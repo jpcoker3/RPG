@@ -4,10 +4,10 @@ from tkinter import messagebox
 
 
 #GLOBAL VARS
-world_name = 'Placeholder '
+world_name = 'Placeholder'
 classes = {
         1:'warrior', 
-        2:'wizzard', 
+        2:'wizard', 
         3:'rogue'
         }
 FONT = 'Arial'
@@ -28,6 +28,12 @@ class GUI_control:
         
         self.display = tk.Text(self.root)
         self.display.pack()
+        
+        self.entry = tk.Entry(self.root, width = 80)
+        self.root.bind('<Return>', self.get_text)
+        self.entry.pack()
+        
+        
         
         self.button_frame = tk.Frame(self.root)
         self.button_frame.columnconfigure(0, weight = 1)
@@ -77,18 +83,24 @@ class GUI_control:
         self.display.delete("1.0", "end")
         
         pass
+    
+    def get_text(self):
+            self.entry_text = self.entry.get()
+            
     def on_closing(self):
         if messagebox.askyesno(title = "Quit?", message = "Do you really want to quit?"):
             self.root.destroy()
         
+        
+        
 #prompts user for name and returns it. Ask prompt as parameter
-def get_name(message):
+def get_name(message, gui):
      #create character by name
     name_prompt = True
     
     while name_prompt:
-        #before call, print what the name is for. 
-        name = input(message)
+        #before call, print what the name is for.  
+        name = input( message)
         name_confirm = input('Okay! is the name ' + name + ' correct? y/n: ')
         if(name_confirm == 'y'): name_prompt = False
         
@@ -102,11 +114,11 @@ def get_name(message):
     return name
 
 #create new char -- has prompts
-def char_create(player):
-    player.name = get_name('Welcome to the game! please enter a name to begin: ')
+def char_create(player, gui):
+    player.name = get_name('Welcome to the game! please enter a name to begin: ', gui)
                                                  
     print(classes)
-    choice = input('What class are you? (1,2,3): ' )
+    choice = input('What class are you? (1,2,3): ')
     char_type(player,classes[int(choice)])
     
     print('Here are your stats: ') 
@@ -120,7 +132,7 @@ def char_type(char_info, class_type):
         char_info.stats['armor'] = char_info.stats['armor'] + 15
         
     # Wizzard
-    elif class_type == 'wizzard':
+    elif class_type == 'wizard':
         char_info.stats['mana'] = char_info.stats['mana'] + 75
         
         
@@ -149,11 +161,11 @@ class char_info():
 def main():
     gui = GUI_control()
     
-    gui.display.insert(tk.END,"Hello")
+    #gui.display.insert(tk.END,"Hello")
     #player
     player = char_info()
     #get name of player
-    char_create(player)
+    char_create(player, gui)
     print('Welcome to ' + world_name + ', ' + player.name +'!')
    
 
