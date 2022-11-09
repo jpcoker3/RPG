@@ -1,14 +1,14 @@
-import tkinter as tk
-from tkinter import messagebox
+#import tkinter as tk
+#from tkinter import messagebox
 
 
 
 #GLOBAL VARS
 world_name = 'Placeholder'
 classes = {
-        1:'warrior', 
-        2:'wizard', 
-        3:'rogue'
+        1:['Warrior', "+ 50 HP, +15 Armor"], 
+        2:['wizard', "+ 75 Mana"], 
+        3:['Rogue', "+ 15 Speed, + 50 Stamina"]
         }
 FONT = 'Arial'
 
@@ -94,7 +94,7 @@ class GUI_control:
         
         
 #prompts user for name and returns it. Ask prompt as parameter
-def get_name(message, gui):
+def get_name(message):
      #create character by name
     name_prompt = True
     
@@ -114,10 +114,14 @@ def get_name(message, gui):
     return name
 
 #create new char -- has prompts
-def char_create(player, gui):
-    player.name = get_name('Welcome to the game! please enter a name to begin: ', gui)
+def char_create(player):
+    player.name = get_name('Welcome to the game! please enter a name to begin: ')
                                                  
-    print(classes)
+    print("\n\n{:<10} {:<10} {:<10}".format('Choice', 'Name', 'Information'))
+    for key, value in classes.items():
+            name, information = value
+            print("{:<10} {:<10} {:25}".format(key, name, information))
+    
     choice = input('What class are you? (1,2,3): ')
     char_type(player,classes[int(choice)])
     
@@ -159,13 +163,13 @@ class char_info():
     
 #main loop
 def main():
-    gui = GUI_control()
+   # gui = GUI_control()
     
     #gui.display.insert(tk.END,"Hello")
     #player
     player = char_info()
     #get name of player
-    char_create(player, gui)
+    char_create(player)
     print('Welcome to ' + world_name + ', ' + player.name +'!')
    
 
