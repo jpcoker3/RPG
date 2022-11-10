@@ -1,98 +1,13 @@
-#import tkinter as tk
-#from tkinter import messagebox
-
-
+import random
 
 #GLOBAL VARS
 world_name = 'Placeholder'
 classes = {
-        1:['Warrior', "+ 50 HP, +15 Armor"], 
-        2:['wizard', "+ 75 Mana"], 
-        3:['Rogue', "+ 15 Speed, + 50 Stamina"]
+        1:'Warrior', 
+        2:'Wizard', 
+        3:'Rogue', 
         }
-FONT = 'Arial'
-
-
-
-class GUI_control:
-    def __init__(self):
-        self.root = tk.Tk()
-        #opening box dimensions
-        self.root.geometry("1280x720")
-        #title of box
-        self.root.title("RPG WIP")
-        
-        #Label at top
-        self.label = tk.Label(self.root, text = world_name, font = (FONT, 18))
-        self.label.pack()
-        
-        self.display = tk.Text(self.root)
-        self.display.pack()
-        
-        self.entry = tk.Entry(self.root, width = 80)
-        self.root.bind('<Return>', self.get_text)
-        self.entry.pack()
-        
-        
-        
-        self.button_frame = tk.Frame(self.root)
-        self.button_frame.columnconfigure(0, weight = 1)
-        self.button_frame.columnconfigure(1, weight = 1)
-        self.button_frame.columnconfigure(2, weight = 1)
-        
-        
-        #news == north, east, west, south
-        #inventory
-        self.inventory_btn = tk.Button(self.button_frame, text = 'Inventory', font = (FONT, 16), command = self.show_inventory) 
-        self.inventory_btn.grid(row = 0, column = 0, sticky = "news")
-        #abilities
-        self.ability_btn = tk.Button(self.button_frame, text = 'Abilities', font = (FONT, 16), command = self.show_abilities) 
-        self.ability_btn.grid(row = 0, column = 1, sticky = "news")
-        #statistics
-        self.statistics_btn = tk.Button(self.button_frame, text = 'Statistics', font = (FONT, 16), command = self.show_statistics)  
-        self.statistics_btn.grid(row = 1, column = 0, sticky = "news")
-        #next
-        self.next_btn = tk.Button(self.button_frame, text = 'Next', font = (FONT, 16), command = self.next) 
-        self.next_btn.grid(row = 2, column = 2, sticky = "news")
-        #back
-        self.back_btn = tk.Button(self.button_frame, text = 'Back', font = (FONT, 16), command = self.back) 
-        self.back_btn.grid(row = 2, column = 0, sticky = "news")
-        
-        self.button_frame.pack(fill = 'x', side = 'bottom', padx= 20, pady = 20)
-        
-        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        #self.root.mainloop()
-        
-    def show_inventory(self):
-        self.display.delete("1.0", "end")
-        self.display.insert(tk.END, 'Inventory')      
-    
-    def show_abilities(self):
-        self.display.delete("1.0", "end")
-        self.display.insert(tk.END, 'Abilities')
-    
-    def show_statistics(self):
-        self.display.delete("1.0", "end")
-        self.display.insert(tk.END, 'Statistics')
-        
-    def next(self):
-        self.display.delete("1.0", "end")
-        
-        pass
-    def back(self):
-        self.display.delete("1.0", "end")
-        
-        pass
-    
-    def get_text(self):
-            self.entry_text = self.entry.get()
-            
-    def on_closing(self):
-        if messagebox.askyesno(title = "Quit?", message = "Do you really want to quit?"):
-            self.root.destroy()
-        
-        
-        
+ 
 #prompts user for name and returns it. Ask prompt as parameter
 def get_name(message):
      #create character by name
@@ -115,62 +30,114 @@ def get_name(message):
 
 #create new char -- has prompts
 def char_create(player):
+    class_char_create = {
+        1:['Warrior', "+ 50 HP, +15 Armor"], 
+        2:['Wizard', "+ 75 Mana"], 
+        3:['Rogue', "+ 15 Speed, + 50 Stamina"]
+        }
     player.name = get_name('Welcome to the game! please enter a name to begin: ')
-                                                 
-    print("\n\n{:<10} {:<10} {:<10}".format('Choice', 'Name', 'Information'))
-    for key, value in classes.items():
-            name, information = value
-            print("{:<10} {:<10} {:25}".format(key, name, information))
     
-    choice = input('What class are you? (1,2,3): ')
+    print("\nTime to choose a class! Here are your options: ")                                             
+    print("\n{:<10} {:<10} {:<10}".format('Choice', 'Name', 'Information'))
+    for key, value in class_char_create.items():
+        name, information = value
+        print("{:<10} {:<10} {:25}".format(key, name, information))
+    
+    choice = input('\nWhat class would you like to be? ')
+    
+    while (int(choice) > 3):
+        choice = input("\nPlease enter a valid option between 1 and 3")
+
     char_type(player,classes[int(choice)])
     
-    print('Here are your stats: ') 
-    print (player.stats)
+    print('Here are your stats: \n') 
+    print("{:<10} {:<10}".format('Name', 'Value'))
+    for stat, val in player.stats.items():
+        print("{:<10} {:<10}".format(stat, val))
+    print("\n")
     
 #choose char types    
-def char_type(char_info, class_type):
+def char_type( player, class_type):
+    player.char_type = class_type
     # Warior
-    if class_type == 'warrior': 
-        char_info.stats['health'] = char_info.stats['health'] + 50
-        char_info.stats['armor'] = char_info.stats['armor'] + 15
+    if class_type == "Warrior": 
+        player.stats["Health"] += 50
+        player.stats["Armor"] += 15
         
     # Wizzard
-    elif class_type == 'wizard':
-        char_info.stats['mana'] = char_info.stats['mana'] + 75
-        
+    elif class_type == "Wizard":
+        player.stats["Mana"] += 75
         
     # Rogue
-    elif class_type == 'rogue':
-        char_info.stats['speed'] = char_info.stats['speed'] + 15
-        char_info.stats['stamina'] = char_info.stats['stamina'] + 50
+    elif class_type == "Rogue":
+        player.stats["Speed"] += 15
+        player.stats["Stamina"] += 50
           
-
 #holds all character info
 class char_info():
     stats = {
-        "health" : 100,
-        "mana": 100,
-        "stamina": 100,
-        "armor": 0,
-        "speed": 100,
-        "level": 0 
+        "Health" : 100,
+        "Mana": 100,
+        "Stamina": 100,
+        "Armor": 0,
+        "Speed": 100,
+        "Level": 0 
     }
-    
     name = 'EMPTY'
     char_type = 'EMPTY'
+   
+def encounter(player):
+    options = ['Nothing', 'Item', 'Enemy']
+    encounter = random.choice(options)
+    if(encounter == 'Nothing'):
+        print(" take a moment to rest .... +10 Health")
 
+        input()
+         
+    elif (encounter == 'Item'):
+        print("Item Encounter")
+        input()
+
+    elif (encounter == 'Enemy'):
+        print("Enemy Encounter")
+        input()
+        
+    else:
+        print("i guess you are unlucky")
+        player.stats["Health"] = 0
+        counter += 1000
     
+    
+
+
 #main loop
 def main():
-   # gui = GUI_control()
-    
-    #gui.display.insert(tk.END,"Hello")
+    game_active = True
     #player
     player = char_info()
     #get name of player
     char_create(player)
+    player.name = player.name + " The " + player.char_type
     print('Welcome to ' + world_name + ', ' + player.name +'!')
+    
+    # now we need to have the main game loop
+    counter = 1
+    while game_active:
+        if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
+        
+        print("Round " + str(counter) + ": ")
+        if(counter % 250 == 0 ): 
+            print("You win!")
+            game_active = False
+            input()
+        elif(counter % 10 == 0):
+            print("Boss Fight")
+            input()
+        else: encounter(player)
+        
+        counter += 1
+        
+
    
 
 main()
