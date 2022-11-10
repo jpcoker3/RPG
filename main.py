@@ -1,4 +1,8 @@
 import random
+import weapons
+from weapons import weapon 
+import armors
+from armors import armor
 
 #GLOBAL VARS
 world_name = 'Placeholder'
@@ -7,6 +11,17 @@ classes = {
         2:'Wizard', 
         3:'Rogue', 
         }
+
+#Get weapons and armor from files
+weapon_list = []
+for weapon in weapons.get_weapons():
+    weapon_list.append(weapon)
+#print(weapon_list[0].name + str(weapon_list[0].damage))
+    
+armor_list = []
+for armor in armors.get_armors():
+    armor_list.append(armor)
+
  
 #prompts user for name and returns it. Ask prompt as parameter
 def get_name(message):
@@ -72,7 +87,8 @@ def char_type( player, class_type):
     elif class_type == "Rogue":
         player.stats["Speed"] += 15
         player.stats["Stamina"] += 50
-          
+
+
 #holds all character info
 class char_info():
     stats = {
@@ -85,10 +101,15 @@ class char_info():
     }
     name = 'EMPTY'
     char_type = 'EMPTY'
+    gold_balance = 0
+    
+    inventory = {
+        
+    }
    
 def encounter(player):
     options = ['Nothing', 'Item', 'Enemy']
-    encounter = random.choice(options)
+    encounter = random.choices(options, weights = (20, 20, 60), k = 3)
     if(encounter == 'Nothing'):
         print(" take a moment to rest .... +10 Health")
 
@@ -99,19 +120,31 @@ def encounter(player):
         input()
 
     elif (encounter == 'Enemy'):
+        enemy_defeated = False
         print("Enemy Encounter")
+        
+        
+        if(enemy_defeated == False):enemy_defeated = True
+        if(enemy_defeated == True):
+            gold = random.randrange(player.stats["Level"]+1, 5*(player.stats["Level"]+1))
+
+            print("Enemy defeated! Obtained " + str(gold) + " gold!")
+            player.gold_balance += gold
+            
         input()
+        
         
     else:
         print("i guess you are unlucky")
         player.stats["Health"] = 0
         counter += 1000
-    
-    
-
-
+        
+        
 #main loop
 def main():
+    
+    
+    
     game_active = True
     #player
     player = char_info()
