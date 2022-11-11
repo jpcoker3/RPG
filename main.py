@@ -3,6 +3,8 @@ import weapons
 from weapons import weapon 
 import armors
 from armors import armor
+import enemies
+from enemies import enemy
 
 #GLOBAL VARS
 world_name = 'Placeholder'
@@ -83,7 +85,16 @@ def recieve_xp(player, xp):
         player.stats["Level"] += 1
         print("Level increased to " + str(player.stats["Level"])+"!")
         player.current_xp = player.current_xp - player.xp_to_lvl_up
-        player.xp_to_lvl_up += 30
+        player.xp_to_lvl_up = player.xp_to_lvl_up * (player.stats["Level"] * 0.85)
+
+#check for new skills on level up
+def check_for_skills(player):
+    if(player.char_type == "Warrior"):
+        pass
+    elif(player.char_type == "Wizard"):
+        pass
+    elif(player.char_type == "Rogue"):
+        pass
 
 
 #choose char types    
@@ -137,7 +148,45 @@ class char_info():
     legs = default_equipt[2]
     boots = default_equipt[3]
     
+def combat(player, opponent):
+    while((player.stats["Health"] > 0) and (opponent.health > 0)):
+        player_speed = player.stats["Speed"]
+        opponent_speed = opponent.speed
+        #check speed, player may be able to attack twice or more before enemy attacks
+        if(player_speed > opponent_speed):
+            while (player_speed > opponent_speed): 
+                opponent.health -= player.weapon.damage
+                player_speed -= opponent_speed
+                print(opponent.name + " was hit for " + str(player.weapon.damage) + ". Enemy health == " + str(opponent.health)) 
+            #make sure opponent isnt dead yet
+            if(opponent.health > 0):
+                player.stats["Health"] -= opponent.damage
+                print(player.name + " was hit for " + str(opponent.damage) + ". Player health == " + str(player.stats["Health"]))
+        #and vice versa, opponent may be able to attack twice or more before player attacks
+        elif(player_speed < opponent_speed):
+            while (player_speed < opponent_speed): 
+                player.stats["Health"] -= opponent.damage
+                opponent_speed -= player.stats["Speed"]
+                print(player.name + " was hit for " + str(opponent.damage) + ". Player health == " + str(player.stats["Health"]))
+            #make sure opponent isnt dead yet
+            if(player.stats["Health"] > 0):
+                opponent.health -= player.weapon.damage
+                print(opponent.name + " was hit for " + str(player.weapon.damage) + ". Enemy health == " + str(opponent.health)) 
+                
+    if((player.stats["Health"] > 0) and (opponent.health <= 0)):
+        print("Congratulations " + player.name +"! You have defeated " + opponent.name + "!")
+        return True
+    else:
+        print("You have died by the hands of" + opponent.name + ". Thus ends the story of " + player.name)
+        return False
+        
     
+    
+            
+            
+        
+        
+        
    
 def encounter(player, prev_encounter):
     options = ['Nothing', 'Item', 'Shop', 'Enemy', 'Enemy', 'Enemy']
@@ -151,7 +200,9 @@ def encounter(player, prev_encounter):
         
     if(encounter == 'Nothing'):
         print("take a moment to rest .... +10 Health")
-
+        player.stats["Health"] += 10 #heal for 10
+        if(player.stats["Health"] > player.max_health): player.stats["Health"] = player.max_health # if healed for more than max, set to max. (cap health)
+        print("Current Health: " + str(player.stats["Health"]) + ". Max Health is: " + str(player.max_health) + ".")
         input()
          
     elif (encounter == 'Item'):
@@ -177,9 +228,9 @@ def encounter(player, prev_encounter):
     elif (encounter == 'Enemy'):
         enemy_defeated = False
         print("Enemy Encounter")
+        opponent = enemies.get_enemy(player.stats["Level"])
+        enemy_defeated = combat(player, opponent)
         
-        
-        if(enemy_defeated == False):enemy_defeated = True
         if(enemy_defeated == True):
             xp = random.randrange(player.stats["Level"]+5, 2*(player.stats["Level"]+5))
             gold = random.randrange(player.stats["Level"]+1, 5*(player.stats["Level"]+1))
@@ -187,9 +238,6 @@ def encounter(player, prev_encounter):
             print("Enemy defeated! Obtained " + str(gold) + " gold and " + str(xp) + "xp!")
             player.gold_balance += gold
             recieve_xp(player, xp)
-            
-                
-            
         input()
     
     elif(encounter == 'Shop'):

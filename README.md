@@ -15,3 +15,16 @@ Implementation goals:
   Skill checks in dialogue
   Boss Fights
   Skill Tree (s) 
+
+
+install pip
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+
+
+to run:
+
+python3 -m pip install fantasynames
+
+
