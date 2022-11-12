@@ -149,6 +149,7 @@ class char_info():
     boots = default_equipt[3]
     
 def combat(player, opponent):
+    print("Player health: "+ str(player.stats["Health"]) + " Enemy health: " + str(opponent.health) )
     while((player.stats["Health"] > 0) and (opponent.health > 0)):
         player_speed = player.stats["Speed"]
         opponent_speed = opponent.speed
@@ -177,27 +178,21 @@ def combat(player, opponent):
         print("Congratulations " + player.name +"! You have defeated " + opponent.name + "!")
         return True
     else:
-        print("You have died by the hands of" + opponent.name + ". Thus ends the story of " + player.name)
+        print("You have died by the hands of " + opponent.name + ". Thus ends the story of " + player.name)
         return False
-        
-    
-    
-            
-            
-        
-        
-        
+     
    
-def encounter(player, prev_encounter):
+def encounter(player, prev_encounter, round):
     options = ['Nothing', 'Item', 'Shop', 'Enemy', 'Enemy', 'Enemy']
     
-    encounter = random.choice(options)
-    #make sure its not the same encounter every time
-    while ((encounter == prev_encounter) and (prev_encounter != 'Enemy')):
+    if(round == 1):
+        encounter = 'Item'
+    else:
         encounter = random.choice(options)
-    
-    
-        
+        #make sure its not the same encounter every time
+        while ((encounter == prev_encounter) and (prev_encounter != 'Enemy')):
+            encounter = random.choice(options)
+         
     if(encounter == 'Nothing'):
         print("take a moment to rest .... +10 Health")
         player.stats["Health"] += 10 #heal for 10
@@ -216,11 +211,34 @@ def encounter(player, prev_encounter):
             if(item.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", item.stamina_bonus))
             if(item.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", item.armor_bonus))
             if(item.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", item.mana_bonus))
+            
+            equip_item = input("Would you like to equip this item? y/n: ")
+            if(equip_item == "y"):
+                if (item.piece == "helmet"):
+                    player.helmet = item
+                elif (item.piece == " chest"):
+                    player.chest = item
+                elif(item.piece == "legs"):
+                    player.legs == item
+                elif( item.piece == "boots"):
+                    player.boots = item
+                print("You have equipped " + item.name)
+            else:
+                print("The item was discarded")
+            
+            
         elif(item.type == "weapon"):
             print("{:<20}{:<10}".format("Level:", item.level))
             if(item.damage != 0): print("{:<20}{:<10}".format("Damage:", item.damage))
             if(item.critical_chance != 0): print("{:<20}{:<10}".format("Critical Chance:", item.critical_chance))
             if(item.critical_damage != 0): print("{:<20}{:<10}".format("Critical Damage:", item.critical_damage))
+            
+            equip_item = input("Would you like to equip this item? y/n: ")
+            if(equip_item == 'y'):
+                player.weapon = item
+                print("You have equipped " + item.name)
+            elif(equip_item == 'n'):
+                print("The item was discarded")
             
             
         input()
@@ -228,7 +246,7 @@ def encounter(player, prev_encounter):
     elif (encounter == 'Enemy'):
         enemy_defeated = False
         print("Enemy Encounter")
-        opponent = enemies.get_enemy(player.stats["Level"])
+        opponent = enemies.get_enemy(player)
         enemy_defeated = combat(player, opponent)
         
         if(enemy_defeated == True):
@@ -265,20 +283,18 @@ def main():
     counter = 1
     while game_active:
         if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
-        
-        print("Round " + str(counter) + ": ")
-        if(counter % 250 == 0 ): 
-            print("You win!")
-            game_active = False
-            input()
-        elif(counter % 10 == 0):
-            print("Boss Fight")
-            input()
-        else: prev_encounter = encounter(player, prev_encounter)
-        
-        counter += 1
-        
-
-   
+        else:
+            print("Round " + str(counter) + ": ")
+            if(counter % 250 == 0 ): 
+                print("You win!")
+                game_active = False
+                input()
+            elif(counter % 10 == 0):
+                print("Boss Fight")
+                input()
+            else: prev_encounter = encounter(player, prev_encounter, counter)
+            
+            counter += 1
+            
 
 main()
