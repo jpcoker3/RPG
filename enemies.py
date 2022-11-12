@@ -1,17 +1,14 @@
 import random
 
 class enemy:
-    def __init__(self, name, level, damage, speed, health):
+    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health):
         self.name = name
         self.level = level
         self.damage = damage
+        self.critical_chance = critical_chance
+        self.critical_damage = critical_damage
         self.speed = speed
         self.health = health
-    name = ""
-    level = 0
-    damage = 0
-    speed = 0
-    health = 0
 
 first_names = [
     "Merlin",
@@ -60,6 +57,14 @@ def get_health(level):
     health = random.randrange(( 20 + 4 * level) , (60 + 8 * level) )
     return health 
 
+def get_critical_chance(level):
+    critical_chance = random.randrange(5, 6 +  2 * level )
+    return critical_chance
+
+def get_critical_damage():
+    critical_damage = random.randrange(20, 25, 1) / 10
+    return critical_damage
+
 def get_enemy(player):
     level = get_level(player.stats["Level"])
     
@@ -67,6 +72,8 @@ def get_enemy(player):
         get_name(),  #name
         level, #level
         get_damage(level), #damage
+        get_critical_chance(level), #critical chance
+        get_critical_damage(), #critical damage
         get_speed(level), #speed
         get_health(level) #health
     )

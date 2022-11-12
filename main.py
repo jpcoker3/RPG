@@ -5,6 +5,7 @@ import armors
 from armors import armor
 import enemies
 from enemies import enemy
+import combat
 
 #GLOBAL VARS
 world_name = 'Placeholder'
@@ -14,21 +15,10 @@ classes = {
         2:'Wizard', 
         3:'Rogue', 
         }
+items = ["weapon", "armor"]
 
-#Get weapons and armor from files
-weapon_list = []
-for weapon in weapons.get_weapons():
-    weapon_list.append(weapon)
-#print(weapon_list[0].name + str(weapon_list[0].damage))
-    
-armor_list = []
-for armor in armors.get_armors():
-    armor_list.append(armor)
-    
+#get default weapons and armor
 default_equipt = armors.get_default_armor() + weapons.get_default_weapon()
-
-
-equiptment_list = weapon_list + armor_list
 
 #prompts user for name and returns it. Ask prompt as parameter
 def get_name(message):
@@ -52,11 +42,7 @@ def get_name(message):
 
 #create new char -- has prompts
 def char_create(player):
-    class_char_create = {
-        1:['Warrior', "+ 50 HP, + 15 Armor, - 50 Mana"], 
-        2:['Wizard', "+ 75 Mana, - 60 Stamina"], 
-        3:['Rogue', "+ 15 Speed, + 50 Stamina, - 20 Health"]
-        }
+    
     player.name = get_name('Welcome to the game! please enter a name to begin: ')
     
     print("\nTime to choose a class! Here are your options: ")                                             
@@ -68,7 +54,7 @@ def char_create(player):
     choice = input('\nWhat class would you like to be? ')
     
     while (int(choice) > 3):
-        choice = input("\nPlease enter a valid option between 1 and 3")
+        choice = input("\nPlease enter a valid option between 1 and 3: ")
 
     char_type(player,classes[int(choice)])
     
@@ -77,6 +63,7 @@ def char_create(player):
     for stat, val in player.stats.items():
         print("{:<10} {:<10}".format(stat, val))
     print("\n")
+    input()
     
 #for any XP increase, handles lvl ups and such
 def recieve_xp(player, xp):
@@ -96,92 +83,88 @@ def check_for_skills(player):
     elif(player.char_type == "Rogue"):
         pass
 
-
 #choose char types    
 def char_type( player, class_type):
     player.char_type = class_type
     # Warior
     if class_type == "Warrior": 
-        player.stats["Health"] += 50
-        player.max_health +=50
-        player.stats["Armor"] += 15
-        player.stats["Mana"] -= 50
-        player.max_mana -= 50
+        player.class_health_bonus = 50
+        player.class_armor_bonus = 15
+        player.class_mana_bonus = -50
         
     # Wizzard
     elif class_type == "Wizard":
-        player.stats["Mana"] += 75
-        player.max_mana += 75
-        player.stats["Stamina"] -= 60
-        player.max_mana -= 60
+        player.class_mana_bonus = 75
+        player.class_stamina_bonus = -60
         
     # Rogue
     elif class_type == "Rogue":
-        player.stats["Speed"] += 15
-        player.stats["Stamina"] += 50
-        player.max_mana += 50
-        player.stats["Health"] -= 20
-        player.max_health -= 20
+        player.class_speed_bonus = 20
+        player.class_stamina_bonus = 50
+        player.class_health_bonus = -20
+        
+        
+class_char_create = {
+        1:['Warrior', "+ 50 HP, + 15 Armor, - 50 Mana"], 
+        2:['Wizard', "+ 75 Mana, - 60 Stamina"], 
+        3:['Rogue', "+ 20 Speed, + 50 Stamina, - 20 Health"]
+        }
+
 
 #holds all character info
 class char_info():
-    stats = {
-        "Health" : 100,
-        "Mana": 100,
-        "Stamina": 100,
-        "Armor": 0,
-        "Speed": 100,
-        "Level": 0 
-    }
-    max_health = 100
-    max_mana = 100
-    max_stamina = 100
-    name = 'EMPTY'
-    char_type = 'EMPTY'
-    gold_balance = 0
-    current_xp = 0
-    xp_to_lvl_up = 20
-    
     weapon = default_equipt[4]
     helmet = default_equipt[0]
     chest = default_equipt[1]
     legs = default_equipt[2]
     boots = default_equipt[3]
     
-def combat(player, opponent):
-    print("Player health: "+ str(player.stats["Health"]) + " Enemy health: " + str(opponent.health) )
-    while((player.stats["Health"] > 0) and (opponent.health > 0)):
-        player_speed = player.stats["Speed"]
-        opponent_speed = opponent.speed
-        #check speed, player may be able to attack twice or more before enemy attacks
-        if(player_speed > opponent_speed):
-            while (player_speed > opponent_speed): 
-                opponent.health -= player.weapon.damage
-                player_speed -= opponent_speed
-                print(opponent.name + " was hit for " + str(player.weapon.damage) + ". Enemy health == " + str(opponent.health)) 
-            #make sure opponent isnt dead yet
-            if(opponent.health > 0):
-                player.stats["Health"] -= opponent.damage
-                print(player.name + " was hit for " + str(opponent.damage) + ". Player health == " + str(player.stats["Health"]))
-        #and vice versa, opponent may be able to attack twice or more before player attacks
-        elif(player_speed < opponent_speed):
-            while (player_speed < opponent_speed): 
-                player.stats["Health"] -= opponent.damage
-                opponent_speed -= player.stats["Speed"]
-                print(player.name + " was hit for " + str(opponent.damage) + ". Player health == " + str(player.stats["Health"]))
-            #make sure opponent isnt dead yet
-            if(player.stats["Health"] > 0):
-                opponent.health -= player.weapon.damage
-                print(opponent.name + " was hit for " + str(player.weapon.damage) + ". Enemy health == " + str(opponent.health)) 
-                
-    if((player.stats["Health"] > 0) and (opponent.health <= 0)):
-        print("Congratulations " + player.name +"! You have defeated " + opponent.name + "!")
-        return True
-    else:
-        print("You have died by the hands of " + opponent.name + ". Thus ends the story of " + player.name)
-        return False
-     
-   
+    
+    class_crit_chance = 0
+    class_crit_damage = 0
+    class_health_bonus = 0
+    class_mana_bonus = 0
+    class_stamina_bonus = 0
+    class_armor_bonus = 0
+    class_speed_bonus = 0
+    class_luck_bonus = 0
+    class_regen_bonus = 0
+    
+    max_health = 100 + class_health_bonus
+    max_mana = 100 + class_mana_bonus
+    max_stamina = 100 + class_stamina_bonus
+    critical_chance = weapon.critical_chance + class_crit_chance
+    critical_damage = weapon.critical_damage + class_crit_damage
+    
+    name = 'EMPTY'
+    char_type = 'EMPTY'
+    gold_balance = 0
+    current_xp = 0
+    xp_to_lvl_up = 20
+    
+    
+    stats = {
+        "Health" : 100 + class_health_bonus,
+        "Mana": 100 + class_mana_bonus,
+        "Stamina": 100 + class_stamina_bonus,
+        "Armor": 0 + class_armor_bonus,
+        "Speed": 100 + class_speed_bonus,
+        "Level": 0,
+        "Luck" : 0 + class_luck_bonus,
+        "Regen": 5 + class_regen_bonus
+    }
+
+def choose_rarity(player):
+    rarity = random.randrange(0,100) + player.stats["Luck"]
+    if(rarity < 70):loot_rarity = "common"
+    elif(rarity < 85): loot_rarity = "uncommon"
+    elif(rarity < 95): loot_rarity = "rare"
+    elif(rarity < 99): loot_rarity = "legendary"
+    elif(rarity > 99): loot_rarity = "mythic" 
+    
+    return loot_rarity
+    
+#choose an encounter from list    
 def encounter(player, prev_encounter, round):
     options = ['Nothing', 'Item', 'Shop', 'Enemy', 'Enemy', 'Enemy']
     
@@ -194,15 +177,26 @@ def encounter(player, prev_encounter, round):
             encounter = random.choice(options)
          
     if(encounter == 'Nothing'):
+        
         print("take a moment to rest .... +10 Health")
         player.stats["Health"] += 10 #heal for 10
         if(player.stats["Health"] > player.max_health): player.stats["Health"] = player.max_health # if healed for more than max, set to max. (cap health)
         print("Current Health: " + str(player.stats["Health"]) + ". Max Health is: " + str(player.max_health) + ".")
         input()
-         
+
+    #free item! congrats
     elif (encounter == 'Item'):
         print("Item Encounter")
-        item = random.choice(equiptment_list)
+        
+        #choose item and rarity
+        loot_rarity = choose_rarity(player)
+        loot_type = random.choice(items)
+        
+        #if weapon, get weapon. if armor, get armor. pretty easy
+        if(loot_type == "weapon"): item = weapons.get_weapon(player, loot_rarity)
+        elif(loot_type == "armor"): item = armors.get_armor(player, loot_rarity)
+
+        # output armor or weapon w stats and ask to equip or not
         print("\nYou opened a chest and found " + item.name + "!\n")
         if(item.type == "armor"):
             print("{:<20}{:<10}".format("Level:", item.level))
@@ -216,7 +210,7 @@ def encounter(player, prev_encounter, round):
             if(equip_item == "y"):
                 if (item.piece == "helmet"):
                     player.helmet = item
-                elif (item.piece == " chest"):
+                elif (item.piece == "chest"):
                     player.chest = item
                 elif(item.piece == "legs"):
                     player.legs == item
@@ -240,14 +234,14 @@ def encounter(player, prev_encounter, round):
             elif(equip_item == 'n'):
                 print("The item was discarded")
             
-            
+        # give user a sec to take in info and continue
         input()
 
     elif (encounter == 'Enemy'):
         enemy_defeated = False
         print("Enemy Encounter")
         opponent = enemies.get_enemy(player)
-        enemy_defeated = combat(player, opponent)
+        enemy_defeated = combat.battle(player, opponent)
         
         if(enemy_defeated == True):
             xp = random.randrange(player.stats["Level"]+5, 2*(player.stats["Level"]+5))
@@ -278,6 +272,8 @@ def main():
     char_create(player)
     player.name = player.name + " The " + player.char_type
     print('Welcome to ' + world_name + ', ' + player.name +'!')
+    print("Press the return key to continue to your first day!")
+    input()
     
     # now we need to have the main game loop
     counter = 1
@@ -294,7 +290,6 @@ def main():
                 input()
             else: prev_encounter = encounter(player, prev_encounter, counter)
             
-            counter += 1
-            
+            counter += 1           
 
 main()
