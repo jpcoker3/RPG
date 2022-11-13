@@ -32,11 +32,14 @@ class armor:
 boots_of_bongo = armor("Boots of Bongo", 0,10, 0, 10, 4,0,0, "common", "boots")
 chest_of_milkers = armor("Chest of Milkers", 4, 30, -20, 15, 10, 0,0, "uncommon", "chest")
 milf = armor("Mailplate Ivory Luxor Facilitator", 10, 70, 20, 30, 10, 0,0, "rare", "chest")
+head_of_terry = armor("Head of Terry", 11, 50, 50, 0, 0, 0, "legendary", "helmet")
+
 
 armors = [
     boots_of_bongo,
     chest_of_milkers,
-    milf
+    milf,
+    head_of_terry
          
     ]
 
