@@ -1,4 +1,5 @@
 import random
+import player_info
 
 class weapon:
     def __init__ (self, name, level, damage, critical_chance, critical_damage, rarity):
@@ -54,6 +55,7 @@ def update_lists():
 def get_weapon(player, rarity):
     update_lists()
     
+    
     #choose rarity, update damage, return weapon
     if(rarity == "common"):
         weapon = random.choice(common)
@@ -76,7 +78,7 @@ def get_weapon(player, rarity):
         weapon.damage += get_damage(player)
         return weapon
     else:
-        print("uh oh")
+        print("Something is wrong with weapon selection")
 
 def get_damage(player):
     #change damage based on level, so item is somewhat relevant

@@ -1,4 +1,5 @@
 import random
+import player_info
 
 def battle(player, opponent):
     print("Player health: "+ str(player.stats["Health"]) + " Enemy health: " + str(opponent.health) )

@@ -1,4 +1,5 @@
 import random
+import player_info
 
 class enemy:
     def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health):

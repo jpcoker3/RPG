@@ -1,4 +1,5 @@
 import random
+import player_info
 
 class armor:
     #set some initial values

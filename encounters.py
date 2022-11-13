@@ -3,6 +3,7 @@ import weapons
 import armors
 import enemies
 import combat
+import player_info
 items = ["weapon", "armor"]
 
 def choose_rarity(player):
@@ -16,16 +17,7 @@ def choose_rarity(player):
     return loot_rarity
     
     
-#for any XP increase, handles lvl ups and such
-def recieve_xp(player, xp):
-    player.current_xp += xp
-    while(player.current_xp >= player.xp_to_lvl_up):
-        player.stats["Level"] += 1
-        print("Level increased to " + str(player.stats["Level"])+"!")
-        player.current_xp = player.current_xp - player.xp_to_lvl_up
-        player.xp_to_lvl_up = player.xp_to_lvl_up * (player.stats["Level"] * 0.85)
-        
-    
+
 #choose an encounter from list    
 def choose_encounter(player, prev_encounter, round):
     options = ['Nothing', 'Item', 'Shop', 'Enemy', 'Enemy', 'Enemy']
