@@ -2,7 +2,7 @@ import random
 import math
 
 class enemy:
-    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health, armor, armor_pen):
+    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health, armor, armor_pen, enemy_type):
         self.name = name
         self.level = level
         self.damage = damage
@@ -12,6 +12,7 @@ class enemy:
         self.health = health
         self.armor = armor
         self.armor_pen = armor_pen
+        self.enemy_type = enemy_type
 
 first_names = [
     "Merlin",
@@ -91,7 +92,7 @@ def get_level(player_level):
         return random.randrange(player_level - 4, player_level + 4)
     
 def get_damage(level):
-    damage =  round(random.randrange(round(level * math.log(pow(level, 2)) + 2), round(level * math.log(pow(level, 2)) + 2* level + 4)))
+    damage =  round(random.randrange(round(math.log(pow(level, 2)) + level), round(math.log(pow(level, 6)) +  level + 1)))
     return damage
 
 def get_speed(level):
@@ -103,7 +104,7 @@ def get_health(level):
     return health 
 
 def get_critical_chance(level):
-    critical_chance = random.randrange(5, 6 +  2 * level )
+    critical_chance = random.randrange(5, 15)
     return critical_chance
 
 def get_armor(level):
@@ -111,7 +112,7 @@ def get_armor(level):
     return armor
 
 def get_critical_damage(level):
-    critical_damage = random.randrange(10 + round(level/2), 25 +  level) / 10
+    critical_damage = random.randrange(11 + round(level/2), 15 +  round(level/2)) / 10
     return critical_damage
 
 def get_armor_pen(level):
@@ -124,7 +125,7 @@ def get_enemy(player):
     elif(player.stats["Level"] == 1):
         level = 2
     else:
-        level = random.randrange(get_level(player.stats["Level"]-1, player.stats["Level"]+1))
+        level = get_level(player.stats["Level"])
     
     unit = enemy(
         get_name(),  #name
@@ -135,7 +136,8 @@ def get_enemy(player):
         get_speed(level), #speed
         get_health(level), #health
         get_armor(level), #armor
-        get_armor_pen(level) #armor penetration
+        get_armor_pen(level), #armor penetration
+        "enemy" # enemy type
     )
     
     
@@ -150,15 +152,38 @@ def get_boss(game_round):
             15, #crit chance
             1.5, #critical damage,
             75, #speed
-            125 #health,
+            125, #health,
             20, #armor
-            4 #armor_pen   
+            4, #armor_pen   
+            "Boss"
         )
     elif(game_round == 20):
+        boss = enemy(
+            "Tavern Guard", # name
+            4, # level
+            15, #damage
+            15, #crit chance
+            2.0, #crit damage
+            100, #speed
+            175, #health
+            40, #armor
+            8, # armor pen
+            "Boss"
+        )
         pass
     else:
         print("Boss logic off. Recieved round = " + str(game_round))
+        boss = enemy( 
+                     " MissingNo ",
+                     999, #level
+                     999, #damage,
+                     100, #critical_chance
+                     10, #crit damage
+                     999, # speed
+                     999, #health
+                     999, #armor
+                     999, #armmor_pen
+                     "Boss"
+                     )
     
     return boss
-
-

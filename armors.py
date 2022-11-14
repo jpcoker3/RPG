@@ -16,23 +16,60 @@ class armor:
         self.piece = piece
     type = "armor"
     
+    
+    
+#RARITY_enabbled
+#rare < 5
+# legendary < 10
+#mythic => 10
 
-#name, level, health_bonus, speed_bonus, stamina_bonus, armor_bonus, mana bonus, regen, luck, rarity, piece
-boots_of_bongo = armor("Boots of Bongo", 0,10, 0, 10, 4,0,0,0, "common", "boots")
 
-chest_of_milkers = armor("Chest of Milkers", 4, 30, -20, 15, 10, 0,0,0, "uncommon", "chest")
-milf = armor("Mailplate Ivory Luxor Facilitator", 10, 70, 20, 30, 10, 0,0,0, "rare", "chest")
-head_of_terry = armor("Head of Terry", 11, 50, 50, 0, 0, 0, 0, 0,"legendary", "helmet")
+#template = armor(name= "", level=0, health_bonus=0, speed_bonus=0, stamina_bonus=0,armor_bonus=0, mana_bonus=0, regen_bonus=0, luck_bonus=0, rarity="", piece="")
 
-breastplate_of_dormamu = armor("Breastplate of Dormamu", 17, 50, 40, 0, 15, 0, 15, 10, "mythic", "chest")
+#common
+boots_of_bongo = armor(name="Boots of Bongo",level= 1,health_bonus= 10,speed_bonus= 0,stamina_bonus= 10,armor_bonus= 4, mana_bonus= 0,regen_bonus= 0,luck_bonus= 0,rarity= "common",piece= "boots")
+knights_chestplate = armor(name = "Knights' Chestplate",level= 2,health_bonus= 10,speed_bonus= 5,stamina_bonus= 10,armor_bonus= 5, mana_bonus= 0, regen_bonus= 5,luck_bonus= 1, rarity= "common",piece= "chest")
+messengers_pants = armor(name="Messengers' Pants",level= 1, health_bonus= 5,speed_bonus= 20, stamina_bonus= 20,armor_bonus= 1,mana_bonus= 0, regen_bonus = 4,luck_bonus= 2,rarity= "common",piece= "pants" )
+
+#uncommon
+drunkards_shirt = armor(name="Drunkards' Shirt",level= 3,health_bonus= 30,speed_bonus= -20,stamina_bonus= -10,armor_bonus= 10,mana_bonus= 0,regen_bonus= 5,luck_bonus= 0,rarity= "uncommon",piece= "chest")
+ranger_cloak = armor(name= "Ranger's Cloak", level=4, health_bonus=20, speed_bonus=10, stamina_bonus=20,armor_bonus=5, mana_bonus=0, regen_bonus=5, luck_bonus=7, rarity="uncommon", piece="chest")
+ranger_boots = armor(name= "Ranger's Boots", level=4, health_bonus=10, speed_bonus=25, stamina_bonus=15,armor_bonus=3, mana_bonus=0, regen_bonus=3, luck_bonus=4, rarity="uncommon", piece="chest")
+ranger_pants = armor(name= "Ranger's Boots", level=4, health_bonus=25, speed_bonus=15, stamina_bonus=10,armor_bonus=3, mana_bonus=0, regen_bonus=4, luck_bonus=4, rarity="uncommon", piece="pants")
+
+
+#rare
+milf = armor(name="Mailplate Ivory Luxor Facilitator",level= 5,health_bonus= 40,speed_bonus= 10,stamina_bonus= 30, armor_bonus = 10, mana_bonus = 0,regen_bonus= 5, luck_bonus= 0,rarity= "rare",piece= "chest")
+
+#legendary
+head_of_terry = armor(name = "Head of Terry",level= 10, health_bonus= 50,speed_bonus= 50,stamina_bonus= 0,armor_bonus= 0,mana_bonus= 0,regen_bonus= 0,luck_bonus= 0,rarity= "legendary",piece= "helmet")
+
+
+#mythic
+breastplate_of_dormamu = armor(name="Breastplate of Dormamu",level= 17,health_bonus= 50,speed_bonus= 40,stamina_bonus= 0,armor_bonus= 15, mana_bonus= 0,regen_bonus= 15,luck_bonus= 10,rarity= "mythic",piece= "chest")
+boots_of_hermes = armor(name = "Boots of Hermes",level= 17, health_bonus= 0,speed_bonus= 60,stamina_bonus= 40, armor_bonus= 5, mana_bonus = 0, regen_bonus = 0,luck_bonus= 15,rarity= "mythic", piece = "boots")
 
 
 armors = [
+    #common
     boots_of_bongo,
-    chest_of_milkers,
+    knights_chestplate,
+    messengers_pants,
+    
+    #uncommon
+    drunkards_shirt,
+    ranger_cloak,
+    ranger_boots,
+    
+    #rare
     milf,
+    
+    #legendary
     head_of_terry,
-    breastplate_of_dormamu
+    
+    #mythic
+    breastplate_of_dormamu,
+    boots_of_hermes
          
     ]
 
@@ -42,49 +79,63 @@ common = []
 uncommon = []
 rare = []
 legendary = []
-ultimate = []
+mythic = []
 
 def update_lists():
     for armor in armors:
+        update_level( armor)
         if(armor.rarity == "common"): common.append(armor)
         elif(armor.rarity == "uncommon"): uncommon.append(armor)
         elif(armor.rarity == "rare"): rare.append(armor)
         elif(armor.rarity == "legendary"): legendary.append(armor)
-        elif(armor.rarity == "ultimate"): ultimate.append(armor)
+        elif(armor.rarity == "mythic"): mythic.append(armor)
     
+    
+def update_level( armor):
+    if(armor.level == 1): armor.level = 1
+    else: armor.level = random.randrange(armor.level -1, armor.level + 1 )
+
 def get_armor(player, rarity):
     update_lists()
     
-    #choose rarity of item
-    if(rarity == "common"):
-        armor_piece = random.choice(common)
-    elif(rarity == "uncommon"):
-        armor_piece = random.choice(uncommon)
-    elif(rarity == "rare"):
-        armor_piece = random.choice(rare)
-    elif(rarity == "legendary"):
-        armor_piece = random.choice(legendary)
-    elif(rarity == "ultimate"):
-        armor_piece = random.choice(ultimate)
+    find_correct_item = True
+    while(find_correct_item):
+        #choose rarity of item
+        if(rarity == "common"):
+            armor_piece = random.choice(common)
+        elif(rarity == "uncommon"):
+            armor_piece = random.choice(uncommon)
+        elif(rarity == "rare"):
+            armor_piece = random.choice(rare)
+        elif(rarity == "legendary"):
+            armor_piece = random.choice(legendary)
+        elif(rarity == "mythic"):
+            armor_piece = random.choice(mythic)
     
-    #adjust item based on level
-    if(armor_piece.health_bonus != 0): armor_piece.health_bonus += random.randrange(0, 2* player.stats["Level"]+1)
-    elif(armor_piece.speed_bonus != 0): armor_piece.speed_bonus += random.randrange(0, 2* player.stats["Level"]+1)
-    elif(armor_piece.stamina_bonus != 0): armor_piece.stamina_bonus += random.randrange(0, 2* player.stats["Level"]+1)
-    elif(armor_piece.armor_bonus != 0): armor_piece.armor_bonus += random.randrange(0, 2* player.stats["Level"]+1)
-    elif(armor_piece.mana_bonus != 0): armor_piece.mana_bonus += random.randrange(0, 2* player.stats["Level"]+1)
-    elif(armor_piece.regen_bonus != 0): armor_piece.regen_bonus += random.randrange(0, 2* player.stats["Level"]+1)
+        if(armor_piece.level < (player.stats["Level"] + 2)):
+            find_correct_item = False
+        else:
+            find_correct_item = True
+        
     
+    #adjust item based on level                                                                   - Level, level +5
+    if(armor_piece.health_bonus != 0): armor_piece.health_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.speed_bonus != 0): armor_piece.speed_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.stamina_bonus != 0): armor_piece.stamina_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.armor_bonus != 0): armor_piece.armor_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.mana_bonus != 0): armor_piece.mana_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.regen_bonus != 0): armor_piece.regen_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
+    if(armor_piece.luck_bonus != 0): armor_piece.luck_bonus += random.randrange(-player.stats["Level"],  player.stats["Level"]+5)
     #return item 
     return armor_piece
     
 def get_default_armor():
-    #kinda self explanatory, set deault items
+    #kinda self explanatory, set default items
     helmet_of_null = armor("You have no Helmet equipped", 0, 0, 0, 0, 0,0, 0,0, "default", "helmet")
     chest_of_null = armor("You have no Chest equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "chest")
-    legs_of_null = armor("You have no Leg Armor equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "legs")
+    pants_of_null = armor("You have no Pants equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "pants")
     boots_of_null = armor("You have no Boots equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "boots")
     
-    default = [helmet_of_null, chest_of_null, legs_of_null, boots_of_null]
+    default = [helmet_of_null, chest_of_null, pants_of_null, boots_of_null]
     
     return default
