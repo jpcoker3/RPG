@@ -9,18 +9,12 @@ def get_name(message):
      #create character by name
     name_prompt = True
     
-    while name_prompt:
+    while (name_prompt):
         #before call, print what the name is for.  
         name = input( message)
         name_confirm = input('Okay! is the name ' + name + ' correct? y/n: ')
         if(name_confirm == 'y'): name_prompt = False
-        
-        #incorrect name, loop until player says yes
-        while name_confirm != 'y':
-            name = input('Please enter a name: ')
-            name_confirm = input('Okay! is the name ' + name + ' correct? y/n: ')
-            #if name correct, exit loop and continue.
-            if(name_confirm == 'y'): name_prompt = False
+        else: message = ("Please enter a name: ")
             
     return name
 
@@ -31,11 +25,11 @@ def recieve_xp(player, xp):
         player.stats["Level"] += 1
         print("Level increased to " + str(player.stats["Level"])+"!")
         player.current_xp = player.current_xp - player.xp_to_lvl_up
-        player.xp_to_lvl_up = player.xp_to_lvl_up * (player.stats["Level"] * 0.85)
+        player.xp_to_lvl_up += 40
         
 
 class class_type_stats:
-    def __self__(self, name, health, mana, stamina, armor, speed, level, luck, regen, critical_chance, critical_damage, summary):
+    def __init__(self, name, health, mana, stamina, armor, speed, level, luck, regen, critical_chance, critical_damage, summary):
         self.name = name
         self.health = health
         self.mana = mana
@@ -48,7 +42,7 @@ class class_type_stats:
         self.critical_chance = critical_chance
         self.critical_damage = critical_damage
         self.summary = summary
-        
+      
         
     #health mana stamina armor speed level luck regen crit chance, crit damage
 warrior = class_type_stats("warrior", 50, -50, 0, 15, 0, 0, 0, 10, 0, 0, "+ 50 Health, - 50 Mana, + 15 Armor, +10 Regen" )
@@ -88,22 +82,22 @@ def char_create(player):
     for choice in classes:
         print("\n{:<15} {:<35} ".format(choice.name,  choice.summary))
     
+    
     choosing_class = True
+    
+    
     while(choosing_class):
-        class_choice = input('\nWhat class would you like to be? ')
+        class_choice = input('\nWhat class would you like to be? (lowercase): ')
         for name in classes:
             if(class_choice == name.name):
                 add_class_stats(player, name)
                 choosing_class = False
-        else:
-            print("You did not choose a valid class. Please try again (lowercase)\n")
         
         
     print('Here are your stats: \n') 
     print("{:<10} {:<10}".format('Name', 'Value'))
     for stat, val in player.stats.items():
         print("{:<10} {:<10}".format(stat, val))
-    print("\n")
     input()
     
 
@@ -136,8 +130,7 @@ class char_info():
     gold_balance = 0
     current_xp = 0
     xp_to_lvl_up = 20
-    
-    
+
     stats = {
         "Health" : 100,
         "Mana": 100,

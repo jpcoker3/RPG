@@ -1,4 +1,3 @@
-import random
 import weapons
 from weapons import weapon 
 import armors
@@ -10,7 +9,7 @@ import player_info
 world_name = 'Placeholder'
 prev_encounter = ""
 
-
+    
 #main loop
 def main():
     
@@ -19,8 +18,8 @@ def main():
     #player
     player = player_info.char_info()
     #get name of player
-    player.char_create(player)
-    player.name = player.name + " The " + player.char_type
+    player_info.char_create(player)
+    player.name = player.name + " The " + player.class_type
     print('Welcome to ' + world_name + ', ' + player.name +'!')
     print("Press the return key to continue to your first day!")
     input()
@@ -36,8 +35,10 @@ def main():
                 game_active = False
                 input()
             elif(counter % 10 == 0):
-                print("Boss Fight")
+                encounters.boss_encounter(player, counter)
                 input()
+            elif(counter % 9 == 0):
+                encounters.shop_encounter(player, counter)
             else: prev_encounter = encounters.choose_encounter(player, prev_encounter, counter)
             
             counter += 1           

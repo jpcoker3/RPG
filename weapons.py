@@ -1,29 +1,24 @@
 import random
-import player_info
+import math
 
 class weapon:
-    def __init__ (self, name, level, damage, critical_chance, critical_damage, rarity):
+    def __init__ (self, name, level, damage, critical_chance, critical_damage,armor_pen, rarity):
         self.name = name
         self.level = level
         self.damage = damage
         self.critical_chance = critical_chance
         self.critical_damage = critical_damage
+        self.armor_pen = armor_pen
         self.rarity = rarity
-    name = ""
-    level = 0
-    damage = 0
-    critical_chance = 0
-    critical_damage = 2
-    rarity = "common"
     type = "weapon"
 
 # enter name, level, damage, crit chance, crit damage
-sword_of_starter = weapon("Sword of Starter", 0, 7, 5, 2, "common")
-bow_of_critical = weapon("Bow of Critical", 0, 5, 20, 2.5, "common")
-dagger_of_shadows = weapon("Dagger of Shadows", 3, 17, 20, 2.7, "uncommon")
-sword_of_storms = weapon("Sword of Storms", 5, 20, 18, 2.4, "rare")
-greatsword_of_amalur = weapon("Greatsword of Amalur", 7, 40, 5, 2.0, "legendary")
-hammer_of_thor = weapon("Hammer of Thor", 17, 70, 40, 3.1, "mythic")
+sword_of_starter = weapon("Sword of Starter", 1, 7, 5, 2.1, 2, "common")
+bow_of_critical = weapon("Bow of Critical", 1, 6, 20, 2.5, 0, "common")
+dagger_of_shadows = weapon("Dagger of Shadows", 3, 17, 20, 2.7,7, "uncommon")
+sword_of_storms = weapon("Sword of Storms", 5, 20, 18, 2.5, 8, "rare")
+greatsword_of_amalur = weapon("Greatsword of Amalur", 7, 40, 10, 2.3, 10, "legendary")
+hammer_of_thor = weapon("Hammer of Thor", 17, 70, 40, 3.1,0, "mythic")
 
 weapons = [
     sword_of_starter,
@@ -83,11 +78,11 @@ def get_weapon(player, rarity):
 def get_damage(player):
     #change damage based on level, so item is somewhat relevant
     level = player.stats["Level"] 
-    damage = random.randrange(3* level, 5*level +1) + level
+    damage = round(random.randrange(round(level * math.log(pow(level, 2)+1)), round(level * math.log(pow(level, 2)+1) + 2* level  + 1)))
     return damage
 
 def get_default_weapon():
     #default weapon, fists, should be able to survive a couple rounds 
-    fists = weapon("Fists", 0, 5, 0, 0, "default")
+    fists = weapon("Fists", 1, 6, 5, 1.5, 0, "default")
     default_weapon = [fists]
     return default_weapon

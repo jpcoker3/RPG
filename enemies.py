@@ -1,8 +1,8 @@
 import random
-import player_info
+import math
 
 class enemy:
-    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health):
+    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health, armor, armor_pen):
         self.name = name
         self.level = level
         self.damage = damage
@@ -10,14 +10,40 @@ class enemy:
         self.critical_damage = critical_damage
         self.speed = speed
         self.health = health
+        self.armor = armor
+        self.armor_pen = armor_pen
 
 first_names = [
     "Merlin",
     "Zorra",
     "Mercy",
     "Tabitha",
-    "Hawk"
-    
+    "Hawk",
+    "Alastair",
+    "Aeron",
+    "Altalune",
+    "Andreas",
+    "Arthur",
+    "Rune",
+    "Rowena",
+    "Nox",
+    "Percival",
+    "Owain",
+    "Nimue",
+    "River",
+    "Luna",
+    "Mirian",
+    "Lancelot",
+    "Lucan",
+    "Lucian",
+    "Galahad",
+    "Faye",
+    "Elderic",
+    "Darius",
+    "Dawn",
+    "Elaine",
+    "Evander",
+    "Clarion"
 ]
 
 last_names = [
@@ -26,8 +52,26 @@ last_names = [
     "Blackbeard",
     "Bluebeard",
     "Griffin",
-    "Raia"
-    
+    "Raia",
+    "Albion",
+    "Ashsorrow",
+    "Dauntless",
+    "Asteria",
+    "Broffet",
+    "Bertillion",
+    "Crowstrike",
+    "Cinderhell",
+    "Clanwing",
+    "Clawroot",
+    "Grasshammer",
+    "Hazekeep",
+    "Hydrabreath",
+    "Humblebringer",
+    "Ironclad",
+    "Irongrip",
+    "Keenstone",
+    "Leafwater",
+    "Longhorn"
 ]
 
 def get_name():
@@ -47,7 +91,7 @@ def get_level(player_level):
         return random.randrange(player_level - 4, player_level + 4)
     
 def get_damage(level):
-    damage =  random.randrange(( 5 +  level) , (10 + 4 * level) )
+    damage =  round(random.randrange(round(level * math.log(pow(level, 2)) + 2), round(level * math.log(pow(level, 2)) + 2* level + 4)))
     return damage
 
 def get_speed(level):
@@ -62,22 +106,59 @@ def get_critical_chance(level):
     critical_chance = random.randrange(5, 6 +  2 * level )
     return critical_chance
 
-def get_critical_damage():
-    critical_damage = random.randrange(20, 25, 1) / 10
+def get_armor(level):
+    armor = random.randrange(round(math.log(pow(level,2) + level)), round(math.log(pow(level, 2)+1) + 2*level+1))
+    return armor
+
+def get_critical_damage(level):
+    critical_damage = random.randrange(10 + round(level/2), 25 +  level) / 10
     return critical_damage
 
+def get_armor_pen(level):
+    armor_pen = random.randrange(level, level +1)
+    return armor_pen
+
 def get_enemy(player):
-    level = get_level(player.stats["Level"])
+    if(player.stats["Level"] == 0):
+        level = 1
+    elif(player.stats["Level"] == 1):
+        level = 2
+    else:
+        level = random.randrange(get_level(player.stats["Level"]-1, player.stats["Level"]+1))
     
     unit = enemy(
         get_name(),  #name
         level, #level
-        get_damage(level), #damage
+        level + get_damage(level), #damage
         get_critical_chance(level), #critical chance
-        get_critical_damage(), #critical damage
+        get_critical_damage(level), #critical damage
         get_speed(level), #speed
-        get_health(level) #health
+        get_health(level), #health
+        get_armor(level), #armor
+        get_armor_pen(level) #armor penetration
     )
     
     
     return unit
+
+def get_boss(game_round):
+    if(game_round == 10):
+        boss = enemy(
+            "Slime Boss", #name
+            2, #level
+            10, #damage
+            15, #crit chance
+            1.5, #critical damage,
+            75, #speed
+            125 #health,
+            20, #armor
+            4 #armor_pen   
+        )
+    elif(game_round == 20):
+        pass
+    else:
+        print("Boss logic off. Recieved round = " + str(game_round))
+    
+    return boss
+
+

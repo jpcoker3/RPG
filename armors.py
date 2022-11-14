@@ -1,9 +1,8 @@
 import random
-import player_info
 
 class armor:
     #set some initial values
-    def __init__(self, name, level, health_bonus, speed_bonus, stamina_bonus, armor_bonus, mana_bonus, regen_bonus, rarity, piece):
+    def __init__(self, name, level, health_bonus, speed_bonus, stamina_bonus, armor_bonus, mana_bonus, regen_bonus,luck_bonus, rarity, piece):
         self.name = name
         self.level = level
         self.health_bonus = health_bonus
@@ -12,35 +11,28 @@ class armor:
         self.armor_bonus = armor_bonus
         self.mana_bonus = mana_bonus
         self.regen_bonus = regen_bonus
+        self.luck_bonus = luck_bonus
         self.rarity = rarity
         self.piece = piece
-        
-    #defaults
-    name = ""
-    level = 0
-    health_bonus = 0
-    speed_bonus = 0
-    stamina_bonus = 0
-    armor_bonus = 0
-    mana_bonus = 0
-    regen_bonus = 0
-    rarity = "common"
-    piece = ""
     type = "armor"
     
 
-#enter name, level, health_bonus, speed_bonus, stamina_bonus, armor_bonus, mana bonus
-boots_of_bongo = armor("Boots of Bongo", 0,10, 0, 10, 4,0,0, "common", "boots")
-chest_of_milkers = armor("Chest of Milkers", 4, 30, -20, 15, 10, 0,0, "uncommon", "chest")
-milf = armor("Mailplate Ivory Luxor Facilitator", 10, 70, 20, 30, 10, 0,0, "rare", "chest")
-head_of_terry = armor("Head of Terry", 11, 50, 50, 0, 0, 0, "legendary", "helmet")
+#name, level, health_bonus, speed_bonus, stamina_bonus, armor_bonus, mana bonus, regen, luck, rarity, piece
+boots_of_bongo = armor("Boots of Bongo", 0,10, 0, 10, 4,0,0,0, "common", "boots")
+
+chest_of_milkers = armor("Chest of Milkers", 4, 30, -20, 15, 10, 0,0,0, "uncommon", "chest")
+milf = armor("Mailplate Ivory Luxor Facilitator", 10, 70, 20, 30, 10, 0,0,0, "rare", "chest")
+head_of_terry = armor("Head of Terry", 11, 50, 50, 0, 0, 0, 0, 0,"legendary", "helmet")
+
+breastplate_of_dormamu = armor("Breastplate of Dormamu", 17, 50, 40, 0, 15, 0, 15, 10, "mythic", "chest")
 
 
 armors = [
     boots_of_bongo,
     chest_of_milkers,
     milf,
-    head_of_terry
+    head_of_terry,
+    breastplate_of_dormamu
          
     ]
 
@@ -88,10 +80,10 @@ def get_armor(player, rarity):
     
 def get_default_armor():
     #kinda self explanatory, set deault items
-    helmet_of_null = armor("You have no Helmet equipped", 0, 0, 0, 0, 0,0, 0, "default", "helmet")
-    chest_of_null = armor("You have no Chest equipped", 0, 0, 0, 0, 0,0, 0,"default", "chest")
-    legs_of_null = armor("You have no Leg Armor equipped", 0, 0, 0, 0, 0,0, 0,"default", "legs")
-    boots_of_null = armor("You have no Boots equipped", 0, 0, 0, 0, 0,0, 0,"default", "boots")
+    helmet_of_null = armor("You have no Helmet equipped", 0, 0, 0, 0, 0,0, 0,0, "default", "helmet")
+    chest_of_null = armor("You have no Chest equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "chest")
+    legs_of_null = armor("You have no Leg Armor equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "legs")
+    boots_of_null = armor("You have no Boots equipped", 0, 0, 0, 0, 0,0, 0,0,"default", "boots")
     
     default = [helmet_of_null, chest_of_null, legs_of_null, boots_of_null]
     
