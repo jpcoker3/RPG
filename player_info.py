@@ -28,7 +28,7 @@ def recieve_xp(player, xp):
         player.stats["Level"] += 1
         print("Level increased to " + str(player.stats["Level"])+"!")
         player.current_xp = player.current_xp - player.xp_to_lvl_up
-        player.xp_to_lvl_up += 40
+        player.xp_to_lvl_up += 10
         lvl_up(player)
         
         
@@ -38,9 +38,9 @@ def lvl_up(player):
     while (bad_input) :
         
         print("{:<2}{:<20} {:<5}".format('#', 'Name', 'Value'))
-        print("{:<2}{:<20} {:<5}".format("1.","Health", "+15"))  
+        print("{:<2}{:<20} {:<5}".format("1.","Health", "+10"))  
         print("{:<2}{:<20} {:<5}".format("2.","Mana", "+10")) 
-        print("{:<2}{:<20} {:<5}".format("3.","Stamina", " +10")) 
+        print("{:<2}{:<20} {:<5}".format("3.","Stamina", "+10")) 
         print("{:<2}{:<20} {:<5}".format("4.","Armor", "+10")) 
         print("{:<2}{:<20} {:<5}".format("5.","Speed", "+10")) 
         print("{:<2}{:<20} {:<5}".format("6.","Luck", "+5")) 
@@ -51,8 +51,8 @@ def lvl_up(player):
         choice = input("What stat would you like to increase? Please enter a number: ")
         
         if(choice == "1"):
-            player.stats["Health"] += 15
-            player.max_health += 15
+            player.stats["Health"] += 10
+            player.max_health += 10
             bad_input = False
         elif(choice == "2"):
             player.stats["Mana"] += 10
@@ -60,7 +60,7 @@ def lvl_up(player):
             bad_input = False
         elif(choice == "3"):
             player.stats["Stamina"] += 10
-            player.max_stamina += 15
+            player.max_stamina += 10
             bad_input = False
         elif(choice == "4"):
             player.stats["Armor"] += 10
@@ -107,13 +107,14 @@ class class_type_stats:
         
 #template = class_type_stats(name = "", health= 0, mana=0, stamina= 0, armor=0, speed=0, level=0, luck=0, regen=0, critical_chance=0, critical_damage=0, summary="")
 
-
+peasant = class_type_stats(name = "peasant", health= 0, mana=0, stamina= 0, armor=0, speed=0, level=0, luck=0, regen=0, critical_chance=0, critical_damage=0, summary="Default Stats")
+idiot = class_type_stats(name = "idiot", health= -15, mana=0, stamina= 0, armor=0, speed=-15, level=0, luck=50, regen=0 , critical_chance=0, critical_damage=0, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",health =  50,  mana = -100,stamina =  0,armor = 20, speed = -20,level= 0,luck= 0,regen= 20,critical_chance= 0,critical_damage= 0,  summary= "+50 Health, +20 Armor, +20 Regen, -100 Mana, -20 Speed" )
-gambler = class_type_stats(name = "gambler",health = -25, mana = -85, stamina = -15,armor =  5,speed =  25,level= 0,luck= 10, regen = 10,critical_chance= 15,critical_damage= .25, summary= "+5 Armor, +25 Speed, +10 Luck, +10 Regen, +15% Crit Chance, +.25 Crit Damage Multiplier, -25 Health, -85 Mana, -15 Stamina  ")
+gambler = class_type_stats(name = "gambler",health = -25, mana = -85, stamina = -15,armor =  5,speed =  25,level= 0,luck= 10, regen = 5,critical_chance= 5,critical_damage= .25, summary= "+5 Armor, +25 Speed, +10 Luck, +5 Regen, +5% Crit Chance, +.25 Crit Damage Multiplier, -25 Health, -85 Mana, -15 Stamina  ")
+ranger = class_type_stats(name = "ranger", health= -15, mana=0, stamina= 15, armor=0, speed=20, level=0, luck=0, regen=5, critical_chance=15, critical_damage= 0.45, summary="+15 Stamina, +20 Speed, +5 Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
+defender = class_type_stats(name = "defender", health= 100, mana=0, stamina= 0, armor=50, speed= -30, level=0, luck=0, regen=20, critical_chance=0, critical_damage= -0.50, summary= "+100 Health, +50 Armor, +20 Regen, -30 Speed, -0.5 Critical Multiplier" )
 
-
-
-classes = [warrior, gambler]
+classes = [peasant, idiot, warrior, gambler, ranger, defender]
 
 def add_class_stats(player, class_type):
     player.class_type = class_type.name.capitalize()
@@ -224,7 +225,7 @@ class char_info():
         "Speed": 100,
         "Level": 1,
         "Luck" : 0,
-        "Regen": 5
+        "Regen": 0
     }
     
     skills = {

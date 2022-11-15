@@ -21,21 +21,29 @@ def main():
     
     
     # now we need to have the main game loop
-    counter = 1
-    while game_active:
-        if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
-        else:
-            print("\nRound " + str(counter) + ": ")
-            if(counter % 250 == 0 ): 
-                print("You win!")
-                game_active = False
-                next = input("\nPress anything to exit game ") 
-            elif(counter % 10 == 0):
-                encounters.boss_encounter(player, counter)
-            elif(counter % 9 == 0):
-                encounters.shop_encounter(player, counter)
-            else: prev_encounter = encounters.choose_encounter(player, prev_encounter, counter)
-            
-            counter += 1           
+    play_again = True
+    while (play_again):
+        counter = 1
+        while game_active:
+            if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
+            else:
+                print("\nRound " + str(counter) + ": ")
+                if(counter % 250 == 0 ): 
+                    print("You win!")
+                    game_active = False
+                    next = input("\nPress anything to exit game ") 
+                elif(counter % 10 == 0):
+                    encounters.boss_encounter(player, counter)
+                elif(counter % 9 == 0):
+                    encounters.shop_encounter(player, counter)
+                else: prev_encounter = encounters.choose_encounter(player, prev_encounter, counter)
+                
+                counter += 1           
+                
+        go_again = input("\nWould you like to play again? y/n: ")
+        if(go_again == "y"): play_again = True
+        else: 
+            print("You may now exit the game.")
+            break
 
 main()

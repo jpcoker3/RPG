@@ -1,5 +1,6 @@
 import random
 import math
+from copy import copy
 
 class weapon:
     def __init__ (self, name, level, damage, critical_chance, critical_damage,armor_pen, rarity):
@@ -95,23 +96,28 @@ def get_weapon(player, rarity):
     while(find_correct_item):
         #choose rarity, update damage, return weapon
         if(rarity == "common"):
-            weapon = random.choice(common)
+            orig_item = random.choice(common)
+            weapon = copy(orig_item)
             weapon.damage += get_damage(weapon)
 
         elif(rarity == "uncommon"):
-            weapon = random.choice(uncommon)
+            orig_item = random.choice(uncommon)
+            weapon = copy(orig_item)
             weapon.damage += get_damage(weapon)
 
         elif(rarity == "rare"):
-            weapon = random.choice(rare)
+            orig_item = random.choice(uncommon)
+            weapon = copy(orig_item)
             weapon.damage += get_damage(weapon)
 
         elif(rarity == "legendary"):
-            weapon = random.choice(legendary)
+            orig_item = random.choice(legendary)
+            weapon = copy(orig_item)
             weapon.damage += get_damage(weapon)
 
         elif(rarity == "mythic"):
-            weapon = random.choice(mythic)
+            orig_item = random.choice(mythic)
+            weapon = copy(orig_item)
             weapon.damage += get_damage(weapon)
         else:
             print("Something is wrong with weapon selection")

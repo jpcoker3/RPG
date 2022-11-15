@@ -40,7 +40,7 @@ def battle(player, opponent):
         print("Congratulations " + player.name +"! You have defeated " + opponent.name + "!")
 
         #regenerate health
-        player.stats["Health"] += player.stats["Regen"]
+        player.stats["Health"] += round(player.stats["Health"] / 10) + player.stats["Regen"]
         if(player.stats["Health"] > player.max_health): 
             player.stats["Health"] = player.max_health
         #output regened health
