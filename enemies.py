@@ -44,7 +44,11 @@ first_names = [
     "Dawn",
     "Elaine",
     "Evander",
-    "Clarion"
+    "Clarion",
+    "Carly",
+    "James",
+    "Harish",
+    "Travis"
 ]
 
 last_names = [

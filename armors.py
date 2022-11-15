@@ -34,7 +34,7 @@ messengers_pants = armor(name="Messengers' Pants",level= 1, health_bonus= 5,spee
 #uncommon
 drunkards_shirt = armor(name="Drunkards' Shirt",level= 3,health_bonus= 30,speed_bonus= -20,stamina_bonus= -10,armor_bonus= 10,mana_bonus= 0,regen_bonus= 5,luck_bonus= 0,rarity= "uncommon",piece= "chest")
 ranger_cloak = armor(name= "Ranger's Cloak", level=4, health_bonus=20, speed_bonus=10, stamina_bonus=20,armor_bonus=5, mana_bonus=0, regen_bonus=5, luck_bonus=7, rarity="uncommon", piece="chest")
-ranger_boots = armor(name= "Ranger's Boots", level=4, health_bonus=10, speed_bonus=25, stamina_bonus=15,armor_bonus=3, mana_bonus=0, regen_bonus=3, luck_bonus=4, rarity="uncommon", piece="chest")
+ranger_boots = armor(name= "Ranger's Boots", level=4, health_bonus=10, speed_bonus=25, stamina_bonus=15,armor_bonus=3, mana_bonus=0, regen_bonus=3, luck_bonus=4, rarity="uncommon", piece="boots")
 ranger_pants = armor(name= "Ranger's Boots", level=4, health_bonus=25, speed_bonus=15, stamina_bonus=10,armor_bonus=3, mana_bonus=0, regen_bonus=4, luck_bonus=4, rarity="uncommon", piece="pants")
 
 

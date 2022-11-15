@@ -4,6 +4,7 @@ import armors
 import enemies
 import combat
 import player_info
+from copy import copy
 items = ["weapon", "armor"]
 
 def choose_rarity(player):
@@ -162,8 +163,8 @@ def ask_player_item(player, item):
             
             equip_item = input("Would you like to equip this item? y/n: ")
             if(equip_item == "y"):
-                item_to_be_equip = armors.armor("",0, 0, 0, 0, 0, 0,0,0, "", "") 
-                item_to_be_equip = item
+                #item_to_be_equip = armors.armor("",0, 0, 0, 0, 0, 0,0,0, "", "") 
+                item_to_be_equip = copy(item)
                 
                 new_armor(player, item_to_be_equip)
                 
@@ -201,10 +202,11 @@ def ask_player_item(player, item):
             
         equip_item = input("Would you like to equip this item? y/n: ")
         if(equip_item == 'y'):
+            item_to_be_equip = copy(item)
             player.critical_chance -= player.weapon.critical_chance
             player.critical_damage -= player.weapon.critical_damage
             
-            player.weapon = item
+            player.weapon = item_to_be_equip
             
             player.critical_chance += player.weapon.critical_chance
             player.critical_damage += player.weapon.critical_damage
