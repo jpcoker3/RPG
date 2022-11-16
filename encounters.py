@@ -5,6 +5,9 @@ import enemies
 import combat
 import player_info
 from copy import copy
+import random
+
+
 items = ["weapon", "armor"]
 
 def choose_rarity(player):
@@ -39,7 +42,11 @@ def loot_item(player):
 
 #choose an encounter from list    
 def choose_encounter(player, prev_encounter, game_round):
-    options = ['Camp', 'Item', 'Enemy', 'Enemy', 'Enemy', 'Enemy'] 
+    
+    encounter_list = ['Camp', 'Item', 'Enemy'] 
+    # get a weighted list of encounters to choose from -- easier to modify
+    options = random.choices(encounter_list, weights=(20, 20, 50), k=100) 
+
     
     if(game_round == 1):
         encounter = 'Item'
@@ -119,46 +126,61 @@ def ask_player_item(player, item):
             if(item.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus: ", item.mana_bonus))
             if(item.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", item.regen_bonus))
             
+            
             if (item.piece == "helmet"):
-                print("\nCurrently Equipped: " + player.helmet.name)
-                print("{:<20}{:<10}".format("Level:", player.helmet.level))
-                print("{:<20}{:<10}".format("Rarity: ", player.helmet.rarity))
-                if(player.helmet.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.helmet.health_bonus))
-                if(player.helmet.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.helmet.speed_bonus))
-                if(player.helmet.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.helmet.stamina_bonus))
-                if(player.helmet.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.helmet.armor_bonus))
-                if(player.helmet.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.helmet.mana_bonus))
-                if(player.helmet.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.helmet.regen_bonus))
+                if(player.helmet.name == "You have no Helmet equipped"):
+                    print("\n" +player.helmet.name)
+                else:
+                    
+                    print("\nCurrently Equipped: " + player.helmet.name)
+                    print("{:<20}{:<10}".format("Level:", player.helmet.level))
+                    print("{:<20}{:<10}".format("Rarity: ", player.helmet.rarity))
+                    if(player.helmet.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.helmet.health_bonus))
+                    if(player.helmet.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.helmet.speed_bonus))
+                    if(player.helmet.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.helmet.stamina_bonus))
+                    if(player.helmet.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.helmet.armor_bonus))
+                    if(player.helmet.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.helmet.mana_bonus))
+                    if(player.helmet.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.helmet.regen_bonus))
             elif (item.piece == "chest"):
-                print("\nCurrently Equipped: " + player.chest.name)
-                print("{:<20}{:<10}".format("Level:", player.chest.level))
-                print("{:<20}{:<10}".format("Rarity: ", player.chest.rarity))
-                if(player.chest.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.chest.health_bonus))
-                if(player.chest.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.chest.speed_bonus))
-                if(player.chest.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.chest.stamina_bonus))
-                if(player.chest.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.chest.armor_bonus))
-                if(player.chest.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.chest.mana_bonus))
-                if(player.chest.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.chest.regen_bonus))
+                if(player.chest.name == "You have no Chest equipped"):
+                    print("\n" +player.chest.name)
+                else:
+                    print("\nCurrently Equipped: " + player.chest.name)
+                    print("{:<20}{:<10}".format("Level:", player.chest.level))
+                    print("{:<20}{:<10}".format("Rarity: ", player.chest.rarity))
+                    if(player.chest.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.chest.health_bonus))
+                    if(player.chest.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.chest.speed_bonus))
+                    if(player.chest.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.chest.stamina_bonus))
+                    if(player.chest.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.chest.armor_bonus))
+                    if(player.chest.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.chest.mana_bonus))
+                    if(player.chest.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.chest.regen_bonus))
             elif(item.piece == "pants"):
-                print("\nCurrently Equipped: " + player.pants.name)
-                print("{:<20}{:<10}".format("Level:", player.pants.level))
-                print("{:<20}{:<10}".format("Rarity: ", player.pants.rarity))
-                if(player.pants.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.pants.health_bonus))
-                if(player.pants.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.pants.speed_bonus))
-                if(player.pants.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.pants.stamina_bonus))
-                if(player.pants.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.pants.armor_bonus))
-                if(player.pants.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.pants.mana_bonus))
-                if(player.pants.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.pants.regen_bonus))
+                if(player.pants.name == "You have no Pants equipped"):
+                    print("\n" +player.pants.name)
+                else:
+                    print("\nCurrently Equipped: " + player.pants.name)
+                    print("{:<20}{:<10}".format("Level:", player.pants.level))
+                    print("{:<20}{:<10}".format("Rarity: ", player.pants.rarity))
+                    if(player.pants.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.pants.health_bonus))
+                    if(player.pants.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.pants.speed_bonus))
+                    if(player.pants.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.pants.stamina_bonus))
+                    if(player.pants.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.pants.armor_bonus))
+                    if(player.pants.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.pants.mana_bonus))
+                    if(player.pants.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.pants.regen_bonus))
             elif( item.piece == "boots"):
-                print("\nCurrently Equipped: " + player.boots.name)
-                print("{:<20}{:<10}".format("Level:", player.boots.level))
-                print("{:<20}{:<10}".format("Rarity: ", player.boots.rarity))
-                if(player.boots.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.boots.health_bonus))
-                if(player.boots.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.boots.speed_bonus))
-                if(player.boots.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.boots.stamina_bonus))
-                if(player.boots.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.boots.armor_bonus))
-                if(player.boots.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.boots.mana_bonus))
-                if(player.boots.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.boots.regen_bonus))
+                if(player.boots.name == "You have no Boots equipped"):
+                    print("\n" +player.boots.name)
+                else:
+                    
+                    print("\nCurrently Equipped: " + player.boots.name)
+                    print("{:<20}{:<10}".format("Level:", player.boots.level))
+                    print("{:<20}{:<10}".format("Rarity: ", player.boots.rarity))
+                    if(player.boots.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.boots.health_bonus))
+                    if(player.boots.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.boots.speed_bonus))
+                    if(player.boots.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.boots.stamina_bonus))
+                    if(player.boots.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.boots.armor_bonus))
+                    if(player.boots.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.boots.mana_bonus))
+                    if(player.boots.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.boots.regen_bonus))
            
             
             equip_item = input("Would you like to equip this item? y/n: ")
@@ -192,7 +214,7 @@ def ask_player_item(player, item):
         
             
             
-        print("\n Currently equipped: " + player.weapon.name + ": ")
+        print("\nCurrently equipped: " + player.weapon.name + ": ")
         print("{:<25}{:<10}".format("Level:", player.weapon.level))
         print("{:<25}{:<10}".format("Rarity:", player.weapon.rarity))
         if(player.weapon.damage != 0): print("{:<25}{:<10}".format("Damage:", player.weapon.damage))

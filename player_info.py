@@ -1,5 +1,7 @@
 import armors
 import weapons
+import skills
+from copy import copy
 
 #get default weapons and armor
 default_equipt = armors.get_default_armor() + weapons.get_default_weapon()
@@ -87,6 +89,8 @@ def lvl_up(player):
     output_stats(player)
     print("\n")
     output_offense_stats(player)
+    
+    skills.get_skill(player)
         
 
 class class_type_stats:
@@ -107,6 +111,9 @@ class class_type_stats:
         
 #template = class_type_stats(name = "", health= 0, mana=0, stamina= 0, armor=0, speed=0, level=0, luck=0, regen=0, critical_chance=0, critical_damage=0, summary="")
 
+
+weak = class_type_stats(name = "weak", health= -80, mana=0, stamina= 0, armor=0, speed=0, level=0, luck=0, regen=-10, critical_chance=0, critical_damage=0, summary="-80 HP, -10 Regen. Test Class")
+op = class_type_stats(name = "op", health= 1000, mana=0, stamina= 0, armor=0, speed=1000, level=0, luck=0, regen=1000, critical_chance=200, critical_damage=10, summary="+1000 HP, +1000 Speed, +1000 Regen, +100 crit chance, + 10 Crit Multiplier. OP test class")
 peasant = class_type_stats(name = "peasant", health= 0, mana=0, stamina= 0, armor=0, speed=0, level=0, luck=0, regen=0, critical_chance=0, critical_damage=0, summary="Default Stats")
 idiot = class_type_stats(name = "idiot", health= -15, mana=0, stamina= 0, armor=0, speed=-15, level=0, luck=50, regen=0 , critical_chance=0, critical_damage=0, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",health =  50,  mana = -100,stamina =  0,armor = 20, speed = -20,level= 0,luck= 0,regen= 20,critical_chance= 0,critical_damage= 0,  summary= "+50 Health, +20 Armor, +20 Regen, -100 Mana, -20 Speed" )
@@ -114,7 +121,7 @@ gambler = class_type_stats(name = "gambler",health = -25, mana = -85, stamina = 
 ranger = class_type_stats(name = "ranger", health= -15, mana=0, stamina= 15, armor=0, speed=20, level=0, luck=0, regen=5, critical_chance=15, critical_damage= 0.45, summary="+15 Stamina, +20 Speed, +5 Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
 defender = class_type_stats(name = "defender", health= 100, mana=0, stamina= 0, armor=50, speed= -30, level=0, luck=0, regen=20, critical_chance=0, critical_damage= -0.50, summary= "+100 Health, +50 Armor, +20 Regen, -30 Speed, -0.5 Critical Multiplier" )
 
-classes = [peasant, idiot, warrior, gambler, ranger, defender]
+classes = [weak, op, peasant, idiot, warrior, gambler, ranger, defender]
 
 def add_class_stats(player, class_type):
     player.class_type = class_type.name.capitalize()
@@ -163,9 +170,11 @@ def char_create(player):
     
     player.critical_chance += default_equipt[4].critical_chance
     player.critical_damage += default_equipt[4].critical_damage
+    player.skills.append(copy(skills.basic_attack))
     
         
     output_stats(player)
+    output_offense_stats(player)
     next = input("\nPress anything to continue: ") 
 
 def output_stats(player):
@@ -186,16 +195,7 @@ def output_offense_stats(player):
     print("{:<20} {:<10}".format("Critical Damage", player.critical_damage))
     print("{:<20} {:<10}".format("Armor Penetration", player.weapon.armor_pen))
     
-    
-#check for new skills on level up
-def check_for_skills(player):
-    if(player.char_type == "Warrior"):
-        pass
-    elif(player.char_type == "Wizard"):
-        pass
-    elif(player.char_type == "Rogue"):
-        pass
-    
+
     
 #holds all character info
 class char_info():
@@ -228,9 +228,10 @@ class char_info():
         "Regen": 0
     }
     
-    skills = {
+    skills = [
+        
         # to be implemented later
         #slash,
         #lunge,
         #etc
-    }
+    ]
