@@ -18,7 +18,8 @@ class armor:
     type = "armor"
     
     
-    
+#typing this on phone... 
+
 #RARITY_enabled
 #rare < 5
 # legendary < 10
