@@ -22,8 +22,8 @@ def main():
         
         #get name of player
         player_info.char_create(player)
-        player.name = player.name + " The " + player.class_type
-        print('Welcome to ' + world_name + ', ' + player.name +'!')
+        player.name = f"{player.name} The {player.class_type}"
+        print(f"Welcome to {world_name}, {player.name}!")
         next = input("Press the return key to continue to your first day!")
     
     
@@ -32,7 +32,7 @@ def main():
         while game_active:
             if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
             else:
-                print("\nRound " + str(counter) + ": ")
+                print(f"\nRound {str(counter)}: ")
                 if(counter % 250 == 0 ): 
                     print("You win!")
                     game_active = False
@@ -52,6 +52,4 @@ def main():
             
         else: 
             print("You may now exit the game.")
-            break
-
 main()

@@ -149,7 +149,7 @@ def add_class_stats(player, class_type):
     player.stats["Regen"] += class_type.regen
     
     player.critical_chance += class_type.critical_chance
-    player.critical_damage += class_type.critical_damage
+    player.critical_damage += round(class_type.critical_damage,2)
     
     
 
@@ -199,8 +199,8 @@ def output_offense_stats(player):
     print("{:<20} {:<10}".format('Stat', 'Value'))
     print("{:<20} {:<10}".format("Physical Damage", player.weapon.ad))
     print("{:<20} {:<10}".format("Magical Damage", player.weapon.ap))
-    print("{:<20} {:<10}".format("Critical Chance", player.critical_chance))
-    print("{:<20} {:<10}".format("Critical Damage", player.critical_damage))
+    print("{:<20} {:<10}".format("Critical Chance", round(player.critical_chance)))
+    print("{:<20} {:<10}".format("Critical Damage", round(player.critical_damage,2)))
     print("{:<20} {:<10}".format("Armor Penetration", player.weapon.armor_pen))
     
 

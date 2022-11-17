@@ -147,11 +147,11 @@ def player_attack(player, opponent):
                     
                     #doublecrit, crit, normal
                     if(player_double_crit):
-                        print(player.name + " attacked with " + skill.name.capitalize() + " and DOUBLE critical hit for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health))
+                        print(f"{player.name} attacked with {skill.name.capitalize()} and DOUBLE critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")
                     elif(player_crit):
-                        print(player.name + " attacked with " + skill.name.capitalize() + " and critical hit for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health)) 
+                        print(f"{player.name} attacked with {skill.name.capitalize()} and critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}") 
                     else:
-                        print(player.name + " attacked with " + skill.name.capitalize() + " for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health))    
+                        print(f"{player.name} attacked with {skill.name.capitalize()} for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")    
                     
                     valid_attack_choice = True
                 #magical damage calculations 
