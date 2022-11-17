@@ -1,5 +1,6 @@
 import encounters
 import player_info
+from copy import copy
 
 #GLOBAL VARS
 world_name = 'Placeholder'
@@ -15,7 +16,10 @@ def main():
         
         game_active = True
         #player
-        player = player_info.char_info()
+        character = player_info.char_info()
+        
+        player = copy(character)
+        
         #get name of player
         player_info.char_create(player)
         player.name = player.name + " The " + player.class_type
@@ -45,9 +49,6 @@ def main():
         if(go_again == "y"):
             play_again = True
             game_active = True
-            
-            player = None
-            counter = 0
             
         else: 
             print("You may now exit the game.")

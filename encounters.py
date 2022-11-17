@@ -50,6 +50,20 @@ def choose_encounter(player, prev_encounter, game_round):
     
     if(game_round == 1):
         encounter = 'Item'
+    elif(game_round == 2):
+        encounter = 'Enemy'
+    elif(game_round == 3):
+        encounter = 'Enemy'
+    elif(game_round == 4):
+        encounter = 'Camp'
+    elif(game_round == 5):
+        encounter = 'Enemy'
+    elif(game_round == 6):
+        encounter = 'Item'
+    elif(game_round == 7):
+        encounter = 'Camp'
+    elif(game_round == 8):
+        encounter = 'Enemy'
     else:
         encounter = random.choice(options)
         #make sure its not the same encounter every time
@@ -57,11 +71,20 @@ def choose_encounter(player, prev_encounter, game_round):
             encounter = random.choice(options)
          
     if(encounter == 'Camp'):
-        
-        health_to_heal = round(3 * (player.max_health)/ 10)
         print("You found a camp! You decide take a moment to rest .... ")
-        print("Gained " + str(health_to_heal) + " Health")
-        player.stats["Health"] += health_to_heal #heal for 10%
+        
+        heal_value = round(3 * (player.max_health)/ 10)
+        
+        #basically, calculate how much to heal ( if any)
+        heal_total = heal_value + player.stats["Health"]
+        if(heal_total > player.max_health):
+            temp = heal_total - player.max_health
+            heal_value -= temp
+            if(heal_value < 0): heal_value =0
+            
+            
+        print("Gained " + str(heal_value) + " Health")
+        player.stats["Health"] += heal_value #heal for 10%
         if(player.stats["Health"] > player.max_health): player.stats["Health"] = player.max_health # if healed for more than max, set to max. (cap health)
         print("Current Health: " + str(player.stats["Health"]) + ". Max Health is: " + str(player.max_health) + ".")
         next = input("\nPress anything to continue: ") 
@@ -207,7 +230,8 @@ def ask_player_item(player, item):
     elif(item.type == "weapon"):
         print("{:<25}{:<10}".format("Level:", item.level))
         print("{:<25}{:<10}".format("Rarity:", item.rarity))
-        if(item.damage != 0): print("{:<25}{:<10}".format("Damage:", item.damage))
+        if(item.ad != 0): print("{:<25}{:<10}".format("Physical Damage:", item.ad))
+        if(item.ap != 0): print("{:<25}{:<10}".format("Magical Damage:", item.ap))
         if(item.critical_chance != 0): print("{:<25}{:<10}".format("Critical Chance:", item.critical_chance))
         if(item.critical_damage != 0): print("{:<25}{:<10}".format("Critical Damage:", item.critical_damage))
         if(item.armor_pen != 0): print("{:<25}{:<10}".format("Armor Penetration:", item.armor_pen))
@@ -217,7 +241,8 @@ def ask_player_item(player, item):
         print("\nCurrently equipped: " + player.weapon.name + ": ")
         print("{:<25}{:<10}".format("Level:", player.weapon.level))
         print("{:<25}{:<10}".format("Rarity:", player.weapon.rarity))
-        if(player.weapon.damage != 0): print("{:<25}{:<10}".format("Damage:", player.weapon.damage))
+        if(player.weapon.ad != 0): print("{:<25}{:<10}".format("Physical Damage:", player.weapon.ad))
+        if(player.weapon.ap != 0): print("{:<25}{:<10}".format("Magical Damage:", player.weapon.ap))
         if(player.weapon.critical_chance != 0): print("{:<25}{:<10}".format("Critical Chance:", player.weapon.critical_chance))
         if(player.weapon.critical_damage != 0): print("{:<25}{:<10}".format("Critical Damage:", player.weapon.critical_damage))
         if(player.weapon.armor_pen != 0): print("{:<25}{:<10}".format("Armor Penetration:", player.weapon.armor_pen))
