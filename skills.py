@@ -1,8 +1,9 @@
 from copy import copy
 import random
 
+
 class skill:
-    def __init__(self, name:str,  summary:str, type:str,ad_scaling:int = 0, ap_scaling:int = 0, heal:int = 0, mana_cost:int = 0, stamina_cost:int = 0, cooldown:int = 0):
+    def __init__(self, name:str,  summary:str, type:str, rarity:str,  ad_scaling:int = 0, ap_scaling:int = 0, heal:int = 0, mana_cost:int = 0, stamina_cost:int = 0, cooldown:int = 0):
         self.name = name
         self.ad_scaling = ad_scaling
         self.ap_scaling = ap_scaling
@@ -11,106 +12,100 @@ class skill:
         self.stamina_cost = stamina_cost
         self.cooldown = cooldown
         self.summary = summary
-        self.type = type
+        self.type = type#melee, ranged, magic, heal
+        self.rarity = rarity #common, uncommon, rare, legendary, mythic
+
     cooldown_counter = 0
          
 
-#template = skill(name="", ad_scaling=0, ap_scaling=0, heal = 0, mana_cost=0, stamina_cost=0,cooldown=0, summary="", type="" )
+#template = skill(name="", rarity = "" ad_scaling=0, ap_scaling=0, heal = 0, mana_cost=0, stamina_cost=0,cooldown=0, summary="", type="" )
 
 #Types are: magic, physical, heal
 
-#common
-    #phys
-lunge = skill("lunge",ad_scaling=1.2, stamina_cost=15, cooldown=3, summary="A short dash followed by a jab", type="physical") 
 
-    #magic
-sparks = skill(name="sparks", ap_scaling=1.3, mana_cost=15,cooldown=2, summary="a small burst of flames", type="magic")
+basic_attack = skill(name="Basic Attack", rarity = "common", ad_scaling=1.0, summary="Basic Melee Attack", type="melee")
+#phys
+#melee
+lunge = skill(name= "lunge", rarity = "common", ad_scaling=1.2, stamina_cost=15, cooldown=3, summary="A short dash followed by a thrust", type="melee") 
+blunt_smash = skill(name="Blunt Smash", rarity = "common", ad_scaling=1.4 , stamina_cost=30, cooldown=5, summary="Smash the enemies face in with the blunt side of your weapon", type="melee" )
 
-    #heal
-weak_heal = skill(name="Weak Heal",heal = 7, cooldown=0, summary="Heal for 7 percent max health", type="heal" )
-warriors_heal = skill(name="Warriors Heal",heal = 12, stamina_cost=15, cooldown=3, summary="Heal for 12 percent max health", type="heal" )
-mage_heal = skill(name="Mage's Heal", heal = 14, mana_cost=40,cooldown=2, summary="Heal for 14 percent max health, quick cooldown with high cost", type="heal" )
+#ranged
+focus_shot = skill(name="Focus Shot", rarity = "common", ad_scaling=1.4, stamina_cost=20 ,cooldown=3, summary="A focused shot towards enemy weak point", type="ranged" )
+volley = skill(name="Volley", rarity = "uncommon", ad_scaling=1.6, stamina_cost=40 ,cooldown=5, summary="Shoot a volley of arrows towards the enemy", type="ranged" )
 
+#magic
+sparks = skill(name="sparks", rarity = "common",  ap_scaling=1.3, mana_cost=15,cooldown=2, summary="a small burst of flames", type="magic")
+fireball = skill(name="fireball", rarity = "uncommon", ap_scaling=1.5, mana_cost=20,cooldown=3, summary="It's a fireball.", type="magic" )
 
-
-#uncommmon
-    #phys
-fireball = skill(name="fireball", ap_scaling=1.5, mana_cost=20,cooldown=3, summary="It's a fireball.", type="magic" )
-
-    #magic
-
-
-    #heal
+#heal
+weak_heal = skill(name="Weak Heal", rarity = "common",heal = 10, cooldown=2, summary="Heal for 10 percent max health", type="heal" )
+melee_heal = skill(name="Melee Heal", rarity = "uncommon",heal = 16, stamina_cost=15, cooldown=3, summary="Heal for 16 percent max health", type="heal" )
+range_heal = skill(name="Ranged Heal", rarity = "uncommon",heal = 16, stamina_cost=15, cooldown=3, summary="Heal for 16 percent max health", type="heal" )
+magic_heal = skill(name="Magic Heal", rarity = "uncommon", heal = 16, mana_cost=25,cooldown=2, summary="Heal for 16 percent max health, quick cooldown with high cost", type="heal" )
 
 
 
-#rare
-    #phys
-
-    #magic
-
-
-    #heal
-
-
-#legendary
-    #phys
-
-    #magic
-
-
-    #heal
-
-
-#mythic
-    #phys
-
-    #magic
-
-
-    #heal
 
 
 
-basic_attack = skill(name="Basic Attack", ad_scaling=1.0,  summary="Basic Attack", type="physical")
 
-common_skills = [
-    lunge,
-    sparks,
+
+non_specific_skills = [
+    
     weak_heal
     
 ]
 
-uncommon_skills = [
+
+melee_skills = [
+    lunge,
+    blunt_smash,
+    melee_heal
+]
+
+ranged_skills = [
+    focus_shot,
+    volley,
+    range_heal
+    
+    
+]
+
+magic_skills = [
     fireball,
-    warriors_heal,
-    mage_heal
-    
+    magic_heal,
+    sparks
 ]
 
-rare_skills = [
-    
-]
 
-legendary_skills = [
-    
-]
-
-mythic_skills = [
-    
-]
 
 def get_skill(player):
-    if(player.stats["Level"] <= 7):
-        skill = random.choice(common_skills)
-        ask_player_skill(player, skill)
-    elif(player.stats["Level"] <= 13):
-        skill = random.choice(uncommon_skills)
-        ask_player_skill(player, skill)
-    else:
-        pass
-
+   # player.class_dmg_type
     
+    if(player.stats["Level"] <= 100):
+        skill = choose_skill(player)
+            
+        ask_player_skill(player, skill)
+    
+    else:
+        return
+
+def choose_rarity(player):
+    #level locked rarity
+    if(player.stats["Level"] < 5):
+        rarity = random.randrange(player.stats["Luck"],84)
+    elif(player.stats["Level"] < 10):
+        rarity = random.randrange(player.stats["Luck"],94)
+    else:
+        rarity = random.randrange(player.stats["Luck"],100)
+        
+    if(rarity <= 70):loot_rarity = "common"
+    elif(rarity <= 85): loot_rarity = "uncommon"
+    elif(rarity <= 95): loot_rarity = "rare"
+    elif(rarity <= 99.5): loot_rarity = "legendary"
+    elif(rarity > 99.5): loot_rarity = "mythic" 
+    
+    return loot_rarity
     
 #prompt player to add skill
 def ask_player_skill(player, skill):
@@ -177,3 +172,50 @@ def ask_player_skill(player, skill):
             print("Skill was discaded")
             return
     
+def choose_skill(player):
+    
+    found_correct_item = False
+    
+    while(not found_correct_item):
+        
+        rarity = choose_rarity(player)
+
+       
+        if((player.class_dmg_type == "melee")):
+            skill = random.choice(non_specific_skills + melee_skills)
+            if(
+                (skill.rarity == rarity) and 
+                ((skill.type == player.class_dmg_type) or 
+                skill.type == "heal")):
+                
+                skill_return = copy(skill)
+                found_correct_item = True
+            else:
+                found_correct_item = False
+        elif((player.class_dmg_type == "ranged")):
+            skill = random.choice(non_specific_skills + ranged_skills)
+            if(
+                (skill.rarity == rarity) and 
+                ((skill.type == player.class_dmg_type) or 
+                skill.type == "heal")):
+                
+                skill_return = copy(skill)
+                found_correct_item = True
+            else:
+                found_correct_item = False
+        elif((player.class_dmg_type == "maagic")):
+            skill = random.choice(non_specific_skills + magic_skills)
+            if(
+                (skill.rarity == rarity) and 
+                ((skill.type == player.class_dmg_type) or 
+                skill.type == "heal")):
+                
+                skill_return = copy(skill)
+                found_correct_item = True
+            else:
+                found_correct_item = False
+                
+        
+            
+            
+    return skill_return
