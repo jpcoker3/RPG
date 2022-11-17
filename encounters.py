@@ -138,75 +138,64 @@ def choose_encounter(player, prev_encounter, game_round):
 
 
 def ask_player_item(player, item):
-    print("Name: " + item.name)
+    print(f"\nItem found: {item.name}")
     if(item.type == "armor"):
-            print("{:<20}{:<10}".format("Level: ", item.level))
-            print("{:<20}{:<10}".format("Rarity: ", item.rarity))
-            if(item.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus: ", item.health_bonus))
-            if(item.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus: ", item.speed_bonus))
-            if(item.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus: ", item.stamina_bonus))
-            if(item.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus: ", item.armor_bonus))
-            if(item.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus: ", item.mana_bonus))
-            if(item.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", item.regen_bonus))
-            
             
             if (item.piece == "helmet"):
-                if(player.helmet.name == "You have no Helmet equipped"):
-                    print("\n" +player.helmet.name)
-                else:
-                    
-                    print("\nCurrently Equipped: " + player.helmet.name)
-                    print("{:<20}{:<10}".format("Level:", player.helmet.level))
-                    print("{:<20}{:<10}".format("Rarity: ", player.helmet.rarity))
-                    if(player.helmet.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.helmet.health_bonus))
-                    if(player.helmet.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.helmet.speed_bonus))
-                    if(player.helmet.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.helmet.stamina_bonus))
-                    if(player.helmet.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.helmet.armor_bonus))
-                    if(player.helmet.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.helmet.mana_bonus))
-                    if(player.helmet.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.helmet.regen_bonus))
+                print(f"Current Item: {player.helmet.name}\n")
+                print("{:<20}{:<20}{:<20}".format(" ", "New Item", "Current Item"))
+                print("{:<20}{:<20}{:<20}".format(" ", item.name, player.helmet.name))
+                print("{:<20}{:<20}{:<20}".format("Level: ", item.level, player.helmet.level))
+                print("{:<20}{:<20}{:<20}".format("Rarity: ", item.rarity, player.helmet.rarity))
+                print("{:<20}{:<20}{:<20}".format("Health Bonus: ", item.health_bonus, player.helmet.health_bonus))
+                print("{:<20}{:<20}{:<20}".format("Speed Bonus: ", item.speed_bonus, player.helmet.speed_bonus))
+                print("{:<20}{:<20}{:<20}".format("Stamina Bonus: ", item.stamina_bonus, player.helmet.stamina_bonus))
+                print("{:<20}{:<20}{:<20}".format("Armor Bonus: ", item.armor_bonus, player.helmet.armor_bonus))
+                print("{:<20}{:<20}{:<20}".format("Mana Bonus: ", item.mana_bonus, player.helmet.mana_bonus))
+                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.regen.bonus))
+                
+                
             elif (item.piece == "chest"):
-                if(player.chest.name == "You have no Chest equipped"):
-                    print("\n" +player.chest.name)
-                else:
-                    print("\nCurrently Equipped: " + player.chest.name)
-                    print("{:<20}{:<10}".format("Level:", player.chest.level))
-                    print("{:<20}{:<10}".format("Rarity: ", player.chest.rarity))
-                    if(player.chest.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.chest.health_bonus))
-                    if(player.chest.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.chest.speed_bonus))
-                    if(player.chest.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.chest.stamina_bonus))
-                    if(player.chest.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.chest.armor_bonus))
-                    if(player.chest.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.chest.mana_bonus))
-                    if(player.chest.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.chest.regen_bonus))
+                print(f"Current Item: {player.chest.name}\n")
+                print("{:<20}{:<20}{:<20}".format(" ", "New Item", "Current Item"))
+                print("{:<20}{:<20}{:<20}".format(" ", item.name, player.chest.name))
+                print("{:<20}{:<20}{:<20}".format("Level: ", item.level, player.chest.level))
+                print("{:<20}{:<20}{:<20}".format("Rarity: ", item.rarity, player.chest.rarity))
+                print("{:<20}{:<20}{:<20}".format("Health Bonus: ", item.health_bonus, player.chest.health_bonus))
+                print("{:<20}{:<20}{:<20}".format("Speed Bonus: ", item.speed_bonus, player.chest.speed_bonus))
+                print("{:<20}{:<20}{:<20}".format("Stamina Bonus: ", item.stamina_bonus, player.chest.stamina_bonus))
+                print("{:<20}{:<20}{:<20}".format("Armor Bonus: ", item.armor_bonus, player.chest.armor_bonus))
+                print("{:<20}{:<20}{:<20}".format("Mana Bonus: ", item.mana_bonus, player.chest.mana_bonus))
+                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.chest.regen_bonus))
+                
             elif(item.piece == "pants"):
-                if(player.pants.name == "You have no Pants equipped"):
-                    print("\n" +player.pants.name)
-                else:
-                    print("\nCurrently Equipped: " + player.pants.name)
-                    print("{:<20}{:<10}".format("Level:", player.pants.level))
-                    print("{:<20}{:<10}".format("Rarity: ", player.pants.rarity))
-                    if(player.pants.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.pants.health_bonus))
-                    if(player.pants.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.pants.speed_bonus))
-                    if(player.pants.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.pants.stamina_bonus))
-                    if(player.pants.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.pants.armor_bonus))
-                    if(player.pants.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.pants.mana_bonus))
-                    if(player.pants.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.pants.regen_bonus))
+                print(f"Current Item: {player.pants.name}\n")
+                print("{:<20}{:<20}{:<20}".format(" ", "New Item", "Current Item"))
+                print("{:<20}{:<20}{:<20}".format(" ", item.name, player.pants.name))
+                print("{:<20}{:<20}{:<20}".format("Level: ", item.level, player.pants.level))
+                print("{:<20}{:<20}{:<20}".format("Rarity: ", item.rarity, player.pants.rarity))
+                print("{:<20}{:<20}{:<20}".format("Health Bonus: ", item.health_bonus, player.pants.health_bonus))
+                print("{:<20}{:<20}{:<20}".format("Speed Bonus: ", item.speed_bonus, player.pants.speed_bonus))
+                print("{:<20}{:<20}{:<20}".format("Stamina Bonus: ", item.stamina_bonus, player.pants.stamina_bonus))
+                print("{:<20}{:<20}{:<20}".format("Armor Bonus: ", item.armor_bonus, player.pants.armor_bonus))
+                print("{:<20}{:<20}{:<20}".format("Mana Bonus: ", item.mana_bonus, player.pants.mana_bonus))
+                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.pants.regen_bonus))
+                
             elif( item.piece == "boots"):
-                if(player.boots.name == "You have no Boots equipped"):
-                    print("\n" +player.boots.name)
-                else:
-                    
-                    print("\nCurrently Equipped: " + player.boots.name)
-                    print("{:<20}{:<10}".format("Level:", player.boots.level))
-                    print("{:<20}{:<10}".format("Rarity: ", player.boots.rarity))
-                    if(player.boots.health_bonus != 0): print("{:<20}{:<10}".format("Health Bonus:", player.boots.health_bonus))
-                    if(player.boots.speed_bonus != 0): print("{:<20}{:<10}".format("Speed Bonus:", player.boots.speed_bonus))
-                    if(player.boots.stamina_bonus != 0): print("{:<20}{:<10}".format("Stamina Bonus:", player.boots.stamina_bonus))
-                    if(player.boots.armor_bonus != 0): print("{:<20}{:<10}".format("Armor Bonus:", player.boots.armor_bonus))
-                    if(player.boots.mana_bonus != 0): print("{:<20}{:<10}".format("Mana Bonus:", player.boots.mana_bonus))
-                    if(player.boots.regen_bonus != 0): print("{:<20}{:<10}".format("Regen Bonus: ", player.boots.regen_bonus))
+                print(f"Current Item: {player.boots.name}\n")
+                print("{:<20}{:<20}{:<20}".format(" ", "New Item", "Current Item"))
+                print("{:<20}{:<20}{:<20}".format(" ", item.name, player.boots.name))
+                print("{:<20}{:<20}{:<20}".format("Level: ", item.level, player.boots.level))
+                print("{:<20}{:<20}{:<20}".format("Rarity: ", item.rarity, player.boots.rarity))
+                print("{:<20}{:<20}{:<20}".format("Health Bonus: ", item.health_bonus, player.boots.health_bonus))
+                print("{:<20}{:<20}{:<20}".format("Speed Bonus: ", item.speed_bonus, player.boots.speed_bonus))
+                print("{:<20}{:<20}{:<20}".format("Stamina Bonus: ", item.stamina_bonus, player.boots.stamina_bonus))
+                print("{:<20}{:<20}{:<20}".format("Armor Bonus: ", item.armor_bonus, player.boots.armor_bonus))
+                print("{:<20}{:<20}{:<20}".format("Mana Bonus: ", item.mana_bonus, player.boots.mana_bonus))
+                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.boots.regen_bonus))
            
             
-            equip_item = input("Would you like to equip this item? y/n: ")
+            equip_item = input("\nWould you like to equip this item? y/n: ")
             if(equip_item == "y"):
                 #item_to_be_equip = armors.armor("",0, 0, 0, 0, 0, 0,0,0, "", "") 
                 item_to_be_equip = copy(item)
@@ -228,26 +217,21 @@ def ask_player_item(player, item):
                 print("The item was discarded")
             
     elif(item.type == "weapon"):
-        print("{:<25}{:<10}".format("Level:", item.level))
-        print("{:<25}{:<10}".format("Rarity:", item.rarity))
-        if(item.ad != 0): print("{:<25}{:<10}".format("Physical Damage:", item.ad))
-        if(item.ap != 0): print("{:<25}{:<10}".format("Magical Damage:", item.ap))
-        if(item.critical_chance != 0): print("{:<25}{:<10}".format("Critical Chance:", item.critical_chance))
-        if(item.critical_damage != 0): print("{:<25}{:<10}".format("Critical Damage:", item.critical_damage))
-        if(item.armor_pen != 0): print("{:<25}{:<10}".format("Armor Penetration:", item.armor_pen))
+        
+        print(f"Current Item: {player.weapon.name}\n")
+        print("{:<20}{:<20}{:<20}".format(" ", "New Item", "Current Item"))
+        print("{:<20}{:<20}{:<20}".format(" ", item.name, player.weapon.name))
+        print("{:<20}{:<20}{:<20}".format("Level: ", item.level, player.weapon.level))
+        print("{:<20}{:<20}{:<20}".format("Rarity: ", item.rarity, player.weapon.rarity))
+        
+        print("{:<20}{:<20}{:<20}".format("Physical Damage: ", item.ad, player.weapon.ad))
+        print("{:<20}{:<20}{:<20}".format("Magical Damage: ", item.ap, player.weapon.ap))
+        print("{:<20}{:<20}{:<20}".format("critical Chance: ", item.critical_chance, player.weapon.critical_chance))
+        print("{:<20}{:<20}{:<20}".format("Critical Damage: ", item.critical_damage, player.weapon.critical_damage))
+        print("{:<20}{:<20}{:<20}".format("Armor Penetration: ", item.armor_pen, player.weapon.armor_pen))
         
             
-            
-        print("\nCurrently equipped: " + player.weapon.name + ": ")
-        print("{:<25}{:<10}".format("Level:", player.weapon.level))
-        print("{:<25}{:<10}".format("Rarity:", player.weapon.rarity))
-        if(player.weapon.ad != 0): print("{:<25}{:<10}".format("Physical Damage:", player.weapon.ad))
-        if(player.weapon.ap != 0): print("{:<25}{:<10}".format("Magical Damage:", player.weapon.ap))
-        if(player.weapon.critical_chance != 0): print("{:<25}{:<10}".format("Critical Chance:", player.weapon.critical_chance))
-        if(player.weapon.critical_damage != 0): print("{:<25}{:<10}".format("Critical Damage:", player.weapon.critical_damage))
-        if(player.weapon.armor_pen != 0): print("{:<25}{:<10}".format("Armor Penetration:", player.weapon.armor_pen))
-            
-        equip_item = input("Would you like to equip this item? y/n: ")
+        equip_item = input("\nWould you like to equip this item? y/n: ")
         if(equip_item == 'y'):
             item_to_be_equip = copy(item)
             player.critical_chance -= player.weapon.critical_chance

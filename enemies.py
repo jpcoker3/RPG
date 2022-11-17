@@ -80,7 +80,7 @@ last_names = [
 ]
 
 def get_name():
-    name = random.choice(first_names) + " " +random.choice(last_names)
+    name = f"{random.choice(first_names)} {random.choice(last_names)}"
     return name
 
 def get_level(player_level):
@@ -95,8 +95,8 @@ def get_level(player_level):
 
     
 def get_damage(level):
-    damage =  round(random.randrange(round(math.log(pow(level, 2)) + level), round(math.log(pow(level, 6)) +  level + 1)))
-    return damage
+    damage =  round(random.randrange(round(math.log(level ** 2) + level), round(math.log(level ** 6) +  level + 1)))
+    return level + damage
 
 def get_speed(level):
     speed = random.randrange( (50 + 2 * level), 100 + 4* level)
@@ -107,11 +107,11 @@ def get_health(level):
     return health 
 
 def get_critical_chance(level):
-    critical_chance = random.randrange(5, 15)
+    critical_chance = random.randrange(5, 15 + round(level/2))
     return critical_chance
 
 def get_armor(level):
-    armor = random.randrange(round(math.log(pow(level,2) + level)), round(math.log(pow(level, 2)+1) + 2*level+1))
+    armor = random.randrange(round(math.log(level ** 2 + level)), round(math.log(level ** 2 +1) + 2*level+1))
     return armor
 
 def get_critical_damage(level):
@@ -133,7 +133,7 @@ def get_enemy(player):
     unit = enemy(
         get_name(),  #name
         level, #level
-        level + get_damage(level), #damage
+        get_damage(level), #damage
         get_critical_chance(level), #critical chance
         get_critical_damage(level), #critical damage
         get_speed(level), #speed
@@ -175,7 +175,7 @@ def get_boss(game_round):
         )
        
     else:
-        print("Boss logic off. Recieved round = " + str(game_round))
+        print(f"Boss logic off. Recieved round = {str(game_round)}")
         boss = enemy( 
                      " MissingNo ",
                      999, #level

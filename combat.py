@@ -3,9 +3,11 @@ import random
 def battle(player, opponent):
    
     if(opponent.enemy_type == "enemy"):   print("Player Health: "+ str(player.stats["Health"]) + " Enemy Health: " + str(opponent.health) )
-    else: print("Player Health: "+ str(player.stats["Health"]) + " Boss Health: " + str(opponent.health) )
+    else:
+        print("\n-----------BOSS FIGHT-----------\n")
+        print(f"Player Health: {str(player.stats['Health'])}. {opponent.name} Health: {str(opponent.health)}" )
     while((player.stats["Health"] > 0) and (opponent.health > 0)):
-        
+        #print("\n") # spacing
         not_dead = True
         player_speed = player.stats["Speed"]
         opponent_speed = opponent.speed
@@ -35,25 +37,44 @@ def battle(player, opponent):
                 not_dead = False
                 
         
-        #add stamina and mana 
-        stam_regen = round(player.stats["Stamina"] + player.stamina_regen)
-        mana_regen = round(player.stats["Mana"] + player.mana_regen)
         
-        if((stam_regen + player.stats["Stamina"]) > player.max_stamina):
-            player.stats["Stamina"] = player.max_stamina
+        #Stamina Regen calculations. Only prints if amount regenerated > 0
+        stam_regen_value = round(player.stats["Stamina"] + player.stamina_regen)
         
-        if((mana_regen + player.stats["Mana"]) > player.max_mana):
-            player.stats["Mana"] = player.max_mana
+        stamina_total = stam_regen_value + player.stats["Stamina"]
+        if(stamina_total > player.max_stamina):
+            temp = stamina_total - player.max_stamina
+            stam_regen_value -= temp
+            if(stam_regen_value < 0): stam_regen_value = 0
+        player.stats["Stamina"] += stam_regen_value
+
+        #output regened health
+        if(stam_regen_value > 0):
+            print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}")
         
-                    
-            
         
-            
+        
+        #Mana Regen calculations. Only prints if amount regenerated > 0
+        mana_regen_value = round(player.stats["Mana"] + player.mana_regen)
+        
+        mana_total = mana_regen_value + player.stats["Mana"]
+        if(mana_total > player.max_mana):
+            temp = mana_total - player.max_mana
+            mana_regen_value -= temp
+            if(mana_regen_value < 0): mana_regen_value = 0
+        player.stats["Stamina"] += mana_regen_value
+
+        #output regened 
+        if(mana_regen_value > 0):
+            print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}")
+
+    
             
     if((player.stats["Health"] > 0) and (opponent.health <= 0)):
         print("Congratulations " + player.name +"! You have defeated " + opponent.name + "!")
         
-        
+        print("\n") # spacing
+    
         #basically, calculate how much to heal ( if any)
         heal_value = player.stats["Regen"]
         
@@ -92,18 +113,20 @@ def opponent_attack(player, opponent):
     player.stats["Health"] -= opp_dmg
     
     if(opp_crit):
-        print(opponent.name + " attacked with a critical hit for " + str(opp_dmg) + ". "+player.name+"'s health: " + str(player.stats["Health"]))
+        print(f"{opponent.name} attacked with a critical hit for {str(opp_dmg)}. {player.name}'s health: {str(player.stats['Health'])}")
     else:
-        print(opponent.name + " attacked for " + str(opp_dmg) + ". " + player.name + "'s health: " + str(player.stats["Health"]))
+        print(f"{opponent.name} attacked for {str(opp_dmg)}. {player.name}'s health: {str(player.stats['Health'])}")
                 
 def player_attack(player, opponent):
     
     valid_attack_choice = False
     while(not valid_attack_choice):
-        
+        print("\n") # spacing
         print("{:<3}{:<10}".format("#", "Skill"))
         for i in  range(len(player.skills)): #-1 for indexing
             print("{:<3}{:<10}".format(str(i+1), player.skills[i].name.capitalize()))
+        print("\n")
+        
         
         valid_input = False
         while(not valid_input):
@@ -116,7 +139,7 @@ def player_attack(player, opponent):
                 valid_input = False 
                 print("Please enter a number. \n")
                 
-        if((3 >= int(attack_choice)-1) >= 0 ):
+        if((int(attack_choice)-1) <= len(player.skills) ):
             
             
             #get skill
@@ -167,11 +190,11 @@ def player_attack(player, opponent):
                     
                     #doublecrit, crit, normal
                     if(player_double_crit):
-                        print(player.name + " attacked with " + skill.name.capitalize() + " and DOUBLE critical hit for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health))
+                        print(f"{player.name} attacked with {skill.name.capitalize()} and DOUBLE critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")
                     elif(player_crit):
-                        print(player.name + " attacked with " + skill.name.capitalize() + " and critical hit for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health)) 
+                        print(f"{player.name} attacked with {skill.name.capitalize()} and critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}") 
                     else:
-                        print(player.name + " attacked with " + skill.name.capitalize() + " for " + str(player_dmg) + ". " + opponent.name + "'s health: " + str(opponent.health))    
+                        print(f"{player.name} attacked with {skill.name.capitalize()} for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")      
                     
                     valid_attack_choice = True
                 
@@ -189,7 +212,7 @@ def player_attack(player, opponent):
                         if(heal_value < 0): heal_value = 0
                   
 
-                    print("Used " + skill.name + " and healed for:" + str(heal_value))
+                    print(f"Used {skill.name} and healed for: {str(heal_value)}")
                         
                     player.stats["Health"] += heal_value
                     
@@ -198,8 +221,15 @@ def player_attack(player, opponent):
                 
             else:
                 print("\nYou do not have enough resources for this ability.")
-                print("You have: Stamina: " + str(player.stats["Stamina"]) + ". Mana: " + str(player.stats["Mana"]) + ". Cooldown: " + str(skill.cooldown_counter))
-                print("Need: Stamina: " + str(skill.stamina_cost) + ". Mana: " + str(skill.mana_cost) + ". Cooldown: 0\n")
+                
+                if(player.stats["Mana"] >= skill.mana_cost):
+                    print(f"This skill requires {str(skill.mana_cost)} Mana. You have {str(player.stats['Mana'])} Mana. ")
+            
+                if(player.stats["Stamina"] >= skill.stamina_cost):
+                    print(f"This skill requires {str(skill.stamina_cost)} Stamina. You have {str(player.stats['Stamina'])} Stamina. ")
+                if(skill.cooldown_counter != 0 ):
+                    print(f"Skill on cooldown for {skill.cooldown_counter} turns.")
+                    
                 valid_attack_choice = False
         
         else:
