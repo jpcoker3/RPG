@@ -38,7 +38,7 @@ volley = skill(name="Volley", rarity = "uncommon", ad_scaling=1.6, stamina_cost=
 #magic
 sparks = skill(name="Sparks", rarity = "common",  ap_scaling=1.3, mana_cost=15,cooldown=2, summary="a small burst of flames", type="magic")
 fireball = skill(name="Fireball", rarity = "uncommon", ap_scaling=1.5, mana_cost=20,cooldown=3, summary="It's a fireball.", type="magic" )
-ice_bolt = skill(name="Ice Bolt", rarity = "uncommon", ap_scaling=1.5, mana_cost= 40, cooldown=3, summary="Shoot out a bolt of Ice", type="magic" )
+ice_bolt = skill(name="Ice Bolt", rarity = "uncommon", ap_scaling=1.5, mana_cost= 20, cooldown=3, summary="Shoot out a bolt of Ice", type="magic" )
 
 
 #heal
