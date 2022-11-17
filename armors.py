@@ -19,7 +19,7 @@ class armor:
     
     
     
-#RARITY_enabbled
+#RARITY_enabled
 #rare < 5
 # legendary < 10
 #mythic => 10
