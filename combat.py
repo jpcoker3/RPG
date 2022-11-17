@@ -134,7 +134,7 @@ def player_attack(player, opponent):
                 
 #DO STUFF DEPENDING ON TYPE OF SKILL
                 #physical damage calculations
-                if(skill.type == "physical"):
+                if((skill.type == "melee") or (skill.type == "ranged")):
                     
                     player_dmg, player_crit, player_double_crit = player_damage(player, skill)
                                     # 1/100 to get a percentage, so attack is reduced by (armor - pen /4)%
@@ -217,13 +217,13 @@ def player_attack(player, opponent):
 def player_damage(player, skill):  
     
     #physical or magical
-    if(skill.type == "physical"):
+    if((skill.type == "melee") or (skill.type == "ranged")):
         damage = random.randrange(round(player.weapon.ad - player.weapon.ad/10),  round(player.weapon.ad + player.weapon.ad /10))
         damage = round(damage * skill.ad_scaling)
     elif(skill.type == "magic"):
         damage = random.randrange(round(player.weapon.ap - player.weapon.ap /10),  round(player.weapon.ap + player.weapon.ap/10) + 1)
         damage = round(damage * skill.ap_scaling)
-        
+    
         
     critical = False
     double_Crit = False

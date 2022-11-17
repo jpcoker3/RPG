@@ -89,11 +89,10 @@ def get_level(player_level):
     elif(player_level == 1):
         return 1
     elif( player_level <= 5):
-        return random.randrange(player_level-1, player_level +1)
-    elif(player_level <= 10):
-        return random.randrange(player_level-2, player_level +3)
+        return random.randrange(player_level, player_level +1)
     else:
-        return random.randrange(player_level - 4, player_level + 4)
+        return random.randrange(player_level-1, player_level +3)
+
     
 def get_damage(level):
     damage =  round(random.randrange(round(math.log(pow(level, 2)) + level), round(math.log(pow(level, 6)) +  level + 1)))
@@ -120,7 +119,7 @@ def get_critical_damage(level):
     return critical_damage
 
 def get_armor_pen(level):
-    armor_pen = random.randrange(level, level +1)
+    armor_pen = random.randrange(0, level +1)
     return armor_pen
 
 def get_enemy(player):
@@ -174,7 +173,7 @@ def get_boss(game_round):
             8, # armor pen
             "Boss"
         )
-        pass
+       
     else:
         print("Boss logic off. Recieved round = " + str(game_round))
         boss = enemy( 

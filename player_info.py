@@ -40,16 +40,10 @@ def lvl_up(player):
     while (bad_input) :
         
         print("{:<2}{:<20} {:<5}".format('#', 'Name', 'Value'))
-        print("{:<2}{:<20} {:<5}".format("1.","Health", "+10"))  
-        print("{:<2}{:<20} {:<5}".format("2.","Mana", "+10")) 
-        print("{:<2}{:<20} {:<5}".format("3.","Stamina", "+10")) 
-        print("{:<2}{:<20} {:<5}".format("4.","Armor", "+10")) 
-        print("{:<2}{:<20} {:<5}".format("5.","Speed", "+10")) 
-        print("{:<2}{:<20} {:<5}".format("6.","Luck", "+5")) 
-        print("{:<2}{:<20} {:<5}".format("7.","Regen", "+5")) 
-        print("{:<2}{:<20} {:<5}".format("8.","Critical Chance", "+5%"))
-        print("{:<2}{:<20} {:<5}".format("9.","Critical Damage", "+0.15")) 
-        
+        print("{:<2}{:<20} {:<5}".format("1.","Max Health", "+10"))  
+        print("{:<2}{:<20} {:<5}".format("2.","Max Mana", "+10")) 
+        print("{:<2}{:<20} {:<5}".format("3.","Max Stamina", "+10")) 
+
         choice = input("What stat would you like to increase? Please enter a number: ")
         
         if(choice == "1"):
@@ -64,32 +58,17 @@ def lvl_up(player):
             player.stats["Stamina"] += 10
             player.max_stamina += 10
             bad_input = False
-        elif(choice == "4"):
-            player.stats["Armor"] += 10
-            bad_input = False
-        elif(choice == "5"):
-            player.stats["Speed"] += 10
-            bad_input = False
-        elif(choice == "6"):
-            player.stats["Luck"] += 5
-            bad_input = False
-        elif(choice == "7"):
-            player.stats["Regen"] += 5
-            bad_input = False
-        elif(choice == "8"):
-            player.critical_chance += 5
-            bad_input = False
-        elif(choice == "9"):
-            player.critical_damage += 0.15
-            bad_input = False
+        
         else:
             bad_input = True
-            print("Please enter a valid number (1-9)")
+            print("Please enter a valid number (1-3)")
     
-    output_stats(player)
-    print("\n")
-    output_offense_stats(player)
     
+    print("{:<15}{:<20}".format( 'Name', 'Value'))
+    print("{:<15}{:<20}".format("Max Health", str(player.max_health)))  
+    print("{:<15}{:<20} ".format("Max Mana",str(player.max_mana))) 
+    print("{:<15}{:<20} ".format("Max Stamina", str(player.max_stamina)))
+
     skills.get_skill(player)
         
 
@@ -104,7 +83,7 @@ class class_type_stats:
         
         self.stamina = stamina
         self.armor = armor
-        self.speed = speed
+        self.speed = speed 
         
         self.luck = luck # Increases chance of getting heigher tier weapons and abilities
         self.regen = regen # flat health heal
@@ -117,8 +96,8 @@ class class_type_stats:
 #template = class_type_stats(name = "", health= 0, mana=0, stamina= 0, armor=0, speed=0, luck=0, regen=0, critical_chance=0, critical_damage=0, summary="")
 
 
-weak = class_type_stats(name = "weak", class_dmg_type = "melee", health= -80,  regen=-10,  summary="-80 HP, -10 Regen. Test Class")
-op = class_type_stats(name = "op",class_dmg_type = "melee", health= 1000,  speed=1000,  regen=1000, critical_chance=200, critical_damage=10, summary="+1000 HP, +1000 Speed, +1000 Regen, +100 crit chance, + 10 Crit Multiplier. OP test class")
+#weak = class_type_stats(name = "weak", class_dmg_type = "melee", health= -80,  regen=-10,  summary="-80 HP, -10 Regen. Test Class")
+#op = class_type_stats(name = "op",class_dmg_type = "melee", health= 1000,  speed=1000,  regen=1000, critical_chance=200, critical_damage=10, summary="+1000 HP, +1000 Speed, +1000 Regen, +100 crit chance, + 10 Crit Multiplier. OP test class")
 peasant = class_type_stats(name = "peasant",class_dmg_type = "melee",  summary="Default Stats")
 idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "melee", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",class_dmg_type = "melee",health =  50,  mana = -100,armor = 20, speed = -20,regen= 20,  summary= "+50 Health, +20 Armor, +20 Regen, -100 Mana, -20 Speed" )
@@ -126,10 +105,11 @@ gambler = class_type_stats(name = "gambler",class_dmg_type = "magic",health = -2
 ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged", stamina= 15, speed=20,   regen=5, critical_chance=15, critical_damage= 0.45, summary="+15 Stamina, +20 Speed, +5 Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
 defender = class_type_stats(name = "defender", health= 100,  armor=50,class_dmg_type = "melee", speed= -30,  regen=20, critical_damage= -0.50, summary= "+100 Health, +50 Armor, +20 Regen, -30 Speed, -0.5 Critical Multiplier" )
 
-classes = [weak, op, peasant, idiot, warrior, gambler, ranger, defender]
+classes = [ peasant, idiot, warrior, gambler, ranger, defender]
 
 def add_class_stats(player, class_type):
     player.class_type = class_type.name.capitalize()
+    player.class_dmg_type = class_type.class_dmg_type
     
     player.max_health += class_type.health
     player.stats["Health"] += class_type.health
@@ -217,8 +197,8 @@ class char_info():
     max_mana = 100
     max_stamina = 100
     
-    mana_regen = 5
-    stamina_regen = 5
+    mana_regen = round((5* max_mana)/100)
+    stamina_regen = round((5* max_stamina)/100)
     
     
     critical_chance = 0
@@ -226,6 +206,7 @@ class char_info():
     
     name = 'EMPTY'
     class_type = 'EMPTY'
+    class_dmg_type = 'EMPTY'
     gold_balance = 0
     current_xp = 0
     xp_to_lvl_up = 20
