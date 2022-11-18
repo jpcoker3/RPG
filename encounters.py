@@ -152,7 +152,7 @@ def ask_player_item(player, item):
                 print("{:<20}{:<20}{:<20}".format("Stamina Bonus: ", item.stamina_bonus, player.helmet.stamina_bonus))
                 print("{:<20}{:<20}{:<20}".format("Armor Bonus: ", item.armor_bonus, player.helmet.armor_bonus))
                 print("{:<20}{:<20}{:<20}".format("Mana Bonus: ", item.mana_bonus, player.helmet.mana_bonus))
-                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.regen.bonus))
+                print("{:<20}{:<20}{:<20}".format("Regen Bonus: ", item.regen_bonus, player.helmet.regen_bonus))
                 
                 
             elif (item.piece == "chest"):

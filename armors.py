@@ -3,7 +3,7 @@ from copy import copy
 
 class armor:
     #set some initial values
-    def __init__(self, name:str, level:int, rarity:str, piece:str, health_bonus:int = 0, speed_bonus:int = 0, stamina_bonus:int = 0, stamina_regen_bonus:int = 0, mana_regen_bonus:int = 0, armor_bonus:int = 0, mana_bonus:int = 0, regen_bonus:int = 0,luck_bonus:int = 0):
+    def __init__(self, name:str, level:int, rarity:str, piece:str,class_type:str="", health_bonus:int = 0, speed_bonus:int = 0, stamina_bonus:int = 0, stamina_regen_bonus:int = 0, mana_regen_bonus:int = 0, armor_bonus:int = 0, mana_bonus:int = 0, regen_bonus:int = 0,luck_bonus:int = 0):
         self.name = name
         self.level = level
         self.health_bonus = health_bonus
@@ -12,6 +12,7 @@ class armor:
         
         self.stamina_regen_bonus = stamina_regen_bonus
         self.mana_regen_bonus = mana_regen_bonus
+        self.class_type = class_type
         
         self.armor_bonus = armor_bonus
         self.mana_bonus = mana_bonus
@@ -30,44 +31,73 @@ class armor:
 #mythic => 10
 
 
-#template = armor(name= "", level=0, health_bonus=0, speed_bonus=0, stamina_bonus=0,armor_bonus=0, mana_bonus=0, regen_bonus=0, luck_bonus=0, rarity="", piece="")
+#squire_boots = armor(name = "Squires' Boots",class_type = "melee",level= 2,health_bonus= 6,speed_bonus= 4,stamina_bonus= 5,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "boots")
 
 #common
-boots_of_bongo = armor(name="Boots of Bongo",level= 1,health_bonus= 5,speed_bonus= 0,stamina_bonus= 10,armor_bonus= 4,rarity= "common",piece= "boots")
-knights_chestplate = armor(name = "Knights' Chestplate",level= 2,health_bonus= 5,speed_bonus= 5,stamina_bonus= 8,armor_bonus= 5,  regen_bonus= 5,luck_bonus= 1, rarity= "common",piece= "chest")
-messengers_pants = armor(name="Messengers' Pants",level= 1, health_bonus= 5,speed_bonus= 15, stamina_bonus= 7,armor_bonus= 1, regen_bonus = 4,luck_bonus= 2,rarity= "common",piece= "pants" )
+boots_of_bongo = armor(name="Boots of Bongo",class_type = "melee", level= 1,health_bonus= 5,speed_bonus= 0,stamina_bonus= 10,armor_bonus= 4,rarity= "common",piece= "boots")
+
+squire_chest = armor(name = "Squires' Chestplate",class_type = "melee",level= 2,health_bonus= 7,speed_bonus= 5,stamina_bonus= 8,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "chest")
+squire_boots = armor(name = "Squires' Boots",class_type = "melee",level= 2,health_bonus= 6,speed_bonus= 4,stamina_bonus= 5,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "boots")
+
+bowman_boots = armor(name = "Bowmans' Boots",class_type = "ranged",level= 2,health_bonus= 3,speed_bonus= 7,stamina_bonus= 5, rarity= "common",piece= "boots")
+bowman_cloak = armor(name = "Bowmans' Cloak",class_type = "ranged",level= 2,health_bonus= 5,speed_bonus= 3,stamina_bonus= 5, rarity= "common",piece= "chest")
+bowman_pants = armor(name = "Bowmans' Boots",class_type = "ranged",level= 2,health_bonus= 4,speed_bonus= 5,stamina_bonus= 5, rarity= "common",piece= "pants")
+bowman_hood = armor(name = "Bowmans' Hood",class_type = "ranged",level= 2,health_bonus= 3,speed_bonus= 3,stamina_bonus= 5, rarity= "common",piece= "helmet")
+
+messengers_pants = armor(name="Messengers' Pants",class_type = "ranged", level= 2, health_bonus= 5,speed_bonus= 15, stamina_bonus= 7,armor_bonus= 1, regen_bonus = 4,luck_bonus= 2,rarity= "common",piece= "pants" )
+
+disciple_hood = armor(name = "Disciple's Hood", class_type="magic", level=2, health_bonus=1, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="helmet")
+disciple_robe = armor(name = "Disciple's Robe", class_type="magic", level=2, health_bonus=5, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="chest")
+disciple_pants = armor(name = "Disciple's Pants", class_type="magic", level=2, health_bonus=1, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="pants")
+disciple_shoes = armor(name = "Disciple's Shoes", class_type="magic", level=2, health_bonus=1, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="boots")
 
 #uncommon
-drunkards_shirt = armor(name="Drunkards' Shirt",level= 3,health_bonus= 12,speed_bonus= -10,stamina_bonus= -10,armor_bonus= 10,regen_bonus= 5,luck_bonus= 0,rarity= "uncommon",piece= "chest")
-ranger_cloak = armor(name= "Ranger's Cloak", level=4, health_bonus=8, speed_bonus=7, stamina_bonus=14,armor_bonus=5, regen_bonus=5, luck_bonus=7, rarity="uncommon", piece="chest")
-ranger_boots = armor(name= "Ranger's Boots", level=4, health_bonus=6, speed_bonus=15, stamina_bonus=12,armor_bonus=3,  regen_bonus=3, luck_bonus=4, rarity="uncommon", piece="boots")
-ranger_pants = armor(name= "Ranger's Boots", level=4, health_bonus=9, speed_bonus=12, stamina_bonus=10,armor_bonus=3, regen_bonus=4, luck_bonus=4, rarity="uncommon", piece="pants")
+drunkards_shirt = armor(name="Drunkard's Shirt",class_type = "melee",level= 3,health_bonus= 12,speed_bonus= -10,stamina_bonus= -10,armor_bonus= 10,regen_bonus= 5,luck_bonus= 0,rarity= "uncommon",piece= "chest")
 
+ranger_cloak = armor(name= "Ranger's Cloak",class_type = "ranged", level=4, health_bonus=8, speed_bonus=8, stamina_bonus=14,armor_bonus=5, regen_bonus=5, luck_bonus=7, rarity="uncommon", piece="chest")
+ranger_boots = armor(name= "Ranger's Boots",class_type = "ranged", level=4, health_bonus=6, speed_bonus=15, stamina_bonus=12,armor_bonus=3,  regen_bonus=3, luck_bonus=4, rarity="uncommon", piece="boots")
+ranger_pants = armor(name= "Ranger's Pants",class_type = "ranged", level=4, health_bonus=9, speed_bonus=12, stamina_bonus=10,armor_bonus=3, regen_bonus=4, luck_bonus=4, rarity="uncommon", piece="pants")
+ranger_helmet= armor(name= "Ranger's Helmet",class_type = "ranged", level=4, health_bonus=9, speed_bonus=12, stamina_bonus=10,armor_bonus=3, regen_bonus=4, luck_bonus=4, rarity="uncommon", piece="helmet")
+
+knights_chestplate = armor(name = "Knights' Chestplate",class_type = "melee",level= 4,health_bonus= 10,speed_bonus= 4,stamina_bonus= 8,armor_bonus= 10,  regen_bonus= 5,luck_bonus= 0, rarity= "uncommon",piece= "chest")
 
 #rare
-milf = armor(name="Mailplate Ivory Luxor Facilitator",level= 5,health_bonus= 30,speed_bonus= 10,stamina_bonus= 20, armor_bonus = 10,regen_bonus= 5, rarity= "rare",piece= "chest")
-assasins_hood = armor(name= "Assassin's Hood", level=6, health_bonus=15, speed_bonus=12, stamina_bonus=7,armor_bonus=3,  regen_bonus=2, luck_bonus=8, rarity="rare", piece="helmet")
-assassins_cloak = armor(name= "Assassin's Cloak", level=6, health_bonus=18, speed_bonus=10, stamina_bonus=5,armor_bonus=6,  regen_bonus=4, luck_bonus=5, rarity="rare", piece="chest")
+milf = armor(name="Mailplate Ivory Luxor Facilitator",class_type = "melee",level= 5,health_bonus= 30,speed_bonus= 10,stamina_bonus= 20, armor_bonus = 10,regen_bonus= 5, rarity= "rare",piece= "chest")
+assasins_hood = armor(name= "Assassin's Hood", class_type = "melee",level=6, health_bonus=15, speed_bonus=12, stamina_bonus=7,armor_bonus=3,  regen_bonus=2, luck_bonus=8, rarity="rare", piece="helmet")
+assassins_cloak = armor(name= "Assassin's Cloak", class_type = "melee",level=6, health_bonus=18, speed_bonus=10, stamina_bonus=5,armor_bonus=6,  regen_bonus=4, luck_bonus=5, rarity="rare", piece="chest")
 
 #legendary
-head_of_terry = armor(name = "Head of Terry",level= 10, health_bonus= 50,speed_bonus= 50,rarity= "legendary",piece= "helmet")
+head_of_terry = armor(name = "Head of Terry",class_type = "melee",level= 10, health_bonus= 50,speed_bonus= 50,rarity= "legendary",piece= "helmet")
 
 
 #mythic
-breastplate_of_dormamu = armor(name="Breastplate of Dormamu",level= 17,health_bonus= 50,speed_bonus= 40,armor_bonus= 15, regen_bonus= 15,luck_bonus= 10,rarity= "mythic",piece= "chest")
-boots_of_hermes = armor(name = "Boots of Hermes",level= 17, speed_bonus= 60,stamina_bonus= 40, armor_bonus= 5, regen_bonus = 0, rarity= "mythic", piece = "boots")
+breastplate_of_dormamu = armor(name="Breastplate of Dormamu",class_type = "melee",level= 17,health_bonus= 50,speed_bonus= 40,armor_bonus= 15, regen_bonus= 15,luck_bonus= 10,rarity= "mythic",piece= "chest")
+boots_of_hermes = armor(name = "Boots of Hermes",class_type = "melee",level= 17, speed_bonus= 60,stamina_bonus= 40, armor_bonus= 5, regen_bonus = 0, rarity= "mythic", piece = "boots")
 
 
 armors = [
     #common
     boots_of_bongo,
-    knights_chestplate,
+    squire_chest,
     messengers_pants,
+    squire_boots,
     
+    bowman_hood,
+    bowman_cloak,
+    bowman_pants,
+    bowman_boots,
+    
+    disciple_hood,
+    disciple_robe,
+    disciple_pants,
+    disciple_shoes,
     #uncommon
     drunkards_shirt,
     ranger_cloak,
     ranger_boots,
+    ranger_helmet,
+    ranger_pants,
+    knights_chestplate,
     
     #rare
     milf,
@@ -112,18 +142,39 @@ def get_armor(player, rarity):
         #choose rarity of item
         if(rarity == "common"):
             orig_piece = random.choice(common)
+            if(player.class_dmg_type == "both"):
+                orig_piece = random.choice(common)
+            else:
+                while(player.class_dmg_type != orig_piece.class_type):
+                    orig_piece = random.choice(common)
             armor_piece = copy(orig_piece)
         elif(rarity == "uncommon"):
-            orig_piece = random.choice(uncommon)
+            if(player.class_dmg_type == "both"):
+                orig_piece = random.choice(uncommon)
+            else:
+                while(player.class_dmg_type != orig_piece.class_type):
+                    orig_piece = random.choice(uncommon)
             armor_piece = copy(orig_piece)
         elif(rarity == "rare"):
-            orig_piece = random.choice(rare)
+            if(player.class_dmg_type == "both"):
+                orig_piece = random.choice(rare)
+            else:
+                while(player.class_dmg_type != orig_piece.class_type):
+                    orig_piece = random.choice(rare)
             armor_piece = copy(orig_piece)
         elif(rarity == "legendary"):
-            orig_piece = random.choice(legendary)
+            if(player.class_dmg_type == "both"):
+                orig_piece = random.choice(legendary)
+            else:
+                while(player.class_dmg_type != orig_piece.class_type):
+                 orig_piece = random.choice(legendary)
             armor_piece = copy(orig_piece)
         elif(rarity == "mythic"):
-            orig_piece = random.choice(mythic)
+            if(player.class_dmg_type == "both"):
+                orig_piece = random.choice(mythic)
+            else:
+                while(player.class_dmg_type != orig_piece.class_type):
+                    orig_piece = random.choice(mythic)
             armor_piece = copy(orig_piece)
     
         if(armor_piece.level < (player.stats["Level"] + 2)):

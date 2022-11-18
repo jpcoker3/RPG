@@ -151,6 +151,6 @@ def get_damage(weapon):
 
 def get_default_weapon():
     #default weapon, fists, should be able to survive a couple rounds 
-    fists = weapon(name="Fists",level= 1,ad= 6,ap =6, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
+    fists = weapon(name="Fists",level= 1,ad= 8,ap =8, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
     default_weapon = [fists]
     return default_weapon

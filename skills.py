@@ -32,13 +32,14 @@ blunt_smash = skill(name="Blunt Smash", rarity = "common", ad_scaling=1.4 , stam
 kick= skill(name="Kick", rarity = "common", ad_scaling=1.2, stamina_cost=15, cooldown=3, summary="Kick the enemy ... kinda obvious", type="melee" )
 
 #ranged
-focus_shot = skill(name="Focus Shot", rarity = "common", ad_scaling=1.4, stamina_cost=20 ,cooldown=3, summary="A focused shot towards enemy weak point", type="ranged" )
+focus_shot = skill(name="Focus Shot", rarity = "common", ad_scaling=1.4, stamina_cost=27 ,cooldown=3, summary="A focused shot towards enemy weak point", type="ranged" )
+quick_shot = skill(name="Quick Shot", rarity="common", ad_scaling=1.2,stamina_cost=15, cooldown=1, summary="Fire a quick shot", type="ranged" )
 volley = skill(name="Volley", rarity = "uncommon", ad_scaling=1.6, stamina_cost=40 ,cooldown=5, summary="Shoot a volley of arrows towards the enemy", type="ranged" )
 
 #magic
 sparks = skill(name="Sparks", rarity = "common",  ap_scaling=1.3, mana_cost=15,cooldown=2, summary="a small burst of flames", type="magic")
-fireball = skill(name="Fireball", rarity = "uncommon", ap_scaling=1.5, mana_cost=20,cooldown=3, summary="It's a fireball.", type="magic" )
-ice_bolt = skill(name="Ice Bolt", rarity = "uncommon", ap_scaling=1.5, mana_cost= 20, cooldown=3, summary="Shoot out a bolt of Ice", type="magic" )
+fireball = skill(name="Fireball", rarity = "common", ap_scaling=1.5, mana_cost=20,cooldown=3, summary="It's a fireball.", type="magic" )
+ice_bolt = skill(name="Ice Bolt", rarity = "common", ap_scaling=1.5, mana_cost= 20, cooldown=3, summary="Shoot out a bolt of Ice", type="magic" )
 
 
 #heal
@@ -71,7 +72,8 @@ melee_skills = [
 ranged_skills = [
     focus_shot,
     volley,
-    range_heal
+    range_heal,
+    quick_shot
     
     
 ]
@@ -208,12 +210,20 @@ def choose_skill(player):
                 found_correct_item = True
             else:
                 found_correct_item = False
-        elif((player.class_dmg_type == "maagic")):
+        elif((player.class_dmg_type == "magic")):
             skill = random.choice(non_specific_skills + magic_skills)
             if(
                 (skill.rarity == rarity) and 
                 ((skill.type == player.class_dmg_type) or 
                 skill.type == "heal")):
+                
+                skill_return = copy(skill)
+                found_correct_item = True
+        elif((player.class_dmg_type == "both")):
+            skill = random.choice(non_specific_skills + magic_skills + ranged_skills + melee_skills)
+            if(
+                (skill.rarity == rarity)  or 
+                skill.type == "heal"):
                 
                 skill_return = copy(skill)
                 found_correct_item = True
