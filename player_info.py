@@ -2,6 +2,7 @@ import armors
 import weapons
 import skills
 from copy import copy
+from dataclasses import dataclass
 
 #get default weapons and armor
 default_equipt = armors.get_default_armor() + weapons.get_default_weapon()
@@ -71,35 +72,35 @@ def lvl_up(player):
 
     skills.get_skill(player)
         
-
+        
+        
+@dataclass
 class class_type_stats:
-    def __init__(self, name:str, summary:str, class_dmg_type:str, health:int = 0, mana:int = 0, stamina_regen:int = 0, mana_regen:int = 0, stamina:int = 0, armor:int = 0, speed:int = 0, luck:int = 0, regen:int = 0, critical_chance:int = 0, critical_damage:int = 0):
-        self.name = name
-        self.health = health
-        self.mana = mana
-        
-        self.stamina_regen = stamina_regen
-        self.mana_regen = mana_regen
-        
-        self.stamina = stamina
-        self.armor = armor
-        self.speed = speed 
-        
-        self.luck = luck # Increases chance of getting heigher tier weapons and abilities
-        self.regen = regen # flat health heal
-        self.critical_chance = critical_chance # critical chance percent
-        self.critical_damage = critical_damage # critical damage multiplier, x0.00
-        self.summary = summary #summary of class stat changes
-        self.class_dmg_type = class_dmg_type # magic, melee, ranged, affects what items and stats you can get
-      
+    name:str
+    summary:str  #summary of class stat changes
+    class_dmg_type:str  # magic, melee, ranged, affects what items and stats you can get
+    health:int = 0
+    mana:int = 0
+    stamina_regen:int = 0
+    mana_regen:int = 0
+    stamina:int = 0
+    armor:int = 0
+    speed:int = 0
+    luck:int = 0 # Increases chance of getting heigher tier weapons and abilities
+    regen:int = 0 # flat health heal
+    critical_chance:int = 0 # critical chance percent
+    critical_damage:int = 0# critical damage multiplier, x0.00
+   
+   
+   
         
 #template = class_type_stats(name = "", health= 0, mana=0, stamina= 0, armor=0, speed=0, luck=0, mana_regen = 0, stamina_regen = 0, regen=0, critical_chance=0, critical_damage=0, class_dmg_type = "", summary="")
 
 
 #weak = class_type_stats(name = "weak", class_dmg_type = "melee", health= -80,  regen=-10,  summary="-80 HP, -10 Regen. Test Class")
 #op = class_type_stats(name = "op",class_dmg_type = "melee", health= 1000,  speed=1000,  regen=1000, critical_chance=200, critical_damage=10, summary="+1000 HP, +1000 Speed, +1000 Regen, +100 crit chance, + 10 Crit Multiplier. OP test class")
-peasant = class_type_stats(name = "peasant",class_dmg_type = "both",  summary="Default Stats")
-idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "both", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
+peasant = class_type_stats(name = "peasant",class_dmg_type = "all",  summary="Default Stats")
+idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "all", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",class_dmg_type = "melee",health =  50,armor = 20, speed = -20,regen= 20,  summary= "+50 Health, +20 Armor, +20 HP Regen, -20 Speed" )
 gambler = class_type_stats(name = "gambler",class_dmg_type = "magic",health = -25,armor =  5,speed =  25,luck= 10,critical_chance= 10,critical_damage= -.5, summary= "+5 Armor, +25 Speed, +10 Luck, +10% Crit Chance, -0.5 Crit Damage Multiplier, -25 Health ")
 ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged",stamina_regen=10, stamina= 20, speed=20, critical_chance=15, critical_damage= 0.45, summary="+20 Stamina, +20 Speed, +10 Stamina Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")

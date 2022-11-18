@@ -227,7 +227,7 @@ def ask_player_item(player, item):
         print("{:<20}{:<20}{:<20}".format("Physical Damage: ", item.ad, player.weapon.ad))
         print("{:<20}{:<20}{:<20}".format("Magical Damage: ", item.ap, player.weapon.ap))
         print("{:<20}{:<20}{:<20}".format("critical Chance: ", item.critical_chance, player.weapon.critical_chance))
-        print("{:<20}{:<20}{:<20}".format("Critical Damage: ", item.critical_damage, player.weapon.critical_damage))
+        print("{:<20}{:<20}{:<20}".format("Critical Damage: ", round(item.critical_damage), round(player.weapon.critical_damage)))
         print("{:<20}{:<20}{:<20}".format("Armor Penetration: ", item.armor_pen, player.weapon.armor_pen))
         
             

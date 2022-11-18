@@ -1,20 +1,21 @@
 from copy import copy
 import random
+from dataclasses import dataclass
 
-
+@dataclass(kw_only = True)
 class skill:
-    def __init__(self, name:str,  summary:str, type:str, rarity:str,  ad_scaling:int = 0, ap_scaling:int = 0, heal:int = 0, mana_cost:int = 0, stamina_cost:int = 0, cooldown:int = 0):
-        self.name = name
-        self.ad_scaling = ad_scaling
-        self.ap_scaling = ap_scaling
-        self.heal = heal
-        self.mana_cost = mana_cost
-        self.stamina_cost = stamina_cost
-        self.cooldown = cooldown
-        self.summary = summary
-        self.type = type#melee, ranged, magic, heal
-        self.rarity = rarity #common, uncommon, rare, legendary, mythic
-
+    
+    name:str  
+    summary:str 
+    type:str #melee, ranged, magic, heal
+    rarity:str #common, uncommon, rare, legendary, mythic
+    ad_scaling:int = 0
+    ap_scaling:int = 0
+    heal:int = 0
+    mana_cost:int = 0
+    stamina_cost:int = 0
+    cooldown:int = 0
+  
     cooldown_counter = 0
          
 

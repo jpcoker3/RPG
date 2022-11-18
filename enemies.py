@@ -1,18 +1,20 @@
 import random
 import math
+from dataclasses import dataclass
 
+@dataclass
 class enemy:
-    def __init__(self, name, level, damage, critical_chance, critical_damage, speed, health, armor, armor_pen, enemy_type):
-        self.name = name
-        self.level = level
-        self.damage = damage
-        self.critical_chance = critical_chance
-        self.critical_damage = critical_damage
-        self.speed = speed
-        self.health = health
-        self.armor = armor
-        self.armor_pen = armor_pen
-        self.enemy_type = enemy_type
+    name:str
+    level:int
+    damage:int
+    critical_chance:int
+    critical_damage:int
+    speed:int
+    health:int
+    armor:int
+    armor_pen:int
+    enemy_type:int
+    
 
 first_names = [
     "Merlin",

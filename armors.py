@@ -1,26 +1,26 @@
 import random
 from copy import copy
+from dataclasses import dataclass, field
 
+@dataclass(kw_only = True)
 class armor:
     #set some initial values
-    def __init__(self, name:str, level:int, rarity:str, piece:str,class_type:str="", health_bonus:int = 0, speed_bonus:int = 0, stamina_bonus:int = 0, stamina_regen_bonus:int = 0, mana_regen_bonus:int = 0, armor_bonus:int = 0, mana_bonus:int = 0, regen_bonus:int = 0,luck_bonus:int = 0):
-        self.name = name
-        self.level = level
-        self.health_bonus = health_bonus
-        self.speed_bonus = speed_bonus
-        self.stamina_bonus = stamina_bonus
-        
-        self.stamina_regen_bonus = stamina_regen_bonus
-        self.mana_regen_bonus = mana_regen_bonus
-        self.class_type = class_type
-        
-        self.armor_bonus = armor_bonus
-        self.mana_bonus = mana_bonus
-        self.regen_bonus = regen_bonus
-        self.luck_bonus = luck_bonus
-        self.rarity = rarity
-        self.piece = piece
-    type = "armor"
+    name:str
+    level:int
+    rarity:str
+    piece:str
+    class_type:str=""
+    health_bonus:int = 0
+    speed_bonus:int = 0
+    stamina_bonus:int = 0
+    stamina_regen_bonus:int = 0
+    mana_regen_bonus:int = 0
+    armor_bonus:int = 0
+    mana_bonus:int = 0
+    regen_bonus:int = 0
+    luck_bonus:int = 0
+       
+    type:int = field(init = False, default = "armor")
     
     
 #typing this on phone... 
@@ -34,7 +34,7 @@ class armor:
 #squire_boots = armor(name = "Squires' Boots",class_type = "melee",level= 2,health_bonus= 6,speed_bonus= 4,stamina_bonus= 5,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "boots")
 
 #common
-boots_of_bongo = armor(name="Boots of Bongo",class_type = "melee", level= 1,health_bonus= 5,speed_bonus= 0,stamina_bonus= 10,armor_bonus= 4,rarity= "common",piece= "boots")
+boots_of_bongo = armor(name="Boots of Bongo",class_type = "all", level= 1,health_bonus= 5,speed_bonus= 0,stamina_bonus= 10,armor_bonus= 4,rarity= "common",piece= "boots")
 
 squire_chest = armor(name = "Squires' Chestplate",class_type = "melee",level= 2,health_bonus= 7,speed_bonus= 5,stamina_bonus= 8,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "chest")
 squire_boots = armor(name = "Squires' Boots",class_type = "melee",level= 2,health_bonus= 6,speed_bonus= 4,stamina_bonus= 5,armor_bonus= 5,  regen_bonus= 3,luck_bonus= 2, rarity= "common",piece= "boots")
@@ -44,7 +44,7 @@ bowman_cloak = armor(name = "Bowmans' Cloak",class_type = "ranged",level= 2,heal
 bowman_pants = armor(name = "Bowmans' Boots",class_type = "ranged",level= 2,health_bonus= 4,speed_bonus= 5,stamina_bonus= 5, rarity= "common",piece= "pants")
 bowman_hood = armor(name = "Bowmans' Hood",class_type = "ranged",level= 2,health_bonus= 3,speed_bonus= 3,stamina_bonus= 5, rarity= "common",piece= "helmet")
 
-messengers_pants = armor(name="Messengers' Pants",class_type = "ranged", level= 2, health_bonus= 5,speed_bonus= 15, stamina_bonus= 7,armor_bonus= 1, regen_bonus = 4,luck_bonus= 2,rarity= "common",piece= "pants" )
+messengers_pants = armor(name="Messengers' Pants",class_type = "all", level= 2, health_bonus= 5,speed_bonus= 15, stamina_bonus= 7,armor_bonus= 1, regen_bonus = 4,luck_bonus= 2,rarity= "common",piece= "pants" )
 
 disciple_hood = armor(name = "Disciple's Hood", class_type="magic", level=2, health_bonus=1, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="helmet")
 disciple_robe = armor(name = "Disciple's Robe", class_type="magic", level=2, health_bonus=5, mana_bonus=5, mana_regen_bonus=2, rarity="common", piece="chest")
@@ -75,108 +75,110 @@ breastplate_of_dormamu = armor(name="Breastplate of Dormamu",class_type = "melee
 boots_of_hermes = armor(name = "Boots of Hermes",class_type = "melee",level= 17, speed_bonus= 60,stamina_bonus= 40, armor_bonus= 5, regen_bonus = 0, rarity= "mythic", piece = "boots")
 
 
-armors = [
-    #common
+any = [ 
     boots_of_bongo,
-    squire_chest,
     messengers_pants,
+    milf,
+    breastplate_of_dormamu,
+    boots_of_hermes,
+    assasins_hood,       
+    drunkards_shirt
+]
+
+melee = [
+    squire_chest,
     squire_boots,
+    head_of_terry,
+    knights_chestplate
     
+]
+
+ranged = [
     bowman_hood,
     bowman_cloak,
     bowman_pants,
     bowman_boots,
+    ranger_cloak,
+    ranger_boots,
+    ranger_helmet,
+    ranger_pants
     
+]
+
+magic = [
     disciple_hood,
     disciple_robe,
     disciple_pants,
     disciple_shoes,
-    #uncommon
-    drunkards_shirt,
-    ranger_cloak,
-    ranger_boots,
-    ranger_helmet,
-    ranger_pants,
-    knights_chestplate,
     
-    #rare
-    milf,
-    assasins_hood,
+]
     
-    #legendary
-    head_of_terry,
-    
-    #mythic
-    breastplate_of_dormamu,
-    boots_of_hermes
-         
-    ]
 
 
-
-common = []
-uncommon = []
-rare = []
-legendary = []
-mythic = []
 
 def update_lists():
-    for armor in armors:
-        update_level( armor)
-        if(armor.rarity == "common"): common.append(armor)
-        elif(armor.rarity == "uncommon"): uncommon.append(armor)
-        elif(armor.rarity == "rare"): rare.append(armor)
-        elif(armor.rarity == "legendary"): legendary.append(armor)
-        elif(armor.rarity == "mythic"): mythic.append(armor)
-    
-    
+    for armor in any:
+        update_level(armor)
+    for armor in melee:
+        update_level(armor)
+    for armor in ranged:
+        update_level(armor)
+    for armor in magic:
+        update_level(armor)
+
+        
 def update_level( armor):
     if(armor.level == 1): armor.level = 1
     else: armor.level = random.randrange(armor.level -1, armor.level + 1 )
+
 
 def get_armor(player, rarity):
     update_lists()
     
     find_correct_item = True
     while(find_correct_item):
-        #choose rarity of item
-        if(rarity == "common"):
-            orig_piece = random.choice(common)
-            if(player.class_dmg_type == "both"):
-                orig_piece = random.choice(common)
-            else:
-                while(player.class_dmg_type != orig_piece.class_type):
-                    orig_piece = random.choice(common)
-            armor_piece = copy(orig_piece)
-        elif(rarity == "uncommon"):
-            if(player.class_dmg_type == "both"):
-                orig_piece = random.choice(uncommon)
-            else:
-                while(player.class_dmg_type != orig_piece.class_type):
-                    orig_piece = random.choice(uncommon)
-            armor_piece = copy(orig_piece)
-        elif(rarity == "rare"):
-            if(player.class_dmg_type == "both"):
-                orig_piece = random.choice(rare)
-            else:
-                while(player.class_dmg_type != orig_piece.class_type):
-                    orig_piece = random.choice(rare)
-            armor_piece = copy(orig_piece)
-        elif(rarity == "legendary"):
-            if(player.class_dmg_type == "both"):
-                orig_piece = random.choice(legendary)
-            else:
-                while(player.class_dmg_type != orig_piece.class_type):
-                 orig_piece = random.choice(legendary)
-            armor_piece = copy(orig_piece)
-        elif(rarity == "mythic"):
-            if(player.class_dmg_type == "both"):
-                orig_piece = random.choice(mythic)
-            else:
-                while(player.class_dmg_type != orig_piece.class_type):
-                    orig_piece = random.choice(mythic)
-            armor_piece = copy(orig_piece)
+        
+        #check for player damage type
+        if(player.class_dmg_type == "any"):
+            list = any + melee + ranged + magic #set list
+            
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            armor_piece = copy(orig_piece) #copy the armor piece
+            
+
+        elif(player.class_dmg_type == "melee"):
+            list = any + melee #set list
+            
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            armor_piece = copy(orig_piece) #copy the armor piece
     
+        elif(player.class_dmg_type == "ranged"):
+            list = any + ranged  #set list
+            
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            armor_piece = copy(orig_piece) #copy the armor piece
+      
+        elif(player.class_dmg_type == "magic"):
+            list = any + magic #set list
+    
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            armor_piece = copy(orig_piece) #copy the armor piece
+       
+        else:
+            print("Incorrect class damage type")
+            
         if(armor_piece.level < (player.stats["Level"] + 2)):
             find_correct_item = False
         else:

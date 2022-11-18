@@ -1,18 +1,20 @@
 import random
 import math
 from copy import copy
+from dataclasses import dataclass
 
+@dataclass(kw_only = True)
 class weapon:
-    def __init__ (self, name:str, level:int, rarity:str, ad:int = 0, ap:int = 0, critical_chance:int = 0, critical_damage:float = 0, armor_pen:int = 0):
-        self.name = name
-        self.level = level
-        self.ad = ad
-        self.ap = ap
-        self.critical_chance = critical_chance
-        self.critical_damage = critical_damage
-        self.armor_pen = armor_pen
-        self.rarity = rarity
-    type = "weapon"
+    name:str
+    level:int
+    rarity:str
+    ad:int = 0
+    ap:int = 0
+    critical_chance:int = 0
+    critical_damage:float = 0
+    armor_pen:int = 0
+        
+    type:str = "weapon"
     
         
 #RARITY_enabled

@@ -24,35 +24,35 @@ def battle(player, opponent):
                 not_dead = False
         
             #Stamina Regen calculations. Only prints if amount regenerated > 0
-        stam_regen_value =  player.stamina_regen
+            stam_regen_value =  player.stamina_regen
         
-        stamina_total = stam_regen_value + player.stats["Stamina"]
+            stamina_total = stam_regen_value + player.stats["Stamina"]
         
-        if(stamina_total > player.max_stamina):
-            temp = stamina_total - player.max_stamina
-            stam_regen_value -= temp
-            if(stam_regen_value < 0): stam_regen_value = 0
+            if(stamina_total > player.max_stamina):
+                temp = stamina_total - player.max_stamina
+                stam_regen_value -= temp
+                if(stam_regen_value < 0): stam_regen_value = 0
+                
+            player.stats["Stamina"] += stam_regen_value
+
+            #output regened health
+            if(stam_regen_value > 0):
+                print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}/{str(player.max_mana)}")
             
-        player.stats["Stamina"] += stam_regen_value
+            
+            #Mana Regen calculations. Only prints if amount regenerated > 0
+            mana_regen_value = player.mana_regen
+            
+            mana_total = mana_regen_value + player.stats["Mana"]
+            if(mana_total > player.max_mana):
+                temp = mana_total - player.max_mana
+                mana_regen_value -= temp
+                if(mana_regen_value < 0): mana_regen_value = 0
+            player.stats["Stamina"] += mana_regen_value
 
-        #output regened health
-        if(stam_regen_value > 0):
-            print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}")
-        
-        
-        #Mana Regen calculations. Only prints if amount regenerated > 0
-        mana_regen_value = player.mana_regen
-        
-        mana_total = mana_regen_value + player.stats["Mana"]
-        if(mana_total > player.max_mana):
-            temp = mana_total - player.max_mana
-            mana_regen_value -= temp
-            if(mana_regen_value < 0): mana_regen_value = 0
-        player.stats["Stamina"] += mana_regen_value
-
-        #output regened 
-        if(mana_regen_value > 0):
-            print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}")        
+            #output regened 
+            if(mana_regen_value > 0):
+                print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}/{str(player.max_mana)}")        
         
         #and vice versa, opponent may be able to attack twice or more before player attacks
         elif(player_speed < opponent_speed):
@@ -68,37 +68,36 @@ def battle(player, opponent):
                 not_dead = False
                 
         
-        
-        #Stamina Regen calculations. Only prints if amount regenerated > 0
-        stam_regen_value =  player.stamina_regen
-        
-        stamina_total = stam_regen_value + player.stats["Stamina"]
-        
-        if(stamina_total > player.max_stamina):
-            temp = stamina_total - player.max_stamina
-            stam_regen_value -= temp
-            if(stam_regen_value < 0): stam_regen_value = 0
+            #Stamina Regen calculations. Only prints if amount regenerated > 0
+            stam_regen_value =  player.stamina_regen
             
-        player.stats["Stamina"] += stam_regen_value
+            stamina_total = stam_regen_value + player.stats["Stamina"]
+            
+            if(stamina_total > player.max_stamina):
+                temp = stamina_total - player.max_stamina
+                stam_regen_value -= temp
+                if(stam_regen_value < 0): stam_regen_value = 0
+                
+            player.stats["Stamina"] += stam_regen_value
 
-        #output regened health
-        if(stam_regen_value > 0):
-            print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}")
-        
-        
-        #Mana Regen calculations. Only prints if amount regenerated > 0
-        mana_regen_value = player.mana_regen
-        
-        mana_total = mana_regen_value + player.stats["Mana"]
-        if(mana_total > player.max_mana):
-            temp = mana_total - player.max_mana
-            mana_regen_value -= temp
-            if(mana_regen_value < 0): mana_regen_value = 0
-        player.stats["Stamina"] += mana_regen_value
+            #output regened health
+            if(stam_regen_value > 0):
+                print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}/{str(player.max_stamina)}")
+            
+            
+            #Mana Regen calculations. Only prints if amount regenerated > 0
+            mana_regen_value = player.mana_regen
+            
+            mana_total = mana_regen_value + player.stats["Mana"]
+            if(mana_total > player.max_mana):
+                temp = mana_total - player.max_mana
+                mana_regen_value -= temp
+                if(mana_regen_value < 0): mana_regen_value = 0
+            player.stats["Stamina"] += mana_regen_value
 
-        #output regened 
-        if(mana_regen_value > 0):
-            print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}")
+            #output regened 
+            if(mana_regen_value > 0):
+                print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}/{str(player.max_mana)}")
 
     
             

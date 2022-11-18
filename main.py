@@ -51,5 +51,6 @@ def main():
             game_active = True
             
         else: 
+            play_again = False
             print("You may now exit the game.")
 main()
