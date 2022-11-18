@@ -142,9 +142,9 @@ def char_create(player):
     player.name = get_name('Welcome to the game! please enter a name to begin: ')
     
     print("\nTime to choose a class! Here are your options: ")                                             
-    print("\n{:<15} {:<35} ".format('Class Name', 'Summary'))
+    print("\n{:<15}{:<10}{:<35} ".format('Class Name','Type', 'Summary'))
     for choice in classes:
-        print("\n{:<15} {:<35} ".format(choice.name.capitalize(),  choice.summary))
+        print("\n{:<15}{:<10}{:<35} ".format(choice.name.capitalize(), choice.class_dmg_type.capitalize(), choice.summary))
     
     
     choosing_class = True
