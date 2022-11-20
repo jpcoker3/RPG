@@ -40,20 +40,22 @@ def battle(player, opponent):
                 print(f"Regenerated {str(stam_regen_value)} Stamina. Current Stamina: {str(player.stats['Stamina'])}/{str(player.max_mana)}")
             
             
-            #Mana Regen calculations. Only prints if amount regenerated > 0
+            # #Mana Regen calculations. Only prints if amount regenerated > 0
             mana_regen_value = player.mana_regen
             
             mana_total = mana_regen_value + player.stats["Mana"]
+            
             if(mana_total > player.max_mana):
                 temp = mana_total - player.max_mana
                 mana_regen_value -= temp
                 if(mana_regen_value < 0): mana_regen_value = 0
-            player.stats["Stamina"] += mana_regen_value
+                
+            player.stats["Mana"] += mana_regen_value
 
             #output regened 
             if(mana_regen_value > 0):
-                print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}/{str(player.max_mana)}")        
-        
+                print(f"Regenerated {str(mana_regen_value)} Mana. Current Mana: {str(player.stats['Mana'])}/{str(player.max_mana)}")
+
         #and vice versa, opponent may be able to attack twice or more before player attacks
         elif(player_speed < opponent_speed):
             while (not_dead and (player_speed < opponent_speed)): 
@@ -89,11 +91,13 @@ def battle(player, opponent):
             mana_regen_value = player.mana_regen
             
             mana_total = mana_regen_value + player.stats["Mana"]
+            
             if(mana_total > player.max_mana):
                 temp = mana_total - player.max_mana
                 mana_regen_value -= temp
                 if(mana_regen_value < 0): mana_regen_value = 0
-            player.stats["Stamina"] += mana_regen_value
+                
+            player.stats["Mana"] += mana_regen_value
 
             #output regened 
             if(mana_regen_value > 0):
@@ -280,7 +284,10 @@ def player_attack(player, opponent):
 def player_damage(player, skill):  
     
     #physical or magical
-    if((skill.type == "melee") or (skill.type == "ranged")):
+    if(skill.name == "Basic Attack"):
+        damage = random.randrange(round((player.weapon.ap + player.weapon.ad) - (player.weapon.ad + player.weapon.ap)/10) ,round((player.weapon.ap +player.weapon.ad) + (player.weapon.ad + player.weapon.ap)/10))
+    
+    elif((skill.type == "melee") or (skill.type == "ranged")):
         damage = random.randrange(round(player.weapon.ad - player.weapon.ad/10),  round(player.weapon.ad + player.weapon.ad /10))
         damage = round(damage * skill.ad_scaling)
     elif(skill.type == "magic"):

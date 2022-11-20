@@ -8,6 +8,7 @@ class weapon:
     name:str
     level:int
     rarity:str
+    class_type:str
     ad:int = 0
     ap:int = 0
     critical_chance:int = 0
@@ -25,51 +26,70 @@ class weapon:
 #template = weapon(name = "", level= 0, ad= 0, ap = 0, critical_chance= 0, critical_damage= 0, armor_pen= 0, rarity=  "")
 
 #common
-sword_of_starter = weapon(name = "Sword of Starter", level = 1,ad = 7,ap = 10,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
-bow_of_critical = weapon(name="Bow of Critical", level=1, ad=6,ap = 10,critical_chance= 20,critical_damage= 2.5,armor_pen= 0,rarity= "common")
-rangers_bow = weapon(name = "Ranger's Bow", level= 2, ad= 8,ap = 10, critical_chance= 15, critical_damage= 1.8 , armor_pen= 3, rarity=  "common")
+sword_of_starter = weapon(name = "Sword of Starter", class_type = "melee", level = 1,ad = 7,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
+apprentice_staff = weapon(name = "Apprentice's Staff", class_type = "magic", level = 1,ap = 10,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
+bow_of_critical = weapon(name="Bow of Critical",class_type = "ranged", level=1, ad=6,critical_chance= 20,critical_damage= 2.5,armor_pen= 0,rarity= "common")
+stick = weapon(name="Stick",class_type = "all", level=1, ad=4,ap = 4,critical_chance= 4,critical_damage= 1.3,armor_pen= 0,rarity= "common")
+rangers_bow = weapon(name = "Ranger's Bow",class_type = "ranged", level= 2, ad= 8, critical_chance= 15, critical_damage= 1.8 , armor_pen= 3, rarity=  "common")
 
 #uncommon
-dagger_of_shadows = weapon(name="Dagger of Shadows",level= 3,ad= 12,ap = 10,critical_chance= 20,critical_damage= 2.7,armor_pen = 7, rarity = "uncommon")
-knights_sword = weapon(name = "Knight's Sword", level= 4, ad= 14,ap = 10,critical_chance= 10, critical_damage= 1.8, armor_pen= 4, rarity= "uncommon")
+dagger_of_shadows = weapon(name="Dagger of Shadows",class_type = "melee",level= 3,ad= 12,critical_chance= 20,critical_damage= 2.7,armor_pen = 7, rarity = "uncommon")
+knights_sword = weapon(name = "Knight's Sword", class_type = "melee",level= 4, ad= 14,critical_chance= 10, critical_damage= 1.8, armor_pen= 4, rarity= "uncommon")
+hunters_compound_bow = weapon(name = "Hunter's Compound Bow",class_type = "ranged", level= 5, ad= 13, critical_chance= 20, critical_damage= 2.1 , armor_pen= 5, rarity=  "uncommon")
+novice_staff = weapon(name="Novice Magestaff", class_type="magic", level=5, ap=12, critical_chance=10, critical_damage=1.80, armor_pen=3, rarity="uncommon")
 
 #rare
-sword_of_storms = weapon(name = "Sword of Storms", level = 5,ad= 15,ap = 10,critical_chance= 25,critical_damage= 2.7,armor_pen= 8,rarity= "rare")
-sword_of_sea = weapon(name = "Sword of the Sea", level= 5, ad= 20,ap = 10,critical_chance= 10, critical_damage= 2.3, armor_pen= 20, rarity= "rare")
+sword_of_storms = weapon(name = "Sword of Storms",class_type = "melee", level = 6,ad= 15,critical_chance= 25,critical_damage= 2.7,armor_pen= 8,rarity= "rare")
+sword_of_sea = weapon(name = "Sword of the Sea",class_type = "melee", level= 6, ad= 20,critical_chance= 10, critical_damage= 2.3, armor_pen= 20, rarity= "rare")
+sceptre_of_knowledge = weapon(name="Sceptre of Knowledge", class_type="magic", level=6, ap=12, critical_chance=30, critical_damage=2.30, armor_pen=12, rarity="rare")
 
 #legendary
-greatsword_of_amalur = weapon(name = "Greatsword of Ezekiel",level= 10,ad= 30,ap = 10,critical_chance= 15,critical_damage= 2.3,armor_pen= 30,rarity= "legendary")
+greatsword_of_amalur = weapon(name = "Greatsword of Amalur",class_type = "melee",level= 10,ad= 25,critical_chance= 15,critical_damage= 2.3,armor_pen= 30,rarity= "legendary")
+jadis_wand = weapon(name="Jadis' Wand", class_type="magic", level=10, ap = 23,critical_chance=20, critical_damage=1.95,armor_pen=12, rarity="legendary" )
 
 #mythic
-hammer_of_thor = weapon(name= "Hammer of Thor", level = 17,ad= 40,ap = 10,critical_chance= 40,critical_damage= 2.7,armor_pen= 0,rarity= "mythic")
-poseidons_trident = weapon(name = "Poseidon's Trident", level= 15, ad= 60,ap = 10, critical_chance= 0, critical_damage= 0, armor_pen= 20, rarity=  "mythic")
-bow_of_artemis = weapon(name = "Bow of Artemis", level= 15, ad= 30,ap = 10,critical_chance= 75, critical_damage= 3.2 , armor_pen= 10, rarity=  "")
+hammer_of_thor = weapon(name= "Hammer of Thor",class_type = "melee", level = 17,ad= 40,critical_chance= 40,critical_damage= 2.7,armor_pen= 0,rarity= "mythic")
+poseidons_trident = weapon(name = "Poseidon's Trident",class_type = "melee", level= 15, ad= 60, critical_chance= 0, critical_damage= 0, armor_pen= 20, rarity=  "mythic")
+bow_of_artemis = weapon(name = "Bow of Artemis", class_type = "ranged",level= 15, ad= 30,critical_chance= 75, critical_damage= 3.2 , armor_pen= 10, rarity=  "mythic")
+merlins_staff = weapon(name="Merlin's Staff", class_type="magic", level=15, ap=45, critical_chance=30, critical_damage=2.35, armor_pen=15, rarity="mythic")
 
 
-weapons = [
-    #common
-    sword_of_starter,
-    bow_of_critical,
-    rangers_bow,
-    
-    #uncommon
-    dagger_of_shadows,
-    knights_sword,
-    
-    #rare
-    sword_of_storms,
-    sword_of_sea,
-    
-    #legendary
-    greatsword_of_amalur,
-    
-    #mythic
-    hammer_of_thor,
-    poseidons_trident,
-    bow_of_artemis
+
+any = [
+    stick
     
     
 ]
+
+ranged = [
+    bow_of_critical,
+    rangers_bow,
+    bow_of_artemis,
+    hunters_compound_bow
+    
+]
+
+melee = [
+    sword_of_starter,
+    sword_of_storms,
+    sword_of_sea,
+    dagger_of_shadows,
+    knights_sword,
+    greatsword_of_amalur,
+    hammer_of_thor,
+    poseidons_trident
+    
+]
+
+magic = [
+    apprentice_staff,
+    merlins_staff,
+    novice_staff,
+    sceptre_of_knowledge,
+    jadis_wand
+]
+
+
 
 common = []
 uncommon = []
@@ -78,7 +98,7 @@ legendary = []
 mythic = []
 
 def update_lists():
-    for weapon in weapons:
+    for weapon in (ranged  + melee  + magic + any):
         #gets new weapon level = +- 1 of base level
         update_level(weapon)
         # add weapon to list of matching rarity
@@ -97,53 +117,67 @@ def get_weapon(player, rarity):
     
     find_correct_item = True
     while(find_correct_item):
-        #choose rarity, update damage, return weapon
-        if(rarity == "common"):
-            orig_item = random.choice(common)
-            weapon = copy(orig_item)
-            weapon.ad += get_damage(weapon)
-
-        elif(rarity == "uncommon"):
-            orig_item = random.choice(uncommon)
-            weapon = copy(orig_item)
-            weapon.ad += get_damage(weapon)
-
-        elif(rarity == "rare"):
-            orig_item = random.choice(uncommon)
-            weapon = copy(orig_item)
-            weapon.ad += get_damage(weapon)
-
-        elif(rarity == "legendary"):
-            orig_item = random.choice(legendary)
-            weapon = copy(orig_item)
-            weapon.ad += get_damage(weapon)
-
-        elif(rarity == "mythic"):
-            orig_item = random.choice(mythic)
-            weapon = copy(orig_item)
-            weapon.ad += get_damage(weapon)
-        else:
-            print("Something is wrong with weapon selection")
+        
+        #check for player damage type
+        if(player.class_dmg_type == "any"):
+            list = any + melee + ranged + magic #set list
             
-        if(weapon.level < (player.stats["Level"] + 2)):
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            armor_piece = copy(orig_piece) #copy the armor piece
+            
+
+        elif(player.class_dmg_type == "melee"):
+            list = any + melee #set list
+            
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            new_weapon = copy(orig_piece) #copy the armor piece
+    
+        elif(player.class_dmg_type == "ranged"):
+            list = any + ranged  #set list
+            
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            new_weapon = copy(orig_piece) #copy the armor piece
+      
+        elif(player.class_dmg_type == "magic"):
+            list = any + magic #set list
+    
+            orig_piece = random.choice(list)
+            while(orig_piece.rarity != rarity):  #while the armor piece isnt the correct rarity, get armor again
+                orig_piece = random.choice(list)
+                
+            new_weapon = copy(orig_piece) #copy the armor piece
+       
+        else:
+            print("Incorrect class damage type")
+            
+        if(new_weapon.level < (player.stats["Level"] + 2)):
             find_correct_item = False
         else:
-            find_correct_item = True        
+            find_correct_item = True    
             
             
     #adjust item based on level                                                                   - Level, Level
-    if(weapon.critical_chance != 0): weapon.critical_chance += random.randrange(-player.stats["Level"],  player.stats["Level"])
-    if(weapon.critical_chance < 0): weapon.critical_chance = 0
+    if(new_weapon.critical_chance != 0): new_weapon.critical_chance += random.randrange(-player.stats["Level"],  player.stats["Level"])
+    if(new_weapon.critical_chance < 0): new_weapon.critical_chance = 0
     
-    if(weapon.critical_damage != 0): weapon.critical_damage +=round((random.randrange(-player.stats["Level"], round( player.stats["Level"] / 2)))/10 , 2)
-    if(weapon.critical_damage < 0): weapon.critical_damage = 0
+    if(new_weapon.critical_damage != 0): new_weapon.critical_damage +=round((random.randrange(-player.stats["Level"], round( player.stats["Level"] / 2)))/10 , 2)
+    if(new_weapon.critical_damage < 0): new_weapon.critical_damage = 0
     
-    if(weapon.armor_pen != 0): weapon.armor_pen += random.randrange(-player.stats["Level"],  round(player.stats["Level"] / 3 ))
-    if(weapon.armor_pen < 0): weapon.armor_pen = 0
+    if(new_weapon.armor_pen != 0): new_weapon.armor_pen += random.randrange(-player.stats["Level"],  round(player.stats["Level"] / 3 ))
+    if(new_weapon.armor_pen < 0): new_weapon.armor_pen = 0
 
 
     #return item 
-    return weapon
+    return new_weapon
 
 def get_damage(weapon):
     #change damage based on level, so item is somewhat relevant
@@ -153,6 +187,6 @@ def get_damage(weapon):
 
 def get_default_weapon():
     #default weapon, fists, should be able to survive a couple rounds 
-    fists = weapon(name="Fists",level= 1,ad= 8,ap =8, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
+    fists = weapon(name="Fists",class_type = "any",level= 1,ad= 4,ap =4, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
     default_weapon = [fists]
     return default_weapon

@@ -348,6 +348,8 @@ def sub_stats(player, item):
         player.stats["Speed"] -= player.helmet.speed_bonus
         player.stats["Luck"] -= player.helmet.luck_bonus
         player.stats["Regen"] -= player.helmet.regen_bonus
+        player.mana_regen -= player.helmet.mana_regen_bonus
+        player.stamina_regen -= player.helmet.stamina_regen_bonus
         
     elif(item.piece == "chest"):
         player.max_health -= player.chest.health_bonus
@@ -363,6 +365,8 @@ def sub_stats(player, item):
         player.stats["Speed"] -= player.chest.speed_bonus
         player.stats["Luck"] -= player.chest.luck_bonus
         player.stats["Regen"] -= player.chest.regen_bonus
+        player.mana_regen -= player.chest.mana_regen_bonus
+        player.stamina_regen -= player.chest.stamina_regen_bonus
         
     elif(item.piece == "pants"):
         player.max_health -= player.pants.health_bonus
@@ -378,6 +382,8 @@ def sub_stats(player, item):
         player.stats["Speed"] -= player.pants.speed_bonus
         player.stats["Luck"] -= player.pants.luck_bonus
         player.stats["Regen"] -= player.pants.regen_bonus
+        player.mana_regen -= player.pants.mana_regen_bonus
+        player.stamina_regen -= player.pants.stamina_regen_bonus
     
     elif(item.piece == "boots"):
         player.max_health -= player.boots.health_bonus
@@ -393,6 +399,8 @@ def sub_stats(player, item):
         player.stats["Speed"] -= player.boots.speed_bonus
         player.stats["Luck"] -= player.boots.luck_bonus
         player.stats["Regen"] -= player.boots.regen_bonus
+        player.mana_regen -= player.boots.mana_regen_bonus
+        player.stamina_regen -= player.boots.stamina_regen_bonus
     #add new armor stats
     
 def add_stats(player,item):
@@ -409,6 +417,9 @@ def add_stats(player,item):
     player.stats["Speed"] += item.speed_bonus
     player.stats["Luck"] += item.luck_bonus
     player.stats["Regen"] += item.regen_bonus
+    
+    player.mana_regen -= item.mana_regen_bonus
+    player.stamina_regen -= item.stamina_regen_bonus
         
  
  

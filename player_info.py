@@ -103,9 +103,9 @@ peasant = class_type_stats(name = "peasant",class_dmg_type = "all",  summary="De
 idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "all", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",class_dmg_type = "melee",health =  50,armor = 20, speed = -20,regen= 20,  summary= "+50 Health, +20 Armor, +20 HP Regen, -20 Speed" )
 gambler = class_type_stats(name = "gambler",class_dmg_type = "magic",health = -25,armor =  5,speed =  25,luck= 10,critical_chance= 10,critical_damage= -.5, summary= "+5 Armor, +25 Speed, +10 Luck, +10% Crit Chance, -0.5 Crit Damage Multiplier, -25 Health ")
-ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged",stamina_regen=10, stamina= 20, speed=20, critical_chance=15, critical_damage= 0.45, summary="+20 Stamina, +20 Speed, +10 Stamina Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
+ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged",stamina_regen=5, stamina= 20, speed=20, critical_chance=15, critical_damage= 0.45, summary="+20 Stamina, +20 Speed, +5 Stamina Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
 defender = class_type_stats(name = "defender", health= 100,  armor=50,class_dmg_type = "melee", speed= -30,  regen=20, critical_damage= -0.65, summary= "+100 Health, +50 Armor, +20 HP Regen, -30 Speed, -0.65 Critical Multiplier" )
-wizzard = class_type_stats(name = "wizzard",class_dmg_type = "magic", mana=75,  luck=15, mana_regen = 10, summary="+75 Mana, +10 Mana Regen, +15 Luck")
+wizzard = class_type_stats(name = "wizzard",class_dmg_type = "magic", mana=25, health =10, luck=15, mana_regen = 10, summary="+25 Mana, +10 Health, +10 Mana Regen, +15 Luck")
 
 
 classes = [ peasant, idiot, warrior, gambler, ranger, defender,wizzard]
@@ -197,11 +197,11 @@ class char_info():
     boots = default_equipt[3]
     
     max_health = 100
-    max_mana = 100
-    max_stamina = 100
+    max_mana = 50
+    max_stamina = 50
     
-    mana_regen = round((5* max_mana)/100)
-    stamina_regen = round((5* max_stamina)/100)
+    mana_regen = 5
+    stamina_regen = 5
     
     
     critical_chance = 0
