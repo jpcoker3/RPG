@@ -161,18 +161,26 @@ def pause_menu():
         
         
         PAUSE_TEXT = get_font(100).render("GAME PAUSED", True,WHITE)
-        PAUSE_RECT = PAUSE_TEXT.get_rect(center=(SCREEN_WIDTH/2, 2*SCREEN_HEIGHT/6))
+        PAUSE_RECT = PAUSE_TEXT.get_rect(center=(SCREEN_WIDTH/2, 2*SCREEN_HEIGHT/10))
         SCREEN.blit(PAUSE_TEXT, PAUSE_RECT)
         
         
-        PAUSE_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  3* SCREEN_HEIGHT/6), 
+        RESUME_BACK = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,   4*SCREEN_HEIGHT/10), # bottom right 10th of the screen
+                            text_input="Resume", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        
+        PAUSE_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  5* SCREEN_HEIGHT/10), 
                             text_input="Options", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
-        PAUSE_BACK = Button(image=pygame.image.load("assets/button.png"), pos=(9*SCREEN_WIDTH/10,   9*SCREEN_HEIGHT/10), # bottom right 10th of the screen
-                            text_input="Back", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        MAIN_MENU_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  6* SCREEN_HEIGHT/10), 
+                            text_input="Main Menu", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        
+        EXIT_GAME_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  6* SCREEN_HEIGHT/10), 
+                            text_input="Exit Game", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
         
-        for button in [PAUSE_OPTIONS, PAUSE_BACK]:
+        
+        
+        for button in [PAUSE_OPTIONS, PAUSE_BACK, MAIN_MENU_OPTIONS,EXIT_GAME_OPTIONS]:
                 button.changeColor(PAUSE_MOUSE_POS)
                 button.update(SCREEN)
                 
@@ -184,13 +192,18 @@ def pause_menu():
                 sys.exit()
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if RESUME_BACK.checkForInput(PAUSE_MOUSE_POS):
+                    return
                 
                 if PAUSE_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
                     options()
                     
-                if PAUSE_BACK.checkForInput(PAUSE_MOUSE_POS):
-                    return
                 
+                if MAIN_MENU_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
+                    main_menu()
+                if EXIT_GAME_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return  
@@ -306,8 +319,7 @@ def main_game_loop():
 
             pygame.display.update()
             clock.tick_busy_loop( FPS )
-    
-        
+            
 def char_create_ui():
     global SCREEN_HEIGHT, SCREEN, SCREEN_WIDTH,MAIN_MENU_BACKGROUND
     CLASS_SELECT = "peasant"
@@ -524,7 +536,7 @@ def change_resolution():
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if RESOLUTION_BACK.checkForInput(RESOLUTION_MOUSE_POS):
-                    options()
+                    return
                 if RESOLUTION_ULTRAWIDE_1080.checkForInput(RESOLUTION_MOUSE_POS):
                     SCREEN_WIDTH = 2560
                     SCREEN_HEIGHT = 1080
@@ -551,7 +563,83 @@ def change_resolution():
                     
         pygame.display.update()
         clock.tick_busy_loop( FPS ) # set to 60 fps
-            
+     
+def change_video():
+    global SCREEN_WIDTH, SCREEN_HEIGHT, FPS, SCREEN,MAIN_MENU_BACKGROUND
+    while True:
+        
+        SCREEN.fill("black")  # fill black first bc it works better
+        
+        SCREEN.blit(MAIN_MENU_BACKGROUND, (0,0)) #blit means "draw" AKA add to screen
+        
+        RESOLUTION_MOUSE_POS = pygame.mouse.get_pos() # mouse posn
+        
+        
+        VIDEO_TEXT = get_font(100).render("Video Options", True,WHITE)
+        VIDEO_TEXT_RECT = VIDEO_TEXT.get_rect(center=(SCREEN.get_width()/2, 3*SCREEN.get_height()/10))
+        SCREEN.blit(VIDEO_TEXT,VIDEO_TEXT_RECT)
+        
+        
+        VIDEO_BACK = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/10, SCREEN_HEIGHT - SCREEN_HEIGHT/10), # bottom left 10th of the screen
+                            text_input="BACK", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(FPS == 120):
+            FPS_120 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 5*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                                text_input="120 FPS", font=get_font(40), base_color=RED, hovering_color="Dark Blue")
+        else:
+            FPS_120 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 5*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                                text_input="120 FPS", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(FPS == 60):
+            FPS_60 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 6*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                                text_input="60 FPS", font=get_font(40), base_color=RED, hovering_color="Dark Blue")
+        else:
+            FPS_60 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 6*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                            text_input="60 FPS", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(FPS == 30):
+            FPS_30 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 7*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                            text_input="30 FPS", font=get_font(40), base_color=RED, hovering_color="Dark Blue")
+        else:
+            FPS_30 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 7*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                            text_input="30 FPS", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(FPS == 15):
+            FPS_15 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 8*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                                text_input="15 FPS", font=get_font(40), base_color=RED, hovering_color="Dark Blue")
+        else:
+            FPS_15 = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 8*SCREEN_HEIGHT/10), #middle 2/5ths of screen
+                            text_input="15 FPS", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        
+        
+        
+        for button in [VIDEO_BACK,FPS_120, FPS_60,FPS_30,FPS_15]:  # update button color based on where mouse is
+            button.changeColor(RESOLUTION_MOUSE_POS)
+            button.update(SCREEN)
+        
+       
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if VIDEO_BACK.checkForInput(RESOLUTION_MOUSE_POS):
+                    return
+                if FPS_120.checkForInput(RESOLUTION_MOUSE_POS):
+                    FPS = 120
+                if FPS_60.checkForInput(RESOLUTION_MOUSE_POS):
+                    FPS = 60
+                if FPS_30.checkForInput(RESOLUTION_MOUSE_POS):
+                    FPS = 30
+                if FPS_15.checkForInput(RESOLUTION_MOUSE_POS):
+                    FPS = 15
+                
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return 
+                    
+                    
+        pygame.display.update()
+        clock.tick_busy_loop( FPS ) # set to 60 fps
+         
+           
 def options():
     running = True
     
@@ -572,11 +660,14 @@ def options():
         
         OPTIONS_BACK = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/10, SCREEN_HEIGHT - SCREEN_HEIGHT/10), # bottom right 10th of the screen
                             text_input="BACK", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        OPTIONS_VIDEO = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 3*SCREEN_HEIGHT/5), #middle 2/5ths of screen
+                            text_input="VIDEO OPTIONS", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        
         OPTIONS_RESOLUTION = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2, 2*SCREEN_HEIGHT/5), #middle 2/5ths of screen
                             text_input="RESOLUTION", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
         
-        for button in [OPTIONS_BACK, OPTIONS_RESOLUTION]:  # update button color based on where mouse is
+        for button in [OPTIONS_BACK, OPTIONS_RESOLUTION, OPTIONS_VIDEO]:  # update button color based on where mouse is
             button.changeColor(OPTIONS_MOUSE_POS)
             button.update(SCREEN)
         
@@ -592,6 +683,8 @@ def options():
                 
                 if OPTIONS_RESOLUTION.checkForInput(OPTIONS_MOUSE_POS):
                     change_resolution()
+                if OPTIONS_VIDEO.checkForInput(OPTIONS_MOUSE_POS):
+                    change_video()
                 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
