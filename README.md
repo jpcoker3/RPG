@@ -13,10 +13,10 @@ Implementation goals:
   Enemy Types: Not Implemented
   Sidequests: Not Implemented
   Class System: Basic Implementation Achieved
-  Various weapon types ( magic, physical): Not Implemented
-  magic/ spell system: Not implemented
+  Various weapon types ( magic, physical): Basic Implementation Achieved
+  magic/ spell system: Basic Implementation Achieved
   Boss Fights: Basic Implementation Achieved
-  Skill Tree(s): Basic Implementation Achieved 
+  Skill Tree(s): Not Implimented 
   GUI: Not Implemented
 
 
