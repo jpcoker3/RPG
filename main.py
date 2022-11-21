@@ -165,7 +165,7 @@ def pause_menu():
         SCREEN.blit(PAUSE_TEXT, PAUSE_RECT)
         
         
-        RESUME_BACK = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,   4*SCREEN_HEIGHT/10), # bottom right 10th of the screen
+        PAUSE_RESUME = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,   4*SCREEN_HEIGHT/10), # bottom right 10th of the screen
                             text_input="Resume", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
         PAUSE_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  5* SCREEN_HEIGHT/10), 
@@ -180,7 +180,7 @@ def pause_menu():
         
         
         
-        for button in [PAUSE_OPTIONS, PAUSE_BACK, MAIN_MENU_OPTIONS,EXIT_GAME_OPTIONS]:
+        for button in [PAUSE_OPTIONS, PAUSE_RESUME, MAIN_MENU_OPTIONS,EXIT_GAME_OPTIONS]:
                 button.changeColor(PAUSE_MOUSE_POS)
                 button.update(SCREEN)
                 
@@ -192,7 +192,7 @@ def pause_menu():
                 sys.exit()
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if RESUME_BACK.checkForInput(PAUSE_MOUSE_POS):
+                if PAUSE_RESUME.checkForInput(PAUSE_MOUSE_POS):
                     return
                 
                 if PAUSE_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
