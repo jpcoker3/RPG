@@ -3,25 +3,26 @@ import weapons
 import skills
 from copy import copy
 from dataclasses import dataclass
+import random
+
+first = [
+    "John"
+    
+]
+last = [
+    "Smith"
+    
+]
 
 #get default weapons and armor
 default_equipt = armors.get_default_armor() + weapons.get_default_weapon()
 
 #prompts user for name and returns it. Ask prompt as parameter
-def get_name(message):
+def get_name():
      #create character by name
-    name_prompt = True
-    
-    while (name_prompt):
-        #before call, print what the name is for.  
-        name = input( message)
-        name = name.lower()
-        name = name.capitalize()
-        
-        name_confirm = input('Okay! is the name ' + name + ' correct? y/n: ')
-        if(name_confirm == 'y'): name_prompt = False
-        else: message = ("Please enter a name: ")
-            
+    First = random.choice(first)
+    Last = random.choice(last)
+    name = First + Last       
     return name
 
 #for any XP increase, handles lvl ups and such
@@ -102,9 +103,9 @@ class class_type_stats:
 peasant = class_type_stats(name = "peasant",class_dmg_type = "all",  summary="Default Stats")
 idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "all", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",class_dmg_type = "melee",health =  50,armor = 20, speed = -20,regen= 20,  summary= "+50 Health, +20 Armor, +20 HP Regen, -20 Speed" )
-gambler = class_type_stats(name = "gambler",class_dmg_type = "magic",health = -25,armor =  5,speed =  25,luck= 10,critical_chance= 10,critical_damage= -.5, summary= "+5 Armor, +25 Speed, +10 Luck, +10% Crit Chance, -0.5 Crit Damage Multiplier, -25 Health ")
-ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged",stamina_regen=5, stamina= 20, speed=20, critical_chance=15, critical_damage= 0.45, summary="+20 Stamina, +20 Speed, +5 Stamina Regen, +15% Critical Chance, +0.45 Critical Multiplier, -15 Health")
-defender = class_type_stats(name = "defender", health= 100,  armor=50,class_dmg_type = "melee", speed= -30,  regen=20, critical_damage= -0.65, summary= "+100 Health, +50 Armor, +20 HP Regen, -30 Speed, -0.65 Critical Multiplier" )
+gambler = class_type_stats(name = "gambler",class_dmg_type = "magic",health = -25,armor =  5,speed =  25,luck= 10,critical_chance= 10,critical_damage= -.5, summary= "+5 Armor, +25 Speed, +10 Luck, +10% Crit Chance, -0.5 Crit Damage, -25 Health ")
+ranger = class_type_stats(name = "ranger",class_dmg_type = "ranged",stamina_regen=5, stamina= 20, speed=20, critical_chance=15, critical_damage= 0.45, summary="+20 Stamina, +20 Speed, +5 Stamina Regen, +15% Crit Chance, +0.45 Crit Damage")
+defender = class_type_stats(name = "defender", health= 100,  armor=50,class_dmg_type = "melee", speed= -30,  regen=20, critical_damage= -0.65, summary= "+100 Health, +50 Armor, +20 HP Regen, -30 Speed, -0.65 Crit Damage" )
 wizzard = class_type_stats(name = "wizzard",class_dmg_type = "magic", mana=25, health =10, luck=15, mana_regen = 10, summary="+25 Mana, +10 Health, +10 Mana Regen, +15 Luck")
 
 
@@ -137,21 +138,13 @@ def add_class_stats(player, class_type):
     
 
 #create new char -- has prompts
-def char_create(player):
-    
-    player.name = get_name('Welcome to the game! please enter a name to begin: ')
-    
-    print("\nTime to choose a class! Here are your options: ")                                             
-    print("\n{:<15}{:<10}{:<35} ".format('Class Name','Type', 'Summary'))
-    for choice in classes:
-        print("\n{:<15}{:<10}{:<35} ".format(choice.name.capitalize(), choice.class_dmg_type.capitalize(), choice.summary))
-    
-    
+def char_create(player, class_choice):
+
+    player.name = get_name()
     choosing_class = True
     
-    
     while(choosing_class):
-        class_choice = input('\nWhat class would you like to be?: ')
+        class_choice
         for name in classes:
             if(class_choice.lower() == name.name):
                 add_class_stats(player, name)
@@ -162,10 +155,6 @@ def char_create(player):
     player.critical_damage += default_equipt[4].critical_damage
     player.skills.append(copy(skills.basic_attack))
     
-        
-    output_stats(player)
-    output_offense_stats(player)
-    next = input("\nPress anything to continue: ") 
 
 def output_stats(player):
     print('Here are your stats: \n') 
