@@ -60,7 +60,34 @@ BATTLE_BGS = [
     GAME_BG9,
     GAME_BG10
 ]
+GAME_BACKGROUND = GAME_BG1
 
+ENEMY_1 = pygame.image.load("assets/enemies/enemy_1.png")
+ENEMY_2 = pygame.image.load("assets/enemies/enemy_2.png")
+ENEMY_3 = pygame.image.load("assets/enemies/enemy_3.png")
+ENEMY_4 = pygame.image.load("assets/enemies/enemy_4.png")
+ENEMY_5 = pygame.image.load("assets/enemies/enemy_5.png")
+ENEMY_6 = pygame.image.load("assets/enemies/enemy_6.png")
+ENEMY_7 = pygame.image.load("assets/enemies/enemy_7.png")
+
+ENEMY_IMG = [
+    ENEMY_1,
+    ENEMY_2,
+    ENEMY_3,
+    ENEMY_4,
+    ENEMY_5,
+    ENEMY_6,
+    ENEMY_7
+]
+
+
+BOSS_1 = pygame.image.load("assets/bosses/boss_1.png")
+BOSS_2 = pygame.image.load("assets/bosses/boss_2.png")
+
+BOSS_IMG = [
+    BOSS_1,
+    BOSS_2
+]
 
 def get_font(size): #return font size
     return pygame.font.SysFont('Calibri', size)
@@ -157,7 +184,10 @@ def pause_menu():
         PAUSE_MOUSE_POS = pygame.mouse.get_pos() # mouse posn
         overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         overlay.fill(BLACK)
-        SCREEN.blit(MAIN_MENU_BACKGROUND,(0,0))
+        overlay.set_alpha(100)
+        
+        INVENTORY_MOUSE_POS = pygame.mouse.get_pos()
+        SCREEN.blit(overlay, (0,0))
         
         
         PAUSE_TEXT = get_font(100).render("GAME PAUSED", True,WHITE)
@@ -174,7 +204,7 @@ def pause_menu():
         MAIN_MENU_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  6* SCREEN_HEIGHT/10), 
                             text_input="Main Menu", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
-        EXIT_GAME_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  6* SCREEN_HEIGHT/10), 
+        EXIT_GAME_OPTIONS = Button(image=pygame.image.load("assets/button.png"), pos=(SCREEN_WIDTH/2,  7* SCREEN_HEIGHT/10), 
                             text_input="Exit Game", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         
         
@@ -288,11 +318,58 @@ def intro():
                 
         pygame.display.update()
         clock.tick_busy_loop( FPS )
+
+def inventory():
+    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN, GAME_BACKGROUND
     
-def main_game_loop():
-    pygame.display.set_caption("Menu")
-    global SCREEN_WIDTH, SCREEN_HEIGHT, FPS
+    while True:
+        SCREEN.fill(BLACK)
+        GAME_BACKGROUND = pygame.transform.smoothscale(GAME_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT)) # scale to screen
+        GAME_BACKGROUND.set_alpha(100)
+        INVENTORY_MOUSE_POS = pygame.mouse.get_pos()
+        SCREEN.blit(GAME_BACKGROUND, (0,0))
     
+    
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                        
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+
+        pygame.display.update()
+        clock.tick_busy_loop( FPS )
+
+def boss_encounter(player, counter):
+    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN, GAME_BACKGROUND
+    BOSS_ICON = random.choice(BOSS_IMG)
+    while True:
+        GAME_BACKGROUND = pygame.transform.smoothscale(GAME_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT)) # scale to screen
+        SCREEN.blit(GAME_BACKGROUND, (0,0))
+        
+       
+        SCREEN.blit(BOSS_ICON, (SCREEN_WIDTH/2, SCREEN_HEIGHT))
+        
+        
+        
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pause_menu() 
+                        
+        pygame.display.update()
+        clock.tick_busy_loop( FPS )
+    
+def main_game_loop(player):
+    global SCREEN_WIDTH, SCREEN_HEIGHT, FPS, SCREEN, GAME_BACKGROUND, prev_encounter
+    counter = 1
     
     while True:
         
@@ -301,11 +378,38 @@ def main_game_loop():
         fade_in_img(GAME_BACKGROUND)
         
         while True:
+            INV_ICON = pygame.image.load("assets/inventory_icon.png")
+            INV_ICON = pygame.transform.smoothscale(INV_ICON, (SCREEN_WIDTH/16, SCREEN_HEIGHT/9))
             GAME_BACKGROUND = pygame.transform.smoothscale(GAME_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT)) # scale to screen
             MAIN_LOOP_MOUSE_POS = pygame.mouse.get_pos()
-            
             SCREEN.blit(GAME_BACKGROUND, (0,0))
-
+            
+            COUNTER_TXT = get_font(100).render(f"Round: {str(counter)}", True,WHITE)  #display counter
+            COUNTER_RECT = COUNTER_TXT.get_rect(center=(SCREEN_WIDTH/2, 1*SCREEN_HEIGHT/10))
+            SCREEN.blit(COUNTER_TXT, COUNTER_RECT)
+            
+            if(counter % 250 == 0 ):  #You Win
+                return
+            elif(counter % 1 == 0):  #Boss encounter
+                boss_encounter(player, counter)
+                #encounters.boss_encounter(player, counter)
+            elif(counter % 9 == 0): #Shop Encounter
+                encounters.shop_encounter(player, counter)
+            else: prev_encounter = encounters.choose_encounter(player, prev_encounter, counter) #random encounter
+                    
+            counter += 1           
+            
+            
+            
+            INVENTORY_BUTTON = Button(image=INV_ICON, pos=(round(SCREEN_WIDTH/12), round(SCREEN_HEIGHT/12)), 
+                            text_input=" ", font=get_font(30), base_color="Black", hovering_color="Dark Blue")
+            
+            
+            for button in [INVENTORY_BUTTON]:  # update button color based on where mouse is
+                button.changeColor(MAIN_LOOP_MOUSE_POS)
+                button.update(SCREEN)
+            
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -315,6 +419,9 @@ def main_game_loop():
                     if event.key == pygame.K_ESCAPE:
                         pause_menu() 
                         
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if INVENTORY_BUTTON.checkForInput(MAIN_LOOP_MOUSE_POS):
+                        inventory()
                 
 
             pygame.display.update()
@@ -342,49 +449,78 @@ def char_create_ui():
         
 
         #PEASANT
-        PEASANT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 2*SCREEN_HEIGHT/10), 
-                            text_input="Peasant", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(CLASS_SELECT == "peasant"):
+            PEASANT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 2*SCREEN_HEIGHT/10), 
+                                text_input="Peasant", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            PEASANT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 2*SCREEN_HEIGHT/10), 
+                                text_input="Peasant", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         PEASANT_SUMMARY = get_font(40).render(player_info.peasant.summary, True, SUMMARY_COLOR)
         PEASANT_TEXT_RECT = PEASANT_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 2*SCREEN_HEIGHT/10))
         SCREEN.blit(PEASANT_SUMMARY, PEASANT_TEXT_RECT)
         
         #IDIOT
-        IDIOT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 3*SCREEN_HEIGHT/10),
-                            text_input="Idiot", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(CLASS_SELECT == "idiot"):
+            IDIOT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 3*SCREEN_HEIGHT/10),
+                                text_input="Idiot", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            IDIOT_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 3*SCREEN_HEIGHT/10),
+                                text_input="Idiot", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         IDIOT_SUMMARY = get_font(40).render(player_info.idiot.summary, True, SUMMARY_COLOR)
         IDIOT_TEXT_RECT = IDIOT_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 3*SCREEN_HEIGHT/10))
         SCREEN.blit(IDIOT_SUMMARY, IDIOT_TEXT_RECT)
         
         #WARRIOR
-        WARRIOR_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 4*SCREEN_HEIGHT/10),
-                            text_input="Warrior", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(CLASS_SELECT == "warrior"):
+            WARRIOR_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 4*SCREEN_HEIGHT/10),
+                                text_input="Warrior", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            WARRIOR_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 4*SCREEN_HEIGHT/10),
+                                text_input="Warrior", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         WARRIOR_SUMMARY = get_font(40).render(player_info.warrior.summary, True, SUMMARY_COLOR)
         WARRIOR_TEXT_RECT = WARRIOR_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 4*SCREEN_HEIGHT/10))
         SCREEN.blit(WARRIOR_SUMMARY, WARRIOR_TEXT_RECT)
         
         #GAMBLER
-        GAMBLER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 5*SCREEN_HEIGHT/10),
+        if(CLASS_SELECT == "gambler"):
+            GAMBLER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 5*SCREEN_HEIGHT/10),
+                                text_input="Gambler", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            GAMBLER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 5*SCREEN_HEIGHT/10),
                             text_input="Gambler", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         GAMBLER_SUMMARY = get_font(40).render(player_info.gambler.summary, True, SUMMARY_COLOR)
         GAMBLER_TEXT_RECT = GAMBLER_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 5*SCREEN_HEIGHT/10))
         SCREEN.blit(GAMBLER_SUMMARY, GAMBLER_TEXT_RECT)
         
         #RANGER
-        RANGER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 6*SCREEN_HEIGHT/10),
-                            text_input="Ranger", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(CLASS_SELECT == "ranger"):
+            RANGER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 6*SCREEN_HEIGHT/10),
+                                text_input="Ranger", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            RANGER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 6*SCREEN_HEIGHT/10),
+                                text_input="Ranger", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+            
         RANGER_SUMMARY = get_font(40).render(player_info.ranger.summary, True, SUMMARY_COLOR)
         RANGER_TEXT_RECT = RANGER_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 6*SCREEN_HEIGHT/10))
         SCREEN.blit(RANGER_SUMMARY, RANGER_TEXT_RECT)
         
         #DEFENDER
-        DEFENDER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 7*SCREEN_HEIGHT/10),
-                            text_input="Defender", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
+        if(CLASS_SELECT == "defender"):
+            DEFENDER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 7*SCREEN_HEIGHT/10),
+                              text_input="Defender", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            DEFENDER_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 7*SCREEN_HEIGHT/10),
+                                text_input="Defender", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         DEFENDER_SUMMARY = get_font(40).render(player_info.defender.summary, True, SUMMARY_COLOR)
         DEFENDER_TEXT_RECT = DEFENDER_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 7*SCREEN_HEIGHT/10))
         SCREEN.blit(DEFENDER_SUMMARY, DEFENDER_TEXT_RECT)
         
         #WIZZARD
-        WIZZARD_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 8*SCREEN_HEIGHT/10),
+        if(CLASS_SELECT == "wizzard"):
+            WIZZARD_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 8*SCREEN_HEIGHT/10),
+                            text_input="Wizzard", font=get_font(40), base_color="Dark Blue", hovering_color="Dark Blue")
+        else:
+            WIZZARD_BUTTON = Button(CHAR_SELECT_BUTTON_IMAGE, pos=(SCREEN_WIDTH/5, 8*SCREEN_HEIGHT/10),
                             text_input="Wizzard", font=get_font(40), base_color=WHITE, hovering_color="Dark Blue")
         WIZZARD_SUMMARY = get_font(40).render(player_info.wizzard.summary, True, SUMMARY_COLOR)
         WIZZARD_TEXT_RECT = WIZZARD_SUMMARY.get_rect(midleft=(SCREEN_WIDTH/3, 8*SCREEN_HEIGHT/10))
@@ -435,53 +571,28 @@ def play():
     
     while running:
         SCREEN.fill(BLACK)
-        PLAY_MOUSE_POS = pygame.mouse.get_pos()
-        
         intro()
         
-
         play_again = True
         while (play_again):
-            prev_encounter = ""
-            
             game_active = True
             #player
             character = player_info.char_info()
             player = copy(character)
             class_choice = char_create_ui()
-    
             #get name of player
             player_info.char_create(player, class_choice)
             player.name = f"{player.name} The {player.class_type}"
         
         
-        # now we need to have the main game loop
-            counter = 1
+        # now we need to have the main game loop 
             while game_active:
-                if(player.stats["Health"] <= 0): game_active = False  # haha you're dead
+                if(player.stats["Health"] <= 0):
+                    
+                    game_active = False  # haha you're dead    
+                    #death scene
                 else:
-                    main_game_loop()
-                    print(f"\nRound {str(counter)}: ")
-                    if(counter % 250 == 0 ): 
-                        print("You win!")
-                        game_active = False
-                        next = input("\nPress anything to exit game ") 
-                    elif(counter % 10 == 0):
-                        encounters.boss_encounter(player, counter)
-                    elif(counter % 9 == 0):
-                        encounters.shop_encounter(player, counter)
-                    else: prev_encounter = encounters.choose_encounter(player, prev_encounter, counter)
-                    
-                    counter += 1           
-                    
-            go_again = input("\nWould you like to play again? y/n: ")
-            if(go_again == "y"):
-                play_again = True
-                game_active = True
-                
-            else: 
-                play_again = False
-                print("You may now exit the game.")
+                    main_game_loop(player)
     
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -638,7 +749,6 @@ def change_video():
                     
         pygame.display.update()
         clock.tick_busy_loop( FPS ) # set to 60 fps
-         
            
 def options():
     running = True
