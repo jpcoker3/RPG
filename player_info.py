@@ -6,11 +6,15 @@ from dataclasses import dataclass
 import random
 
 first = [
-    "John"
+    "John",
+    "David",
+    "Arthur"
     
 ]
 last = [
-    "Smith"
+    "Smith",
+    "Steelbender",
+    'Kingslayer'
     
 ]
 
@@ -22,7 +26,7 @@ def get_name():
      #create character by name
     First = random.choice(first)
     Last = random.choice(last)
-    name = First + Last       
+    name = f"{First} {Last}"       
     return name
 
 #for any XP increase, handles lvl ups and such
@@ -153,7 +157,7 @@ def char_create(player, class_choice):
     
     player.critical_chance += default_equipt[4].critical_chance
     player.critical_damage += default_equipt[4].critical_damage
-    player.skills.append(copy(skills.basic_attack))
+    
     
 
 def output_stats(player):
@@ -205,8 +209,8 @@ class char_info():
 
     stats = {
         "Health" : 100,
-        "Mana": 100,
-        "Stamina": 100,
+        "Mana": 50,
+        "Stamina": 50,
         "Armor": 0,
         "Speed": 100,
         "Level": 1,
@@ -215,7 +219,10 @@ class char_info():
     }
     
     skills = [
-        
+        copy(skills.basic_attack),
+        None,
+        None,
+        None
         # to be implemented later
         #slash,
         #lunge,

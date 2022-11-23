@@ -152,135 +152,101 @@ def opponent_attack(player, opponent):
     else:
         print(f"{opponent.name} attacked for {str(opp_dmg)}. {player.name}'s health: {str(player.stats['Health'])}")
                 
-def player_attack(player, opponent):
-    
-    valid_attack_choice = False
-    while(not valid_attack_choice):
-        print("\n") # spacing
-        print("{:<3}{:<10}".format("#", "Skill"))
-        for i in  range(len(player.skills)): #-1 for indexing
-            print("{:<3}{:<10}".format(str(i+1), player.skills[i].name.capitalize()))
-        print("\n")
-        
-        
-        valid_input = False
-        while(not valid_input):
-            attack_choice = input("What would you like to do?: ")
-                
-            if(attack_choice.isdigit() and (int(attack_choice) < 5)): 
-                valid_input = True
-                
-            else: 
-                valid_input = False 
-                print("Please enter a number. \n")
-                
-        if((int(attack_choice)-1) <= len(player.skills) ):
+def player_attack(player, opponent, skill):
             
-            
-            #get skill
-            skill = player.skills[int(attack_choice)-1]
-            
-            if((player.stats["Mana"] >= skill.mana_cost) and   # if you have enought resources
-                (player.stats["Stamina"] >= skill.stamina_cost) and  # and if not on cooldown
-                (skill.cooldown_counter == 0 )):
+    if((player.stats["Mana"] >= skill.mana_cost) and   # if you have enought resources
+        (player.stats["Stamina"] >= skill.stamina_cost) and  # and if not on cooldown
+        (skill.cooldown_counter == 0 )):
 
-               
-                #get skill
-                skill.cooldown_counter = skill.cooldown
-                player.stats["Mana"] -= skill.mana_cost
-                player.stats["Stamina"] -= skill.stamina_cost
-                
         
-                
+        #get skill
+        skill.cooldown_counter = skill.cooldown
+        player.stats["Mana"] -= skill.mana_cost
+        player.stats["Stamina"] -= skill.stamina_cost
+        
+
+        
 #DO STUFF DEPENDING ON TYPE OF SKILL
-                #physical damage calculations
-                if((skill.type == "melee") or (skill.type == "ranged")):
-                    
-                    player_dmg, player_crit, player_double_crit = player_damage(player, skill)
-                                    # 1/100 to get a percentage, so attack is reduced by (armor - pen /4)%
-                    player_dmg -= round(player_dmg * (1/100 * 1/3 * (opponent.armor - player.weapon.armor_pen)))
-                    
-                                
-                    #set min damage to 1
-                    if(player_dmg <= 0): player_dmg = 1
-                    opponent.health -= player_dmg
-                    
-                    #doublecrit, crit, normal
-                    if(player_double_crit):
-                        print(f"{player.name} attacked with {skill.name.capitalize()} and DOUBLE critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")
-                    elif(player_crit):
-                        print(f"{player.name} attacked with {skill.name.capitalize()} and critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}") 
-                    else:
-                        print(f"{player.name} attacked with {skill.name.capitalize()} for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")    
-                    
-                    valid_attack_choice = True
-                #magical damage calculations 
-                elif(skill.type == "magic"):
-                    player_dmg, player_crit, player_double_crit = player_damage(player, skill)
-                                    # 1/100 to get a percentage, so attack is reduced by (armor - pen /4)%
-                   # player_dmg -= round(player_dmg * (1/100 * 1/3 * (opponent.armor - player.weapon.armor_pen))) # no armor pen
-                    
-                                
-                    #set min damage to 1
-                    if(player_dmg <= 0): player_dmg = 1
-                    opponent.health -= player_dmg
-                    
-                    #doublecrit, crit, normal
-                    if(player_double_crit):
-                        print(f"{player.name} attacked with {skill.name.capitalize()} and DOUBLE critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")
-                    elif(player_crit):
-                        print(f"{player.name} attacked with {skill.name.capitalize()} and critical hit for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}") 
-                    else:
-                        print(f"{player.name} attacked with {skill.name.capitalize()} for {str(player_dmg)}. {opponent.name}'s health: {str(opponent.health)}")      
-                    
-                    valid_attack_choice = True
-                
-                
-                #Heal Skills
-                elif(skill.type == "heal"):                                          #heal percent
-                    heal_value = round(player.max_health * (skill.heal / 100))
-                    
-                    
-                    #basically, calculate how much to heal ( if any)
-                    heal_total = heal_value + player.stats["Health"]
-                    if(heal_total > player.max_health):
-                        temp = heal_total - player.max_health
-                        heal_value -= temp
-                        if(heal_value < 0): heal_value = 0
-                  
-
-                    print(f"Used {skill.name} and healed for: {str(heal_value)}")
+        #physical damage calculations
+        if((skill.type == "melee") or (skill.type == "ranged")):
+            
+            player_dmg, player_crit, player_double_crit = player_damage(player, skill)
+                            # 1/100 to get a percentage, so attack is reduced by (armor - pen /4)%
+            player_dmg -= round(player_dmg * (1/100 * 1/3 * (opponent.armor - player.weapon.armor_pen)))
+            
                         
-                    player.stats["Health"] += heal_value
-                    
-                    valid_attack_choice = True
-                    
-                
+            #set min damage to 1
+            if(player_dmg <= 0): player_dmg = 1
+            opponent.health -= player_dmg
+            
+            #doublecrit, crit, normal
+            if(player_double_crit):
+                dmg_str = (f" DOUBLE critical hit for {str(player_dmg)}")
+            elif(player_crit):
+                dmg_str =(f"Critical hit for {str(player_dmg)}") 
             else:
-                print("\nYou do not have enough resources for this ability.")
+                dmg_str =(f"Attacked for {str(player_dmg)}")
                 
-                if(player.stats["Mana"] < skill.mana_cost):
-                    print(f"This skill requires {str(skill.mana_cost)} Mana. You have {str(player.stats['Mana'])} Mana. ")
+                
+        #magical damage calculations 
+        elif(skill.type == "magic"):
+            player_dmg, player_crit, player_double_crit = player_damage(player, skill)
+                            # 1/100 to get a percentage, so attack is reduced by (armor - pen /4)%
+            # player_dmg -= round(player_dmg * (1/100 * 1/3 * (opponent.armor - player.weapon.armor_pen))) # no armor pen
             
-                if(player.stats["Stamina"] < skill.stamina_cost):
-                    print(f"This skill requires {str(skill.stamina_cost)} Stamina. You have {str(player.stats['Stamina'])} Stamina. ")
-                if(skill.cooldown_counter != 0 ):
-                    print(f"Skill on cooldown for {skill.cooldown_counter} turns.")
-                    
-                valid_attack_choice = False
+                        
+            #set min damage to 1
+            if(player_dmg <= 0): player_dmg = 1
+            opponent.health -= player_dmg
+            
+            #doublecrit, crit, normal
+            if(player_double_crit):
+                dmg_str = (f" DOUBLE critical hit for {str(player_dmg)}")
+            elif(player_crit):
+                dmg_str = (f"Critical hit for {str(player_dmg)}") 
+            else:
+                dmg_str = (f"Attacked for {str(player_dmg)}")
         
-        else:
-            print("Please enter a valid option. ")
-            valid_attack_choice = False
+        
+        #Heal Skills
+        elif(skill.type == "heal"):                                          #heal percent
+            heal_value = round(player.max_health * (skill.heal / 100))
             
+            
+            #basically, calculate how much to heal ( if any)
+            heal_total = heal_value + player.stats["Health"]
+            if(heal_total > player.max_health):
+                temp = heal_total - player.max_health
+                heal_value -= temp
+                if(heal_value < 0): heal_value = 0
+            
+
+            dmg_str = (f"Healed for: {str(heal_value)}")
+                
+            player.stats["Health"] += heal_value
+            
+        
+    else:
+        print("\nYou do not have enough resources for this ability.")
+        
+        if(player.stats["Mana"] < skill.mana_cost):
+            dmg_str=(f"This skill requires {str(skill.mana_cost)} Mana. You have {str(player.stats['Mana'])} Mana. ")
+    
+        if(player.stats["Stamina"] < skill.stamina_cost):
+            dmg_str=(f"This skill requires {str(skill.stamina_cost)} Stamina. You have {str(player.stats['Stamina'])} Stamina. ")
+        if(skill.cooldown_counter != 0 ):
+            dmg_str=(f"Skill on cooldown for {skill.cooldown_counter} turns.")
+            
+
                 
     #reduce cooldown
     for i in range(len(player.skills)):
-        if( player.skills[i].cooldown_counter != 0):
-            player.skills[i].cooldown_counter -= 1
-            
+        if(player.skills[i] != None):
+            if( player.skills[i].cooldown_counter != 0):
+                player.skills[i].cooldown_counter -= 1
 
-    
+    return dmg_str
+
 def player_damage(player, skill):  
     
     #physical or magical
@@ -304,7 +270,6 @@ def player_damage(player, skill):
         if(random.randrange(0,100) <= (player.critical_chance - 100)):
             damage = round( damage * player.critical_damage)
             double_Crit = True
-    
     
     
     return damage, critical, double_Crit

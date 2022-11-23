@@ -1,5 +1,4 @@
-import encounters
-import player_info
+import player_info, enemies, encounters, combat
 from copy import copy
 from colors import *
 import pygame, sys
@@ -15,16 +14,16 @@ prev_encounter = ""
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
 run = True
-FPS = 60
-
-
-
-
-
+FPS = 15
 clock = pygame.time.Clock()
 
 
+
+
+
 pygame.init()
+
+
 
 SURFACE = pygame.HWSURFACE|pygame.DOUBLEBUF#|pygame.RESIZABLE
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT), SURFACE)    #|pygame.RESIZABLE)   #set resolution to be displayed
@@ -101,8 +100,17 @@ def fade_out():#TEXT, RECT,start_width ,start_height ):
         fade.set_alpha(alpha)
         SCREEN.blit(fade, (0,0))
         pygame.display.update()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                fade.set_alpha(0)
+
+                SCREEN.blit(fade, (0,0))
+                pygame.display.update()
+                return
+            
+            
         pygame.time.delay(5)
-    pygame.time.delay(1000)
+    pygame.time.delay(500)
         
 def fade_in_txt(TEXT, RECT,start_width ,start_height ):
     global SCREEN, SCREEN_HEIGHT,SCREEN_WIDTH
@@ -116,6 +124,23 @@ def fade_in_txt(TEXT, RECT,start_width ,start_height ):
         SCREEN.blit(fade, (start_width,start_height))
         pygame.display.update()
         pygame.time.delay(4)
+        
+        
+        for event in pygame.event.get():# use these to quit
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+                        
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    fade.set_alpha(0)
+        
+                    SCREEN.blit(TEXT, RECT)
+                    SCREEN.blit(fade, (start_width,start_height))
+                    pygame.display.update()
+                    
+                    return
+        
     pygame.time.delay(1000)
         
 def fade_in_img(image):
@@ -130,6 +155,15 @@ def fade_in_img(image):
         SCREEN.blit(fade, (0,0))
         pygame.display.update()
         pygame.time.delay(1)
+        
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                            
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
 
 def main_menu():
     pygame.display.set_caption("Menu")
@@ -182,15 +216,15 @@ def pause_menu():
     
     while True:
         PAUSE_MOUSE_POS = pygame.mouse.get_pos() # mouse posn
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        overlay.fill(BLACK)
-        overlay.set_alpha(100)
         
-        INVENTORY_MOUSE_POS = pygame.mouse.get_pos()
-        SCREEN.blit(overlay, (0,0))
+        SCREEN.fill(BLACK)
+        
+        copy_GB = copy(GAME_BACKGROUND)
+        copy_GB.set_alpha(100)
+        SCREEN.blit(copy_GB, (0,0))
         
         
-        PAUSE_TEXT = get_font(100).render("GAME PAUSED", True,WHITE)
+        PAUSE_TEXT = get_font(100).render("GAME PAUSED", True, WHITE)
         PAUSE_RECT = PAUSE_TEXT.get_rect(center=(SCREEN_WIDTH/2, 2*SCREEN_HEIGHT/10))
         SCREEN.blit(PAUSE_TEXT, PAUSE_RECT)
         
@@ -227,13 +261,14 @@ def pause_menu():
                 
                 if PAUSE_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
                     options()
-                    
                 
                 if MAIN_MENU_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
                     main_menu()
+                    
                 if EXIT_GAME_OPTIONS.checkForInput(PAUSE_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
+                    
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return  
@@ -268,7 +303,7 @@ def intro():
             INTRO_TEXT5 = get_font(60).render(f"Anyway, Good Luck. You'll need it. ", True, WHITE)
             INTRO_TEXT_RECT5 = INTRO_TEXT5.get_rect(center=(SCREEN_WIDTH/2, 5*SCREEN_HEIGHT/7))
             
-            INTRO_TEXT6 = get_font(40).render("The voices fades", True, WHITE)
+            INTRO_TEXT6 = get_font(40).render("The voice fades", True, WHITE)
             INTRO_TEXT_RECT6 = INTRO_TEXT6.get_rect(center=(round(SCREEN_WIDTH/2), 6*SCREEN_HEIGHT/7))
             
             text_list=[INTRO_TEXT,INTRO_TEXT2,INTRO_TEXT3, INTRO_TEXT4,INTRO_TEXT5, INTRO_TEXT6]
@@ -313,21 +348,19 @@ def intro():
                     return
                 
             
-                                     
-                
-                
         pygame.display.update()
         clock.tick_busy_loop( FPS )
 
 def inventory():
     global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN, GAME_BACKGROUND
+    copy_GB = copy(GAME_BACKGROUND)
+    copy_GB.set_alpha(100)
     
     while True:
         SCREEN.fill(BLACK)
-        GAME_BACKGROUND = pygame.transform.smoothscale(GAME_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT)) # scale to screen
-        GAME_BACKGROUND.set_alpha(100)
+        SCREEN.blit(copy_GB, (0,0))
+        
         INVENTORY_MOUSE_POS = pygame.mouse.get_pos()
-        SCREEN.blit(GAME_BACKGROUND, (0,0))
     
     
     
@@ -343,39 +376,182 @@ def inventory():
         pygame.display.update()
         clock.tick_busy_loop( FPS )
 
-def boss_encounter(player, counter):
-    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN, GAME_BACKGROUND
+def skill_buttons(player):
+    skill_icon = pygame.image.load("assets/button.png")
+    skill_icon = pygame.transform.smoothscale(skill_icon, (SCREEN_WIDTH/6, 2*SCREEN_HEIGHT/10))  #format size of button
+    skill_icon_rect = skill_icon.get_rect()
+    
+    
+    #if skill = none, load none, else, load skill
+    if(player.skills[0] == None):
+        skill0 = Button(skill_icon, pos=(3*SCREEN_WIDTH/6 -skill_icon_rect.centerx, 16*SCREEN_HEIGHT/20 ), 
+                            text_input="", font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+    else:
+        skill0 = Button(skill_icon, pos=(3*SCREEN_WIDTH/6-skill_icon_rect.centerx, 16*SCREEN_HEIGHT/20 ), 
+                            text_input=player.skills[0].name, font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+        
+    if(player.skills[1] == None):
+        skill1 = Button(skill_icon, pos=(4*SCREEN_WIDTH/6-skill_icon_rect.centerx, 16*SCREEN_HEIGHT/20 ), 
+                            text_input="", font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+    else:
+        skill1 = Button(skill_icon, pos=(4*SCREEN_WIDTH/6-skill_icon_rect.centerx, 16*SCREEN_HEIGHT/20 ), 
+                            text_input=player.skills[1].name, font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+
+    if(player.skills[2] == None):
+        skill2 = Button(skill_icon, pos=(3*SCREEN_WIDTH/6-skill_icon_rect.centerx, 18*SCREEN_HEIGHT/20 ), 
+                            text_input="", font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+    else:
+        skill2 = Button(skill_icon, pos=(3*SCREEN_WIDTH/6-skill_icon_rect.centerx, 18*SCREEN_HEIGHT/20 ), 
+                            text_input=player.skills[2].name, font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+        
+    if(player.skills[3] == None):
+        skill3 = Button(skill_icon, pos=(4*SCREEN_WIDTH/6-skill_icon_rect.centerx, 18*SCREEN_HEIGHT/20 ), 
+                            text_input="", font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+    else:
+        skill3 = Button(skill_icon, pos=(4*SCREEN_WIDTH/6-skill_icon_rect.centerx, 18*SCREEN_HEIGHT/20), 
+                            text_input=player.skills[3].name, font=get_font(30), base_color=WHITE, hovering_color="Dark Blue")
+        
+    return skill0, skill1, skill2, skill3
+
+def enemy_healthbar(enemy, enemy_max_health):
+    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN
+    
+    health_percent = enemy.health/enemy_max_health
+    
+    #black background
+    pygame.draw.rect(SCREEN, BLACK,(round(5*SCREEN_WIDTH/20) ,round(SCREEN_HEIGHT/20), 10*SCREEN_WIDTH/20, SCREEN_HEIGHT/30))
+    
+    #red foreground
+    pygame.draw.rect(SCREEN, RED,(round(5*SCREEN_WIDTH/20) ,round(SCREEN_HEIGHT/20), round(SCREEN_WIDTH/2 * health_percent), SCREEN_HEIGHT/30))
+    
+    #health numbers on top
+    HEALTH_TXT = get_font(30).render(f"Health: {str(enemy.health)}/{str(enemy_max_health)}", True,WHITE)  #display counter
+    HEALTH_RECT = HEALTH_TXT.get_rect(midtop=(round(SCREEN_WIDTH/2) , round(SCREEN_HEIGHT/20 +4)))
+    SCREEN.blit(HEALTH_TXT, HEALTH_RECT)
+
+def player_resource_display(player):
+    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN
+    
+    health_percent = player.stats["Health"]/player.max_health
+    #black background
+    pygame.draw.rect(SCREEN, BLACK,(round(SCREEN_WIDTH/30) ,round(16*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20, SCREEN_HEIGHT/30))
+    #red foreground
+    pygame.draw.rect(SCREEN, RED,(round(SCREEN_WIDTH/30) ,round(16*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20 * health_percent, SCREEN_HEIGHT/30))
+    #health numbers on top
+    HEALTH_TXT = get_font(30).render(f"Health: {str(player.stats['Health'])}/{str(player.max_health)}", True,WHITE)  #display counter
+    HEALTH_RECT = HEALTH_TXT.get_rect(topleft=((round(3* SCREEN_WIDTH/30) ,round(16*SCREEN_HEIGHT/20))))
+    SCREEN.blit(HEALTH_TXT, HEALTH_RECT)
+    
+    if(player.max_mana !=0):
+        mana_percent = player.stats["Mana"]/player.max_mana
+        #black background
+        pygame.draw.rect(SCREEN, BLACK,(round(SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20, SCREEN_HEIGHT/30))
+        #red foreground
+        pygame.draw.rect(SCREEN, BLUE,(round(SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20 * mana_percent, SCREEN_HEIGHT/30))
+        #health numbers on top
+        MANA_TXT = get_font(30).render(f"Mana: {str(player.stats['Mana'])}/{str(player.max_mana)}", True,WHITE)  #display counter
+        MANA_RECT = MANA_TXT.get_rect(topleft=((round(3* SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20))))
+        SCREEN.blit(MANA_TXT, MANA_RECT)
+    if(player.max_stamina!=0):
+        stamina_percent = player.stats["Stamina"]/player.max_stamina
+        #black background
+        pygame.draw.rect(SCREEN, BLACK,(round(SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20, SCREEN_HEIGHT/30))
+        #red foreground
+        pygame.draw.rect(SCREEN, GREEN,(round(SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20), 5*SCREEN_WIDTH/20 * stamina_percent, SCREEN_HEIGHT/30))
+        #health numbers on top
+        STAMINA_TXT = get_font(30).render(f"Stamina: {str(player.stats['Stamina'])}/{str(player.max_stamina)}", True,WHITE)  #display counter
+        STAMINA_RECT = STAMINA_TXT.get_rect(topleft=((round(3* SCREEN_WIDTH/30) ,round(17*SCREEN_HEIGHT/20))))
+        SCREEN.blit(STAMINA_TXT, STAMINA_RECT)
+
+def attack(player, opponent, skill):
+    global SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN
+    combat_str = combat.player_attack(player, opponent, skill)
+    
+    COMBAT_TXT = get_font(30).render(combat_str, True,WHITE)  #display message
+    COMBAT_RECT = COMBAT_TXT.get_rect(center=(round(SCREEN_WIDTH/2) , round(7*SCREEN_HEIGHT/10)))
+    SCREEN.blit(COMBAT_TXT, COMBAT_RECT)
+
+def boss_encounter(player, counter): 
+    global GAME_BACKGROUND
     BOSS_ICON = random.choice(BOSS_IMG)
+    boss = enemies.get_boss(counter)
+    enemy_max_health = boss.health
+    combat_str = ""
+    
     while True:
+        SCREEN.fill(BLACK)
+        BOSS_MOUSE_POS = pygame.mouse.get_pos() #get mouse posn
+        
+        
         GAME_BACKGROUND = pygame.transform.smoothscale(GAME_BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT)) # scale to screen
-        SCREEN.blit(GAME_BACKGROUND, (0,0))
+        SCREEN.blit(GAME_BACKGROUND, (0,0))# background
         
        
-        SCREEN.blit(BOSS_ICON, (SCREEN_WIDTH/2, SCREEN_HEIGHT))
+        INV_ICON = pygame.image.load("assets/inventory_icon.png") # inv icon
+        INV_ICON = pygame.transform.smoothscale(INV_ICON, (SCREEN_WIDTH/16, SCREEN_HEIGHT/9))
+        INV_ICON_RECT = INV_ICON.get_rect()
+        INVENTORY_BUTTON = Button(image=INV_ICON, pos=(round(SCREEN_WIDTH/12 - INV_ICON_RECT.centerx), round(SCREEN_HEIGHT/12)), 
+                            text_input="    ", font=get_font(30), base_color="Black", hovering_color="Dark Blue") # all that for 1 button
+        
+        skill0, skill1, skill2, skill3 = skill_buttons(player)
+        
+        BOSS_ICON_RECT = BOSS_ICON.get_rect() # used to get center x and y for positioning
+        SCREEN.blit(BOSS_ICON, (SCREEN_WIDTH/2 - BOSS_ICON_RECT.centerx, 2*SCREEN_HEIGHT/5 - BOSS_ICON_RECT.centery)) # center the boss
+        enemy_healthbar(boss, enemy_max_health)
+        player_resource_display(player)
+        
+        COMBAT_TXT = get_font(30).render(combat_str, True,WHITE)  #display message
+        COMBAT_RECT = COMBAT_TXT.get_rect(center=(round(SCREEN_WIDTH/2) , round(7*SCREEN_HEIGHT/10)))
+        SCREEN.blit(COMBAT_TXT, COMBAT_RECT)
+        
+        
+        for button in [INVENTORY_BUTTON, skill0, skill1, skill2, skill3]:  # update button color based on where mouse is
+                button.changeColor(BOSS_MOUSE_POS)
+                button.update(SCREEN)
         
         
         
         for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT: # if they hit the big red X, exit game 
                     pygame.quit()
-                    sys.exit()
+                    sys.exit() 
                     
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+                    if event.key == pygame.K_ESCAPE: # if they press esc, go to pause menu
                         pause_menu() 
+                        
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if INVENTORY_BUTTON.checkForInput(BOSS_MOUSE_POS): # if they hit inventory button, go to inventory
+                        inventory()
+                    if skill0.checkForInput(BOSS_MOUSE_POS):
+                        if(player.skills[0] != None):
+                            combat_str = combat.player_attack(player, boss, player.skills[0])
+    
+                    if skill1.checkForInput(BOSS_MOUSE_POS):
+                        if(player.skills[1] != None):
+                            combat_str = combat.player_attack(player, boss, player.skills[1])
+    
+                    if skill2.checkForInput(BOSS_MOUSE_POS):
+                        if(player.skills[2] != None):
+                            combat_str = combat.player_attack(player, boss, player.skills[2])
+    
+                    if skill3.checkForInput(BOSS_MOUSE_POS):
+                        if(player.skills[3] != None):
+                            combat_str = combat.player_attack(player, boss, player.skills[2])
+                        
                         
         pygame.display.update()
         clock.tick_busy_loop( FPS )
     
 def main_game_loop(player):
     global SCREEN_WIDTH, SCREEN_HEIGHT, FPS, SCREEN, GAME_BACKGROUND, prev_encounter
-    counter = 1
+    counter = 10
     
     while True:
         
         GAME_BACKGROUND = random.choice(BATTLE_BGS)
         SCREEN.fill(BLACK)
-        fade_in_img(GAME_BACKGROUND)
+        fade_in_img(GAME_BACKGROUND) # get game background, fade in 
         
         while True:
             INV_ICON = pygame.image.load("assets/inventory_icon.png")
@@ -571,7 +747,7 @@ def play():
     
     while running:
         SCREEN.fill(BLACK)
-        intro()
+        #intro()  ENABLE LATER
         
         play_again = True
         while (play_again):

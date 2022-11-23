@@ -1,11 +1,9 @@
-import random
-import weapons
-import armors
-import enemies
-import combat
-import player_info
+import random, pygame, sys #outside files
+import weapons, armors, enemies, combat, player_info  #my files
 from copy import copy
-import random
+from button import Button
+
+
 
 
 items = ["weapon", "armor"]
@@ -421,6 +419,5 @@ def add_stats(player,item):
     player.mana_regen -= item.mana_regen_bonus
     player.stamina_regen -= item.stamina_regen_bonus
         
- 
  
  
