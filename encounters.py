@@ -10,6 +10,7 @@ import random
 
 items = ["weapon", "armor"]
 
+#choose rarity based on luck and level
 def choose_rarity(player):
     #level locked rarity
     if(player.stats["Level"] < 5):
@@ -17,14 +18,14 @@ def choose_rarity(player):
     elif(player.stats["Level"] < 10):
         rarity = random.randrange(player.stats["Luck"],94)
     else:
-        rarity = random.randrange(player.stats["Luck"],100)
+        #            from luck to 100 + luck/10, better for higher levels so luck feels good
+        rarity = random.randrange(player.stats["Luck"],100 + round(player.stats["Luck"]/10))
         
     if(rarity <= 70):loot_rarity = "common"
     elif(rarity <= 85): loot_rarity = "uncommon"
     elif(rarity <= 95): loot_rarity = "rare"
     elif(rarity <= 99.5): loot_rarity = "legendary"
     elif(rarity > 99.5): loot_rarity = "mythic" 
-    
     return loot_rarity
     
     
@@ -44,10 +45,10 @@ def loot_item(player):
 def choose_encounter(player, prev_encounter, game_round):
     
     encounter_list = ['Camp', 'Item', 'Enemy'] 
-    # get a weighted list of encounters to choose from -- easier to modify
+    # get a weighted list of encounters to choose from, returns k # of items.
     options = random.choices(encounter_list, weights=(20, 20, 50), k=100) 
 
-    
+    #first 8 encounters are predetermined to make sure the player gets a fair start
     if(game_round == 1):
         encounter = 'Item'
     elif(game_round == 2):
@@ -65,7 +66,8 @@ def choose_encounter(player, prev_encounter, game_round):
     elif(game_round == 8):
         encounter = 'Enemy'
     else:
-        encounter = random.choice(options)
+        encounter = random.choice(options) # choose a random encounter from the weighted list
+        
         #make sure its not the same encounter every time
         while ((encounter == prev_encounter) and (prev_encounter != 'Enemy')):
             encounter = random.choice(options)

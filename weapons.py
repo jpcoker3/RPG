@@ -29,7 +29,7 @@ class weapon:
 sword_of_starter = weapon(name = "Sword of Starter", class_type = "melee", level = 1,ad = 7,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
 apprentice_staff = weapon(name = "Apprentice's Staff", class_type = "magic", level = 1,ap = 10,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
 bow_of_critical = weapon(name="Bow of Critical",class_type = "ranged", level=1, ad=6,critical_chance= 20,critical_damage= 2.5,armor_pen= 0,rarity= "common")
-stick = weapon(name="Stick",class_type = "all", level=1, ad=4,ap = 4,critical_chance= 4,critical_damage= 1.3,armor_pen= 0,rarity= "common")
+#stick = weapon(name="Stick",class_type = "all", level=1, ad=4,ap = 4,critical_chance= 4,critical_damage= 1.3,armor_pen= 0,rarity= "common")
 rangers_bow = weapon(name = "Ranger's Bow",class_type = "ranged", level= 2, ad= 8, critical_chance= 15, critical_damage= 1.8 , armor_pen= 3, rarity=  "common")
 
 #uncommon
@@ -56,7 +56,7 @@ merlins_staff = weapon(name="Merlin's Staff", class_type="magic", level=15, ap=4
 
 
 any = [
-    stick
+    
     
     
 ]
@@ -97,6 +97,7 @@ rare = []
 legendary = []
 mythic = []
 
+#update lists with current weapons
 def update_lists():
     for weapon in (ranged  + melee  + magic + any):
         #gets new weapon level = +- 1 of base level
@@ -108,10 +109,12 @@ def update_lists():
         elif(weapon.rarity == "legendary"): legendary.append(weapon)
         elif(weapon.rarity == "mythic"):mythic.append(weapon)
 
+#make sure relevant level
 def update_level( weapon):
     if(weapon.level == 1): weapon.level = 1
     else: weapon.level = random.randrange(weapon.level -1, weapon.level+ 1 )
 
+#returns a random weapon of the correct rarity and type
 def get_weapon(player, rarity):
     update_lists()
     
@@ -185,8 +188,12 @@ def get_damage(weapon):
     damage = round(random.randrange(round(level * math.log(pow(level, 2)+1)), round(level * math.log(pow(level, 2)+1) + 2* level  + 1)))
     return damage
 
-def get_default_weapon():
+def get_default_weapons():
     #default weapon, fists, should be able to survive a couple rounds 
-    fists = weapon(name="Fists",class_type = "any",level= 1,ad= 4,ap =4, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
-    default_weapon = [fists]
-    return default_weapon
+    stick = weapon(name="Stick",class_type = "any",level= 1,ad= 4,ap =4, critical_chance= 5,critical_damage= 1.5,armor_pen= 0,rarity= "default")
+    rusty_butter_knife = weapon(name="Rusty Butter Knife",class_type = "melee",level= 1,ad= 8, critical_chance= 2,critical_damage= 1.3,armor_pen= 0,rarity= "default")
+    slingshot = weapon(name="Slingshot",class_type = "ranged",level= 1,ad= 6, critical_chance= 7,critical_damage= 1.7,armor_pen= 0,rarity= "default")
+    magic_stick = weapon(name="Magic Stick",class_type = "magic",level= 1, ap =7, critical_chance= 5,critical_damage= 2.1,armor_pen= 0,rarity= "default")
+    
+    default_weapons = [stick, rusty_butter_knife, slingshot, magic_stick]
+    return default_weapons

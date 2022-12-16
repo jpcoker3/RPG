@@ -200,13 +200,13 @@ def get_armor(player, rarity):
     #return item 
     return armor_piece
     
+    
+#kinda self explanatory, set default items
 def get_default_armor():
-    #kinda self explanatory, set default items
-    helmet_of_null = armor(name = "You have no Helmet equipped", level = 0, rarity ="default", piece ="helmet")
+    helmet_of_null = armor(name = "You have no headpiece equipped", level = 0, rarity ="default", piece ="helmet")
     chest_of_null = armor(name ="You have no Chest equipped",level = 0,rarity ="default", piece ="chest")
-    pants_of_null = armor(name ="You have no Pants equipped",level = 0,rarity ="default", piece ="pants")
+    pants_of_null = armor(name ="Tighty Whities",level = 0,rarity ="default", piece ="pants")
     boots_of_null = armor(name ="You have no Boots equipped",level = 0,rarity = "default", piece ="boots")
     
     default = [helmet_of_null, chest_of_null, pants_of_null, boots_of_null]
-    
     return default
