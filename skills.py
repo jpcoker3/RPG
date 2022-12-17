@@ -147,22 +147,27 @@ def ask_player_skill(player, skill):
                         #output abilities, choose one to replace
                         print("\n")
                         print("{:<8}{:<15}{:<10}{:<10}{:<20}".format("Choice","Name", "Cost", "Damage","Summary" ))
-                        for skill in player.skills:
-                            if((skill.type == "melee") or (skill.type == "ranged")):
-                                print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skill)+1,skill.name, skill.stamina_cost, skill.ad_scaling, skill.summary ))
-                            elif(skill.type == "magic"):
-                                print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skill)+1,skill.name, skill.mana_cost, skill.ap_scaling, skill.summary ))
-                        
+                        for skills in player.skills:
+                            if((skills.type == "melee") or (skills.type == "ranged")):
+                                print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skills)+1,skills.name, skills.stamina_cost, skills.ad_scaling, skills.summary ))
+                            elif(skills.type == "magic"):
+                                print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skills)+1,skills.name, skills.mana_cost, skills.ap_scaling, skills.summary ))
+                            elif(skills.type == "heal"):
+                                if(skills.mana_cost == 0):
+                                    print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skills)+1,skills.name, skills.stamina_cost, skills.heal, skills.summary ))
+                                else:
+                                    print("{:<8}{:<15}{:<10}{:<10}{:<20}".format(player.skills.index(skills)+1,skills.name, skills.mana_cost, skills.heal, skills.summary ))
                         skill_to_replace = int(input("Which would you like to replace? (1-4): "))
                         
                         #easier to say its been replaced before actually replacing it
 #TODO fix this, error in addition of NULL + string
-                        print(player.skills[skill_to_replace-1].name + " was successfully replaced with " + skill.name), ". "
-                        player.skills.pop(skill_to_replace)
+                        print(player.skills[skill_to_replace-1].name + " was replaced with " + skill.name + ". ")
+                        
+                        player.skills.pop(skill_to_replace+1)
                         player.skills.append(copy(skill))
                         
                         
-                        valid = True
+                        valid_replace = True
                     elif(choice_replace == "n"):
                         print("Skill was discarded")
                         valid = True

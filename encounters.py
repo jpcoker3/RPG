@@ -15,14 +15,15 @@ def choose_rarity(player, add_weight = 0):
     #add weight and level to increase chance of higher rarity
     rarities = ["common", "uncommon", "rare", "legendary", "mythic"]
     rarity_list = random.choices(rarities, weights=(
-                                                    40 + round((player.stats["Level"]*5 + add_weight)*.1),
-                                                    20 + round((player.stats["Level"]*5 + add_weight)*.3),
-                                                    10+ round((player.stats["Level"]*5 + add_weight)*.5),
-                                                    5+ round((player.stats["Level"]*5 + add_weight)*.7),
-                                                    1+ round((player.stats["Level"]*5 + add_weight)*.9)),
-                                                    k=100
+                                                    #uneven leveling here so that higher tier items are more likely to drop later in the game
+                                                    80 + round((player.stats["Level"]*3 + add_weight)*.1),
+                                                    40 + round((player.stats["Level"]*3 + add_weight)*.3),
+                                                    10+ round((player.stats["Level"]*3 + add_weight)*.5),
+                                                    3+ round((player.stats["Level"]*3 + add_weight)*.7),
+                                                    0+ round((player.stats["Level"]*3 + add_weight)*.9)),
+                                                    k=25 #get 25 items
                                                     )
-    loot_rarity = random.choice(rarity_list)
+    loot_rarity = random.choice(rarity_list) # choose one of the 25
     print(str(loot_rarity))
     return loot_rarity
    
@@ -367,7 +368,7 @@ def cave_encounter(player):
             #do stuff
             #choose encounter
             cave_encounter_list = ["enemy","trap","chest"]
-            cave_encouter_options = random.choices(cave_encounter_list, weights=(50, 20, 10), k=100) 
+            cave_encouter_options = random.choices(cave_encounter_list, weights=(50, 20, 10), k=10) 
             cave_encounter_choice = random.choice(cave_encouter_options)
             #if enemy enounter
             if(cave_encounter_choice == "enemy"):

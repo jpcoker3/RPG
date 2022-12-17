@@ -70,7 +70,7 @@ seraphine_hood = armor(name = "Seraphine's Hood", class_type="all", level=4, hea
 
 #rare
 milf = armor(name="Mailplate Ivory Luxor Facilitator",class_type = "all",level= 5,health_bonus= 30,speed_bonus= 10,stamina_bonus= 20,mana_bonus=20, armor_bonus = 10,regen_bonus= 5, rarity= "rare",piece= "chest")
-assasins_hood = armor(name= "Assassin's Hood", class_type = "all",level=6, health_bonus=15, speed_bonus=12, stamina_bonus=7, mana_bonus=7,armor_bonus=3,  regen_bonus=2, luck_bonus=8, rarity="rare", piece="helmet")
+assasins_hood = armor(name= "Assassin's Hood", class_type = "melee",level=6, health_bonus=15, speed_bonus=12, stamina_bonus=7,armor_bonus=3,  regen_bonus=2, luck_bonus=8, rarity="rare", piece="helmet")
 assassins_cloak = armor(name= "Assassin's Cloak", class_type = "melee",level=6, health_bonus=18, speed_bonus=10, stamina_bonus=5,armor_bonus=6,  regen_bonus=4, luck_bonus=5, rarity="rare", piece="chest")
 
 #legendary
@@ -89,7 +89,6 @@ any = [
     milf,
     breastplate_of_dormamu,
     boots_of_hermes,
-    assasins_hood,       
     drunkards_shirt,
     seraphine_hood,
     armadillo_chest
@@ -99,7 +98,9 @@ melee = [
     squire_chest,
     squire_boots,
     head_of_terry,
-    knights_chestplate
+    knights_chestplate,
+    assasins_hood,
+    assassins_cloak
     
 ]
 
