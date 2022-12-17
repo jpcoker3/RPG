@@ -29,7 +29,6 @@ class weapon:
 sword_of_starter = weapon(name = "Sword of Starter", class_type = "melee", level = 1,ad = 7,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
 apprentice_staff = weapon(name = "Apprentice's Staff", class_type = "magic", level = 1,ap = 10,critical_chance= 5,critical_damage= 2.1,armor_pen= 2, rarity="common")
 bow_of_critical = weapon(name="Bow of Critical",class_type = "ranged", level=1, ad=6,critical_chance= 20,critical_damage= 2.5,armor_pen= 0,rarity= "common")
-#stick = weapon(name="Stick",class_type = "all", level=1, ad=4,ap = 4,critical_chance= 4,critical_damage= 1.3,armor_pen= 0,rarity= "common")
 rangers_bow = weapon(name = "Ranger's Bow",class_type = "ranged", level= 2, ad= 8, critical_chance= 15, critical_damage= 1.8 , armor_pen= 3, rarity=  "common")
 
 #uncommon
@@ -41,10 +40,12 @@ novice_staff = weapon(name="Novice Magestaff", class_type="magic", level=5, ap=1
 #rare
 sword_of_storms = weapon(name = "Sword of Storms",class_type = "melee", level = 6,ad= 15,critical_chance= 25,critical_damage= 2.7,armor_pen= 8,rarity= "rare")
 sword_of_sea = weapon(name = "Sword of the Sea",class_type = "melee", level= 6, ad= 20,critical_chance= 10, critical_damage= 2.3, armor_pen= 20, rarity= "rare")
-sceptre_of_knowledge = weapon(name="Sceptre of Knowledge", class_type="magic", level=6, ap=12, critical_chance=30, critical_damage=2.30, armor_pen=12, rarity="rare")
+sceptre_of_knowledge = weapon(name="Sceptre of Knowledge", class_type="magic", level=6, ap=15, critical_chance=25, critical_damage=2.30, armor_pen=12, rarity="rare")
+sniper_rifle = weapon(name = "Sniper Rifle",class_type = "ranged", level= 6, ad= 15,critical_chance= 25, critical_damage= 2.5 , armor_pen= 18, rarity=  "rare")
 
 #legendary
 greatsword_of_amalur = weapon(name = "Greatsword of Amalur",class_type = "melee",level= 10,ad= 25,critical_chance= 15,critical_damage= 2.3,armor_pen= 30,rarity= "legendary")
+nightbane = weapon(name="Nightbane", class_type="ranged", level=10, ad=22, critical_chance=30, critical_damage=2.5, armor_pen=20, rarity="legendary")
 jadis_wand = weapon(name="Jadis' Wand", class_type="magic", level=10, ap = 23,critical_chance=20, critical_damage=1.95,armor_pen=12, rarity="legendary" )
 
 #mythic
@@ -65,7 +66,9 @@ ranged = [
     bow_of_critical,
     rangers_bow,
     bow_of_artemis,
-    hunters_compound_bow
+    hunters_compound_bow,
+    sniper_rifle,
+    nightbane
     
 ]
 
@@ -161,8 +164,8 @@ def get_weapon(player, rarity):
        
         else:
             print("Incorrect class damage type")
-            
-        if(new_weapon.level < (player.stats["Level"] + 2)):
+#TODO: add more weapons so that the level thing actually works
+        if(new_weapon.level < (player.stats["Level"] + 100)):
             find_correct_item = False
         else:
             find_correct_item = True    

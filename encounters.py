@@ -7,46 +7,45 @@ import player_info
 from copy import copy
 import random
 
-
 items = ["weapon", "armor"]
 
 #choose rarity based on luck and level
-def choose_rarity(player):
-    #level locked rarity
-    if(player.stats["Level"] < 5):
-        rarity = random.randrange(player.stats["Luck"],84)
-    elif(player.stats["Level"] < 10):
-        rarity = random.randrange(player.stats["Luck"],94)
-    else:
-        #            from luck to 100 + luck/10, better for higher levels so luck feels good
-        rarity = random.randrange(player.stats["Luck"],100 + round(player.stats["Luck"]/10))
-        
-    if(rarity <= 70):loot_rarity = "common"
-    elif(rarity <= 85): loot_rarity = "uncommon"
-    elif(rarity <= 95): loot_rarity = "rare"
-    elif(rarity <= 99.5): loot_rarity = "legendary"
-    elif(rarity > 99.5): loot_rarity = "mythic" 
+def choose_rarity(player, add_weight = 0):
+    #40% common, 20% uncommon, 10% rare, 5% legendary, 1% mythic
+    #add weight and level to increase chance of higher rarity
+    rarities = ["common", "uncommon", "rare", "legendary", "mythic"]
+    rarity_list = random.choices(rarities, weights=(
+                                                    40 + round((player.stats["Level"]*5 + add_weight)*.1),
+                                                    20 + round((player.stats["Level"]*5 + add_weight)*.3),
+                                                    10+ round((player.stats["Level"]*5 + add_weight)*.5),
+                                                    5+ round((player.stats["Level"]*5 + add_weight)*.7),
+                                                    1+ round((player.stats["Level"]*5 + add_weight)*.9)),
+                                                    k=100
+                                                    )
+    loot_rarity = random.choice(rarity_list)
+    print(str(loot_rarity))
     return loot_rarity
-    
-    
-def loot_item(player):
+   
+#gets random loot item and returns it 
+def loot_item(player, set_rarity:str = "None"):
     #choose item and rarity
-    loot_rarity = choose_rarity(player)
+    if(set_rarity == "None"):
+        loot_rarity = choose_rarity(player)
+    else:
+        loot_rarity = set_rarity
     loot_type = random.choice(items)
-        
+    
     #if weapon, get weapon. if armor, get armor. pretty easy
     if(loot_type == "weapon"): item = weapons.get_weapon(player, loot_rarity)
     elif(loot_type == "armor"): item = armors.get_armor(player, loot_rarity)
-    
     return item
-
 
 #choose an encounter from list    
 def choose_encounter(player, prev_encounter, game_round):
     
-    encounter_list = ['Camp', 'Item', 'Enemy'] 
+    encounter_list = ['Camp', 'Item', 'Enemy', 'Cave', 'Trap'] 
     # get a weighted list of encounters to choose from, returns k # of items.
-    options = random.choices(encounter_list, weights=(20, 20, 50), k=100) 
+    options = random.choices(encounter_list, weights=(20, 20, 50, 5, 5), k=100) 
 
     #first 8 encounters are predetermined to make sure the player gets a fair start
     if(game_round == 1):
@@ -73,72 +72,27 @@ def choose_encounter(player, prev_encounter, game_round):
             encounter = random.choice(options)
          
     if(encounter == 'Camp'):
-        print("You found a camp! You decide take a moment to rest .... ")
-        
-        heal_value = round(3 * (player.max_health)/ 10)
-        
-        #basically, calculate how much to heal ( if any)
-        heal_total = heal_value + player.stats["Health"]
-        if(heal_total > player.max_health):
-            temp = heal_total - player.max_health
-            heal_value -= temp
-            if(heal_value < 0): heal_value =0
-            
-            
-        print("Gained " + str(heal_value) + " Health")
-        player.stats["Health"] += heal_value #heal for 10%
-        if(player.stats["Health"] > player.max_health): player.stats["Health"] = player.max_health # if healed for more than max, set to max. (cap health)
-        print("Current Health: " + str(player.stats["Health"]) + ". Max Health is: " + str(player.max_health) + ".")
-        next = input("\nPress anything to continue: ") 
+        camp_encounter(player)
 
     #free item! congrats
     elif (encounter == 'Item'):
-        print("Item Encounter")
-        
-        item = loot_item(player)
-
-        # output armor or weapon w stats and ask to equip or not
-        
-        gold = random.randrange(player.stats["Level"]+ 10, 2*(player.stats["Level"])+10)
-        gold += round(gold * (player.stats["Luck"] / 100))
-        player.gold_balance += gold 
-        
-        print("You found a chest ....")
-        print("Found: " + str(gold) + " gold in the chest. Current gold: " + str(player.gold_balance) )
-        
-        ask_player_item(player, item)
-        
-
- 
-        
-        # give user a sec to take in info and continue
-        next = input("\nPress anything to continue: ") 
+        item_encounter(player)
 
     elif (encounter == 'Enemy'):
-        enemy_defeated = False
-        print("Enemy Encounter")
-        opponent = enemies.get_enemy(player)
-        enemy_defeated = combat.battle(player, opponent)
+        enemy_encounter(player)
         
-        if(enemy_defeated == True):
-            xp = random.randrange(player.stats["Level"] +8, 2*(player.stats["Level"])+9)
-            xp += round(xp* (player.stats["Luck"] / 100))
-            
-            gold = random.randrange(player.stats["Level"]+5, 3*(player.stats["Level"])+5)
-            gold += round(gold * (player.stats["Luck"] /100))
-            
-
-            print("Enemy defeated! Obtained " + str(gold) + " gold and " + str(xp) + "xp!")
-            player.gold_balance += gold
-            player_info.recieve_xp(player, xp)
-        next = input("\nPress anything to continue: ") 
-        
+    elif(encounter == "Cave"):
+        cave_encounter(player)
+    
+    elif(encounter == "Trap"):
+        trap_encounter(player)
+    
     else:
         print("Well something messed up")
         
     return encounter
 
-
+#long function, outputs new item and current item as well as their stats. asks if player wants to equip new item. replaces stats if yes.
 def ask_player_item(player, item):
     print(f"\nItem found: {item.name}")
     if(item.type == "armor"):
@@ -235,12 +189,13 @@ def ask_player_item(player, item):
             
         equip_item = input("\nWould you like to equip this item? y/n: ")
         if(equip_item == 'y'):
+            #subtracts the current weapon stats from the player
             item_to_be_equip = copy(item)
             player.critical_chance -= player.weapon.critical_chance
             player.critical_damage -= player.weapon.critical_damage
             
             player.weapon = item_to_be_equip
-            
+            #adds the new weapon stats to the player
             player.critical_chance += player.weapon.critical_chance
             player.critical_damage += player.weapon.critical_damage
             
@@ -250,7 +205,7 @@ def ask_player_item(player, item):
         elif(equip_item == 'n'):
             print("The item was discarded")
             
-        
+#set  rounds, not random.         
 def boss_encounter(player, game_round):
     boss = enemies.get_boss(game_round)
     
@@ -274,6 +229,7 @@ def boss_encounter(player, game_round):
     
     return
 
+#display shop menu and offers, also has buying logic
 def shop_encounter(player, game_round):
     
     heal_cost = round(game_round + pow(player.stats["Level"], 2))
@@ -330,11 +286,113 @@ def shop_encounter(player, game_round):
         
     return
 
-    #do new armor math
+#enemy encounter logic
+def enemy_encounter(player):
+    enemy_defeated = False
+    print("Enemy Encounter")
+    opponent = enemies.get_enemy(player)
+    enemy_defeated = combat.battle(player, opponent)
+    
+    if(enemy_defeated == True):
+        xp = random.randrange(player.stats["Level"] +5, 2*(player.stats["Level"])+9)
+        xp += round(xp* (player.stats["Luck"] / 100))
+        
+        gold = random.randrange(player.stats["Level"]+5, 3*(player.stats["Level"])+5)
+        gold += round(gold * (player.stats["Luck"] /100))
+        
+
+        print("Enemy defeated! Obtained " + str(gold) + " gold and " + str(xp) + " xp!")
+        player.gold_balance += gold
+        player_info.recieve_xp(player, xp)
+    next = input("\nPress anything to continue: ") #blank input to continue
+    
+# camp enounter logic
+def camp_encounter(player):    
+    print("You found a camp! You decide take a moment to rest .... ")
+        
+    heal_value = round(3 * (player.max_health)/ 10)
+    
+    #basically, calculate how much to heal ( if any)
+    heal_total = heal_value + player.stats["Health"]
+    if(heal_total > player.max_health):
+        temp = heal_total - player.max_health
+        heal_value -= temp
+        if(heal_value < 0): heal_value =0
+        
+        
+    print("Gained " + str(heal_value) + " Health")
+    player.stats["Health"] += heal_value #heal for 10%
+    if(player.stats["Health"] > player.max_health): player.stats["Health"] = player.max_health # if healed for more than max, set to max. (cap health)
+    print("Current Health: " + str(player.stats["Health"]) + ". Max Health is: " + str(player.max_health) + ".")
+    next = input("\nPress anything to continue: ") 
+   
+#item encounter logic 
+def item_encounter(player):
+    print("Item Encounter")
+    
+    # output armor or weapon w stats and ask to equip or not
+    
+    gold = random.randrange(player.stats["Level"]+ 10, 2*(player.stats["Level"])+10)
+    gold += round(gold * (player.stats["Luck"] / 100))
+    player.gold_balance += gold 
+    
+    print("You found a chest ....")
+    print("Found: " + str(gold) + " gold in the chest. Current gold: " + str(player.gold_balance) )
+    
+    item = loot_item(player)
+    ask_player_item(player, item)
+    
+    # give user a sec to take in info and continue
+    next = input("\nPress anything to continue: ") 
+
+#trap encounter logic
+def trap_encounter(player):
+    print("As you walk along, you notice a trap! You try to avoid it, but it's too late!")
+    trap_damage = player.max_health * .10 #10% of max health
+    player.stats["Health"] -= trap_damage
+    if player.stats["Health"] < 0:
+        print("You died from the trap!")
+    else:
+        print(f"You took {trap_damage} damage from the trap! Current Health: {player.stats['Health']}")
+ 
+#cave encounter
+def cave_encounter(player):
+    enter = input("Would you like to enter the cave? (y/n) ")
+    if(enter == 'n'):
+        print("You decide to leave the cave alone.")
+    else:
+        print("You enter the cave, the air is cold and damp.")
+        cave_counter = 0
+        while((cave_counter <= 8) and (player.stats["Health"] > 0)):
+            #do stuff
+            #choose encounter
+            cave_encounter_list = ["enemy","trap","chest"]
+            cave_encouter_options = random.choices(cave_encounter_list, weights=(50, 20, 10), k=100) 
+            cave_encounter_choice = random.choice(cave_encouter_options)
+            #if enemy enounter
+            if(cave_encounter_choice == "enemy"):
+                enemy_encounter(player)
+            elif(cave_encounter_choice == "trap"):
+                trap_encounter(player)
+            elif(cave_encounter_choice == "chest"):
+                item_encounter(player)
+            cave_counter += 1
+        
+        if(player.stats["Health"] > 0):
+            looting = 0
+            #give player 3 items
+            while (looting <= 3):
+                item_rarity = choose_rarity(player, 20) #added 20 weight to item rarity, may be OP. We shall see
+                item = loot_item(player, item_rarity) # get item w modified rarity
+                ask_player_item(player, item) #ask player if they want to keep item
+                looting += 1 #increment looting counter 
+        
+#do new armor math
 def new_armor(player, item):
     sub_stats(player, item)
     add_stats(player, item)
-    #subtract old armor piece stats
+
+#subtract old armor piece stats
 def sub_stats(player, item):
     if(item.piece == "helmet"):
         player.max_health -= player.helmet.health_bonus
@@ -403,8 +461,8 @@ def sub_stats(player, item):
         player.stats["Regen"] -= player.boots.regen_bonus
         player.mana_regen -= player.boots.mana_regen_bonus
         player.stamina_regen -= player.boots.stamina_regen_bonus
-    #add new armor stats
     
+#add new armor stats    
 def add_stats(player,item):
     player.max_health += item.health_bonus
     player.stats["Health"] += item.health_bonus
@@ -422,7 +480,17 @@ def add_stats(player,item):
     
     player.mana_regen -= item.mana_regen_bonus
     player.stamina_regen -= item.stamina_regen_bonus
-        
- 
- 
- 
+    
+    #make sure everything is positive
+    if(player.mana_regen < 0):
+        player.mana_regen = 0
+    if(player.stamina_regen < 0):
+        player.stamina_regen = 0
+    if(player.stats["Mana"] < 0):
+        player.stats["Mana"] = 0
+    if(player.stats["Stamina"] < 0):
+        player.stats["Stamina"] = 0
+    if(player.max_stamina < 0):
+        player.max_stamina = 0
+    if(player.max_mana < 0):
+        player.max_mana = 0

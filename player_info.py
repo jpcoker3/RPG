@@ -18,40 +18,44 @@ def get_name(message):
 
 #for any XP increase, handles lvl ups and such
 def recieve_xp(player, xp):
-    player.current_xp += xp
-    while(player.current_xp >= player.xp_to_lvl_up):
-        player.stats["Level"] += 1
+    player.current_xp += xp #add xp to player xp pool
+    while(player.current_xp >= player.xp_to_lvl_up): #while player xp is greater than xp to level up
+        player.stats["Level"] += 1 #increase level
         print("Level increased to " + str(player.stats["Level"])+"!")
-        player.current_xp = player.current_xp - player.xp_to_lvl_up
-        player.xp_to_lvl_up += 7
-        lvl_up(player)
+        player.current_xp = player.current_xp - player.xp_to_lvl_up #subtract xp to level up from current xp
+        player.xp_to_lvl_up += 7 # increase xp needed to level up
+        lvl_up(player) #do the level up stuff
+        #repeat if needed for multiple level ups
         
         
 #handles level up
 def lvl_up(player):
-    if(player.class_dmg_type == "any"):
+    if(player.class_dmg_type == "any"): #any class can use both stamina and mana skills so give a little of both
         player.max_stamina += 5
         player.max_mana += 5
         player.max_health += 10
         print("You have leveled up! You have gained 5 Stamina, 5 Mana, and 10 Health!")
-    elif(player.class_dmg_type == "melee"):
+    elif(player.class_dmg_type == "melee"): # melee and ranged use stamina
         player.max_stamina += 10
         player.max_health += 15
         print("You have leveled up! You have gained 10 Stamina and 15 Health!")
-    elif(player.class_dmg_type == "ranged"):
+    elif(player.class_dmg_type == "ranged"): #melee and ranged use stamina
         player.max_stamina += 10
         player.max_health += 15
         print("You have leveled up! You have gained 10 Stamina and 15 Health!")
-    elif(player.class_dmg_type == "magic"):
+    elif(player.class_dmg_type == "magic"): #magic used mana
         player.max_mana += 10
         player.max_health += 15
         print("You have leveled up! You have gained 10 Mana and 15 Health!")
-
+    #heal to full health
+    print("You have been healed to full health!")
+    player.stats["Health"] = player.max_health
+    
+    
     skills.get_skill(player)
         
         
 #handles class data, all optional except name, summary, and class_dmg_type
-  
 @dataclass
 class class_type_stats:
     name:str
@@ -69,11 +73,8 @@ class class_type_stats:
     critical_chance:int = 0 # critical chance percent
     critical_damage:int = 0 # critical damage multiplier, x0.00
    
-   
-   
         
 #template = class_type_stats(name = "", health= 0, mana=0, stamina= 0, armor=0, speed=0, luck=0, mana_regen = 0, stamina_regen = 0, regen=0, critical_chance=0, critical_damage=0, class_dmg_type = "", summary="")
-
 peasant = class_type_stats(name = "peasant",class_dmg_type = "all",  summary="Default Stats")
 idiot = class_type_stats(name = "idiot", health= -15,class_dmg_type = "all", speed=-15,  luck=50, summary="+50 Luck, -15 Health, -15 Speed, ")
 warrior = class_type_stats(name = "warrior",class_dmg_type = "melee",health =  50,armor = 20, speed = -20,regen= 20,  summary= "+50 Health, +20 Armor, +20 HP Regen, -20 Speed" )
@@ -82,10 +83,12 @@ ranger = class_type_stats(name = "ranger", health= -15,class_dmg_type = "ranged"
 defender = class_type_stats(name = "defender", health= 100,  armor=50,class_dmg_type = "melee", speed= -30,  regen=20, critical_damage= -0.65, summary= "+100 Health, +50 Armor, +20 HP Regen, -30 Speed, -0.65 Critical Multiplier" )
 wizzard = class_type_stats(name = "wizzard",class_dmg_type = "magic", mana=25,health =10, luck=15, mana_regen = 10, summary="+25 Mana, +10 Health, +10 Mana Regen, +15 Luck")
 
-
+#gotta have a list of classes to parse through
 classes = [ peasant, idiot, warrior, gambler, ranger, defender,wizzard]
 
+#add stats of chosen class to player
 def add_class_stats(player, class_type):
+    #change mana and/or stamina based on class type
     if(class_type.class_dmg_type == "melee"):
         class_type.mana = -50
     elif(class_type.class_dmg_type == "ranged"):
@@ -96,6 +99,7 @@ def add_class_stats(player, class_type):
         class_type.mana = -25
         class_type.stamina = -25
     
+    #add class stats to player
     player.class_type = class_type.name.capitalize()
     player.class_dmg_type = class_type.class_dmg_type
     
@@ -117,10 +121,8 @@ def add_class_stats(player, class_type):
     player.stats["Regen"] += class_type.regen
     
     player.critical_chance += class_type.critical_chance
-    player.critical_damage += round(class_type.critical_damage,2)
+    player.critical_damage += round(class_type.critical_damage,2) #round to 2 decimal places
     
-    
-
 #create new char -- has prompts
 def char_create(player):
     
@@ -142,7 +144,7 @@ def char_create(player):
                 choosing_class = False
     
     #get default weapon depending on class damage type
-    if(player.class_dmg_type == "any"):
+    if(player.class_dmg_type == "all"):
         player.weapon = copy(default_equipt[4]) #stick
     elif(player.class_dmg_type == "melee"):
         player.weapon = copy(default_equipt[5]) #rusty_butter_knife
@@ -190,8 +192,6 @@ def output_offense_stats(player):
     print("{:<20} {:<10}".format("Critical Damage", round(player.critical_damage,2)))
     print("{:<20} {:<10}".format("Armor Penetration", player.weapon.armor_pen))
     
-
-    
 #holds all character info
 class char_info():
     weapon = None
@@ -231,8 +231,5 @@ class char_info():
     
     skills = [
         
-        # to be implemented later
-        #slash,
-        #lunge,
-        #etc
+        #basic attack is added during char creation, other skills are added by the player on lvl up
     ]

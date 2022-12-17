@@ -149,35 +149,77 @@ def get_enemy(player):
     return unit
 
 def get_boss(game_round):
-    if(game_round == 10):
-        boss = enemy(
-            "Slime Boss", #name
-            2, #level
-            10, #damage
-            15, #crit chance
-            1.5, #critical damage,
-            75, #speed
-            125, #health,
-            20, #armor
-            4, #armor_pen   
-            "Boss"
-        )
-    elif(game_round == 20):
-        boss = enemy(
-            "Tavern Guard", # name
-            4, # level
-            15, #damage
-            15, #crit chance
-            2.0, #crit damage
-            100, #speed
-            175, #health
-            40, #armor
-            8, # armor pen
-            "Boss"
-        )
-       
+    # "random" stats for the boss
+    boss_names_low = (
+        "Slime Boss",
+        "Orc",
+        "Ogre",
+        "Troll",
+        "Giant",
+        "Tavern Guard",
+        "Goblin" 
+    )
+    
+    boss_names_med = (
+        "Goblin Chief",
+        "Dragon",
+        "Demon Chieftan",
+        "Draconian Guardian",
+    )
+    
+    boss_names_high = (
+        "Draconian Lord",
+        "Draconian God",
+        "The Pope Himself",
+        "Demon Lord",
+        "Demon King",
+        "Demon God"
+    )
+    
+    #boss name
+    if(game_round <= 40):
+        boss_name = random.choice(boss_names_low)
+    elif(game_round <= 80):
+        boss_name = random.choice(boss_names_med)
     else:
-        print(f"Boss logic off. Recieved round = {str(game_round)}")
+        boss_name = random.choice(boss_names_high)
+    
+    #boss level is based on the round
+    boss_level = round(game_round/5)
+    
+    #boss damage is based on the boss level (so based on the round)
+    boss_damage = 10 + 2 * boss_level
+    #boss crit chance is based on the boss level (so based on the round)
+    boss_critical_chance = 10 + boss_level
+    #set the boss critical damage, capped at 2.2
+    boss_critical_damage = 1.0 + boss_level/50
+    if(boss_critical_damage > 2.2):
+        boss_critical_damage = 2.2
+    #boss speed 
+    boss_speed = 50 + 5 * boss_level
+    #boss health
+    boss_health = 60 + 11 * boss_level
+    #boss armor
+    boss_armor = 10 + 2 * boss_level
+    #boss armor penetration
+    boss_armor_pen = round(1.5 * boss_level)
+    
+    #create the boss
+    if(game_round % 10 == 0):
+        boss = enemy(
+            boss_name, #name
+            boss_level, #level
+            boss_damage, #damage 
+            boss_critical_chance, #critical chance
+            boss_critical_damage, #critical damage
+            boss_speed, #speed
+            boss_health, #health
+            boss_armor, #armor
+            boss_armor_pen, #armor penetration
+            "Boss" #enemy type
+        )  
+    else:
+        print(f"\n\n\nBoss logic off. Recieved round = {str(game_round)}\n\n\n")
         boss = enemy( 
                      " MissingNo ",
                      999, #level
